@@ -1,0 +1,111 @@
+@font-face {
+    font-family: 'zabars';
+    src: url('./fonts/zabars.ttf') format(truetype);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-image: url('./img/background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    background-size: 100% 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 64px;
+    letter-spacing: 3px;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+canvas {
+    background-color: black;
+    display: block;
+}
+
+.onlyDesktop {
+    display: block;
+}
+
+.gameButton {
+    width: 32px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#btnStart {
+    background-image: url('./img/play-button.png');
+}
+
+#btnSound {
+    background-image: url('./img/sound-button.png');
+}
+
+#btnFullscreen {
+    background-image: url('./img/fullscreen.png');
+}
+
+#btnLeft {
+    background-image: url('./img/arrow-left.png');
+}
+
+#btnRight {
+    background-image: url('./img/arrow-right.png');
+}
+
+#btnThrow {
+    background-image: url('./img/throw-button.png');
+}
+
+#btnJump {
+    background-image: url('./img/jump.png');
+}
+/* ############# Smartphone ############## */
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+
+    .onlyDesktop {
+        display: none;
+    }
+}
+
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+}
+
+/* Buttons über dem Canvas */
+#mobile-controls {
+    position: absolute;
+    /* bottom: 20px; */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Nur auf mobilen Geräten anzeigen */
+@media (max-width: 768px) {
+    #mobile-controls {
+        display: flex;
+    }
+}

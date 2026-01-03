@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <title>El pollo loco </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="./models/drawable-objects.class.js"></script>
+    <script src="./models/movable-object.class.js"></script>
+    <script src="./models/character.class.js"></script>
+    <script src="./models/character.knight.class.js"></script>
+    <script src="./models/enemy.class.js"></script>
+    <script src="./models/enemy-dino.class.js"></script>
+    <script src="./models/enemy-goblin.class.js"></script>
+    <script src="./models/enemy-spider.class.js"></script>
+    <script src="./models/enemy-plant.class.js"></script>
+    <script src="./models/cloud.class.js"></script>
+    <script src="./models/background-object.class.js"></script>
+    <script src="./models/keyboard.class.js"></script>
+    <script src="./models/status-bar.class.js"></script>
+    <script src="./models/status-bar-health.class.js"></script>
+    <script src="./models/status-bar-coin.class.js"></script>
+    <script src="./models/status-bar-bottle.class.js"></script>
+    <script src="./models/world.class.js"></script>
+    <script src="./models/level.class.js"></script>
+    <script src="./models/endboss.class.js"></script>
+    <script src="./models/throwable-objects.class.js"></script>
+    <script src="./models/collectabe-objects-bottle.class.js"></script>
+    <script src="./models/collectabe-objects-coin.class.js"></script>
+    <script src="./levels/start.js"></script>
+    <script src="./levels/level1.js"></script>
+    <script src="./js/game.js" defer></script>
+</head>
+
+<body onload="init()">
+
+    <div id="game-container">
+        <h1 class="onlyDesktop">El pollo loco</h1>
+        <div id="header">
+            <button id="btnStart" class="gameButton"></button>
+            <button id="btnSound" class="gameButton"></button>
+            <button id="btnFullscreen" class="gameButton"></button>
+        </div>
+        <canvas id="canvas" width="720" height="480"> </canvas>
+
+        <div id="mobile-controls">
+            <div>
+                <button id="btnLeft" class="gameButton"></button>
+                <button id="btnRight" class="gameButton"></button>
+            </div>
+            <div>
+                <button id="btnThrow" class="gameButton"></button>
+                <button id="btnJump" class="gameButton"></button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

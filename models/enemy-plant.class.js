@@ -1,0 +1,57 @@
+class enemyPlant extends enemy {
+    y = 310;
+
+    height = 220;
+    width = 270;
+
+    offset = {
+        top: 150,
+        bottom: 160,
+        left: 220,
+        right: 260
+    }
+
+    hitPosition = {
+        top: false,
+        bottom: false,
+        left: false,
+        right: false
+    }
+
+    hitEnergy = 10;
+    otherDirection = true;
+
+
+    IMAGES_WALKING = [
+        '../img/enemy/Plant/trap_plant.png',
+        '../img/enemy/Plant/trap_plant2.png',
+        '../img/enemy/Plant/trap_plant3.png',
+        '../img/enemy/Plant/trap_plant4.png',
+        '../img/enemy/Plant/trap_plant5.png',
+        '../img/enemy/Plant/trap_plant6.png'
+    ];
+
+    IMAGES_DEAD = [
+        '../img/enemy/Plant/trap_plant.png',
+        '../img/enemy/Plant/trap_plant2.png',
+        '../img/enemy/Plant/trap_plant3.png',
+        '../img/enemy/Plant/trap_plant4.png',
+        '../img/enemy/Plant/trap_plant5.png',
+        '../img/enemy/Plant/trap_plant6.png'
+    ];
+
+    constructor(x) {
+        super();
+        this.loadImage(this.IMAGES_WALKING[0]);
+
+        this.x = 450 + Math.random() * x;
+
+        this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_DEAD);
+        this.speed = 0;
+
+        this.animate();
+
+    }
+
+}
