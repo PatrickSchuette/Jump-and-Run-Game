@@ -92,8 +92,16 @@ function playGameButton() {
 
 
 function startGame() {
-    world.setLevel(LEVEL1);
+    elementRev.btnStart.blur();
+
+    if (world && world.stop) {
+        world.stop();
+    }
+
+    world = new World(canvas, keyboard);
+    world.setLevel(level1());
 }
+
 
 // Buttons verbinden
 bindButton(elementRev.btnLeft, "LEFT");

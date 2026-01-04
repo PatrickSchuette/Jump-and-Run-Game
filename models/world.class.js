@@ -1,6 +1,6 @@
 class World {
     character;
-    level = START;
+    level = start();
     canvas;
     ctx;
     keyboard;
@@ -13,11 +13,11 @@ class World {
         const selected = localStorage.getItem("selectedCharacter");
         console.log(selected);
 
-        switch (selected) { 
-            case "knight": this.character = new CharacterKnight(); break; 
-            case "mage": this.character = new CharacterMage(); break; 
-            case "rouge": this.character = new CharacterRogue(); break; 
-            default: this.character = new CharacterKnight(); 
+        switch (selected) {
+            case "knight": this.character = new CharacterKnight(); break;
+            case "mage": this.character = new CharacterMage(); break;
+            case "rouge": this.character = new CharacterRogue(); break;
+            default: this.character = new CharacterKnight();
         }
 
         // ⬇️ Statusbars ERST JETZT erzeugen!
@@ -45,14 +45,14 @@ class World {
 setLevel(newLevel) {
     this.level = newLevel;
     this.statusPlayMode = newLevel.playMode;
+
     this.character.hadFirstContact = this.statusPlayMode;
 
     this.level.enemies.forEach(enemy => enemy.world = this);
 
-
-        this.character.x = 105;
-    
+    this.character.x = 105;
 }
+
 
 
 
@@ -125,14 +125,20 @@ setLevel(newLevel) {
     }
 
     run() {
-        setInterval(() => {
+        IntervalManager.setInterval(() => {
             this.checkCollisionCollactable();
             this.checkCollisionEnemy();
             this.checkThrowObjects();
         }, 200);
 
-        setInterval(() => { this.checkCollisionThrowable(); }, 25);
+        IntervalManager.setInterval(() => { this.checkCollisionThrowable(); }, 25);
     }
+
+    stop() {
+        this.animationStopped = true;
+        IntervalManager.clearAll();
+    }
+
 
     checkThrowObjects() {
         if (this.keyboard.D) {
@@ -169,7 +175,7 @@ setLevel(newLevel) {
 
     checkDeadEndboss(enemy) {
         if (!(enemy instanceof Endboss)) return;
-        if (enemy.isDead) this.setLevel(WIN);
+        if (enemy.isDead) this.setLevel(win());
     }
 
     checkCollisionThrowable() {

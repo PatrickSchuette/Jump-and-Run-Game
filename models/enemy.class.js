@@ -24,14 +24,14 @@ animate() {
     let intervalTime = !this.isDead ? 100 : 200; // Death langsamer
 
     // Bewegung
-    this.moveInterval = setInterval(() => {
+    this.moveInterval = IntervalManager.setInterval(() => {
         if (!this.isDead) {
             this.moveLeft();
         }
     }, 1000 / 60);
 
     // Animation
-    this.animationInterval = setInterval(() => {
+    this.animationInterval = IntervalManager.setInterval(() => {
         if (!this.isDead) {
             this.playAnimation(this.IMAGES_WALKING);
         } else {

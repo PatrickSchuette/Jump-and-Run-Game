@@ -38,7 +38,7 @@ class ThrowableObject extends MoveableObject {
         this.startX = this.x;
 
         
-        this.throwInterval = setInterval(() => {
+        this.throwInterval = IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
             if (this.otherDirection) {
                 this.x -= 10;

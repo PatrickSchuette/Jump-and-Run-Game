@@ -45,7 +45,7 @@ class Character extends MoveableObject {
     }
 
     animate() {
-        setInterval(() => {
+        IntervalManager.setInterval(() => {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
@@ -65,7 +65,7 @@ class Character extends MoveableObject {
         }, 1000 / 60);
 
 
-        setInterval(() => {
+        IntervalManager.setInterval(() => {
             this.extandOffsetAttac();
             if (this.isDead()) {
                 this.playDeathAnimationOnce();
@@ -100,7 +100,7 @@ playDeathAnimationOnce() {
     this.playAnimation(this.IMAGES_DEAD);
 
     setTimeout(() => {
-        this.world.setLevel(LOST); // richtig: über world
+        this.world.setLevel(lost()); // richtig: über world
     }, 2000);
 }
 

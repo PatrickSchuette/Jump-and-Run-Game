@@ -29,7 +29,7 @@ class EndbossStatus extends StatusBar {
     }
 
     animate() {
-        setInterval(() => {
+        IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
         }, 100);
     }

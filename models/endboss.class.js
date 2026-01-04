@@ -48,11 +48,11 @@ class Endboss extends enemy {
 
     /** Starts movement and animation intervals for the boss. */
     animate() {
-        setInterval(() => {
+        IntervalManager.setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
 
-        setInterval(() => {
+        IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 100);
 

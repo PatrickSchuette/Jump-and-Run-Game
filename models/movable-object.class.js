@@ -23,6 +23,11 @@ class MoveableObject extends DrawableObject {
     hitEnergy = 5;
     parentArray = null;
 
+constructor() {
+        super();
+        this.loadImage('./img/ball-energy.png');
+}
+
     /** move moveable Object to the right Direction */
     moveRight() {
         if (this.hadFirstContact) this.x += this.speed;
@@ -50,7 +55,7 @@ class MoveableObject extends DrawableObject {
 
     /**IF Object is in the Air over Ground, starts the gravity to ground */
     applyGravity() {
-        setInterval(() => {
+        IntervalManager.setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
