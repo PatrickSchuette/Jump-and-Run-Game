@@ -28,6 +28,8 @@ class Character extends MoveableObject {
     }
 
     showDrawFrame = true;
+    isDeathSequenceRunning = false;
+
 
     constructor() {
         super();
@@ -66,7 +68,8 @@ class Character extends MoveableObject {
         setInterval(() => {
             this.extandOffsetAttac();
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                this.playDeathAnimationOnce();
+                return;
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if (this.world.keyboard.ATTAC) {
@@ -86,9 +89,22 @@ class Character extends MoveableObject {
         if (this.world.keyboard.ATTAC) {
             this.offset.right = 180;
         } else {
-            this.offset.right = 250;
+            this.offset.right = 290;
         }
     }
+
+playDeathAnimationOnce() {
+    if (this.isDeathSequenceRunning) return; // verhindert mehrfaches Auslösen
+    this.isDeathSequenceRunning = true;
+
+    this.playAnimation(this.IMAGES_DEAD);
+
+    setTimeout(() => {
+        this.world.setLevel(LOST); // richtig: über world
+    }, 2000);
+}
+
+
 
     jump() { }
 }

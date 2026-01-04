@@ -1,14 +1,14 @@
 class enemyPlant extends enemy {
     y = 310;
 
-    height = 220;
-    width = 270;
+    height = 180;
+    width = 200;
 
     offset = {
         top: 150,
         bottom: 160,
-        left: 220,
-        right: 260
+        left: 180,
+        right: 180
     }
 
     hitPosition = {

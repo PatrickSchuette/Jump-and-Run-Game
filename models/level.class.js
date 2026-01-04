@@ -88,25 +88,19 @@ class Level {
 
         // Coins
         for (let i = 0; i < (config.coins || 0); i++) {
-            this.spawnCollectable(CollectableCoin, false);
+            this.spawnCollectable(CollectableCoin);
         }
 
         // Bottles
         for (let i = 0; i < (config.bottle || 0); i++) {
-            this.spawnCollectable(CollectableBottle, true);
+            this.spawnCollectable(CollectableBottle);
         }
     }
 
-    spawnCollectable(ClassRef, ground) {
+    spawnCollectable(ClassRef) {
         const x = 200 + Math.random() * this.level_end_x;
-        let y;
-
-        if (ground) {
-            y = 340;
-        } else {
-            y = 100 + Math.random() * 200;
-        }
-
+        const y = 100 + Math.random() * 200;
+        
         const obj = new ClassRef(x, y);
 
         obj.parentArray = this.collectables;

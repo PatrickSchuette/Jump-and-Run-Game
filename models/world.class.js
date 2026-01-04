@@ -45,16 +45,26 @@ class World {
 
         if (this.statusPlayMode) {
             this.ctx.translate(-this.camera_x, 0);
+
             this.addToMap(this.statusbarHealth);
             this.addToMap(this.statusbarCoin);
             this.addToMap(this.statusbarBottle);
-            this.ctx.translate(this.camera_x, 0);
 
-            this.addObjectsToMap(this.throwableObjects);
+            const boss = this.endboss();
+            if (boss && boss.hadFirstContact) {
+                if (!this.statusbarEndboss) {
+                    this.statusbarEndboss = new EndbossStatus(boss);
+                }
+                this.addToMap(this.statusbarEndboss);
+            }
+
+
+            this.ctx.translate(this.camera_x, 0);
 
             this.addToMap(this.character);
             this.addObjectsToMap(this.level.enemies);
             this.addObjectsToMap(this.level.collectables);
+            this.addObjectsToMap(this.throwableObjects);
         }
         this.ctx.translate(-this.camera_x, 0)
 
@@ -73,16 +83,12 @@ class World {
     }
 
     addToMap(mo) {
-        if (mo.otherDirection) {
-            this.flipImage(mo);
-        }
+        if (mo.otherDirection) this.flipImage(mo);
 
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        //  mo.drawFrame(this.ctx);
 
-        if (mo.otherDirection) {
-            this.flipImageBack(mo);
-        }
+        if (mo.otherDirection) this.flipImageBack(mo);
     }
 
     flipImage(mo) {
@@ -121,7 +127,7 @@ class World {
 
     checkCollisionEnemy() {
         this.level.enemies.forEach((enemy) => {
-
+            this.checkDeadEndboss(enemy)
             const col = this.character.isColliding(enemy);
 
             if (col.collision) {
@@ -140,6 +146,10 @@ class World {
         });
     }
 
+    checkDeadEndboss(enemy) {
+        if (!(enemy instanceof Endboss)) return;
+        if (enemy.isDead) this.setLevel(WIN);
+    }
 
     checkCollisionThrowable() {
         this.throwableObjects.forEach((bottle) => {
@@ -147,14 +157,9 @@ class World {
             this.level.enemies.forEach((enemy) => {
 
                 if (bottle.isColliding(enemy).collision) {
-
-                    // Gegner Schaden zufügen
                     enemy.hit(bottle.hitEnergy, enemy.isDead);
-
-                    // Bottle entfernen
                     bottle.removeFromWorld();
 
-                    // Gegner ggf. sterben lassen
                     if (enemy.isDead) {
                         enemy.isDead = true;
                         enemy.hitEnergy = 0;
@@ -166,28 +171,24 @@ class World {
         });
     }
 
-
+    handleCollect(obj, type, max, statusbar) {
+        if (this.character.collectableObjects[type] < max) {
+            this.character.collectableObjects[type]++;
+            statusbar.setPercentage(this.character.collectableObjects[type]);
+            obj.removeFromWorld();
+        }
+    }
 
     checkCollisionCollactable() {
         this.level.collectables.forEach((obj) => {
             if (this.character.isColliding(obj).collision) {
-                if (obj instanceof CollectableBottle) {
-                    if (this.character.collectableObjects.bottle < this.character.collectableObjects.maxBottle) {
-                        this.character.collectableObjects.bottle++;
-                        this.statusbarBottle.setPercentage(this.character.collectableObjects.bottle);
-                        obj.removeFromWorld();
-                    }
-                }
-
-                if (obj instanceof CollectableCoin) {
-                    if (this.character.collectableObjects.coin < this.character.collectableObjects.maxCoin) {
-                        this.character.collectableObjects.coin++;
-                        this.statusbarCoin.setPercentage(this.character.collectableObjects.coin);
-                        obj.removeFromWorld();
-                    }
-                }
+                if (obj instanceof CollectableBottle) this.handleCollect(obj, "bottle", this.character.collectableObjects.maxBottle, this.statusbarBottle);
+                if (obj instanceof CollectableCoin) this.handleCollect(obj, "coin", this.character.collectableObjects.maxCoin, this.statusbarCoin);
             }
         });
     }
 
+    endboss() {
+        return this.level.enemies.find(e => e instanceof Endboss);
+    }
 }

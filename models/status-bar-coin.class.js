@@ -1,21 +1,33 @@
 class CoinStatus extends StatusBar {
     IMAGES = [
-        './img/statusbar/coin/0.png',
-        './img/statusbar/coin/20.png',
-        './img/statusbar/coin/40.png',
-        './img/statusbar/coin/60.png',
-        './img/statusbar/coin/80.png',
-        './img/statusbar/coin/100.png'
-    ];
+        '../img/star/star.png',
+        '../img/star/star2.png',
+        '../img/star/star3.png',
+        '../img/star/star4.png',
+        '../img/star/star5.png',
+        '../img/star/star6.png',
+        '../img/star/star7.png',
+        '../img/star/star8.png',
+        '../img/star/star9.png',
+        '../img/star/star10.png',
+    ]
     y = 50;
 
     constructor(character) {
-        super(); 
+        super();
         this.maxValue = character.collectableObjects.maxCoin;
         this.percentage = character.collectableObjects.coin;
-        this.loadImages(this.IMAGES); 
-        this.setPercentage(this.percentage); 
+        this.loadImages(this.IMAGES);
+        //this.setPercentage(this.percentage);
         this.textSuffix = " / " + this.maxValue;
+        this.animate();
     }
+
+    animate() {
+        setInterval(() => {
+            this.playAnimation(this.IMAGES);
+        }, 100);
+    }
+
 }
 

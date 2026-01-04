@@ -10,10 +10,7 @@ class enemy extends MoveableObject {
     hasDeathPhysics = false;
     deathSpeedX = 0;
     showDrawFrame = true;
-
-    deathAnimationCount = 0;
-    deathAnimationMax = 30;
-    deathInterval = null;
+    deathFrameIndex = 0;
 
     IMAGES_WALKING = [];
     IMAGES_DEAD = [];
@@ -23,39 +20,40 @@ class enemy extends MoveableObject {
 
     }
 
-    animate() {
-        setInterval(() => {
-            if (!this.isDead) {
-                this.moveLeft();
-            }
-        }, 1000 / 60);
+animate() {
+    let intervalTime = !this.isDead ? 100 : 200; // Death langsamer
 
-        setInterval(() => {
-            if (!this.isDead) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else if (this.isDead) {
-                this.playDeathAnimation();
-            }
-        }, 100);
-    }
-
-    playDeathAnimation() { // Death-Animation abspielen 
-        this.playAnimation(this.IMAGES_DEAD);
-        this.deathAnimationCount++;
-        if (this.deathAnimationCount >= this.deathAnimationMax) {
-            this.cleanupAndRemove();
+    // Bewegung
+    this.moveInterval = setInterval(() => {
+        if (!this.isDead) {
+            this.moveLeft();
         }
-    }
+    }, 1000 / 60);
 
-    cleanupAndRemove() {
-        clearInterval(this.moveInterval);
-        clearInterval(this.animationInterval);
+    // Animation
+    this.animationInterval = setInterval(() => {
+        if (!this.isDead) {
+            this.playAnimation(this.IMAGES_WALKING);
+        } else {
+            this.playDeathAnimationOnce();
+        }
+    }, intervalTime);
+}
+
+playDeathAnimationOnce() {
+    const frames = this.IMAGES_DEAD.length;
+
+    // aktuelles Bild setzen
+    this.img = this.imageCache[this.IMAGES_DEAD[this.deathFrameIndex]];
+
+    this.deathFrameIndex++;
+
+    // Wenn letzter Frame erreicht → entfernen
+    if (this.deathFrameIndex >= frames) {
         this.removeFromWorld();
     }
+}
 
-    isAboveGround() {
-        if (this.isDead) return true;
-        return super.isAboveGround();
-    }
+
 
 }

@@ -22,7 +22,7 @@ class enemyDino extends enemy {
         '../img/enemy/dino/walk4.png',
     ];
 
-        IMAGES_DEAD = [
+    IMAGES_DEAD = [
         '../img/enemy/dino/death1.png',
         '../img/enemy/dino/death2.png',
         '../img/enemy/dino/death3.png',

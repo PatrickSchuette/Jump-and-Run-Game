@@ -46,16 +46,7 @@ class MoveableObject extends DrawableObject {
         }
     }
 
-    /** 
-     * Plays an animation by cycling through image frames. 
-     * @param {string[]} images - Array of image paths.
-     */
-    playAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
-    }
+
 
     /**IF Object is in the Air over Ground, starts the gravity to ground */
     applyGravity() {

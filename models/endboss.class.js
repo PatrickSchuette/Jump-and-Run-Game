@@ -1,14 +1,16 @@
-class Endboss extends MoveableObject {
+class Endboss extends enemy {
     y = -200;
     otherDirection = true;
     height = 950;
     width = 400;
 
+    energy=100;
+
     hitPosition = {
         top: false,
         bottom: false,
-        left: false,
-        right: false
+        left: true,
+        right: true
     }
 
     offset = {

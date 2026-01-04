@@ -1,4 +1,4 @@
-class HealthStatus extends StatusBar {
+class EndbossStatus extends StatusBar {
     IMAGES = [
         '../img/Heart/heart.png',
         '../img/Heart/heart2.png',
@@ -10,19 +10,22 @@ class HealthStatus extends StatusBar {
         '../img/Heart/heart8.png',
         '../img/Heart/heart9.png',
         '../img/Heart/heart10.png',
-
     ];
-    
+
     maxValue = 100;
     textSuffix = "%";
     percentage = 100;
     y = 10;
+    x = 630;
+    textOffsetX = -70;
 
     constructor() {
-        super(); 
-        this.loadImages(this.IMAGES); 
-        //this.setPercentage(this.percentage); // setzt das richtige Bild
-            this.animate();
+        super();
+
+        this.loadImage(this.IMAGES[0]);
+        this.loadImages(this.IMAGES);
+
+        this.animate();
     }
 
     animate() {
@@ -30,5 +33,7 @@ class HealthStatus extends StatusBar {
             this.playAnimation(this.IMAGES);
         }, 100);
     }
-}
 
+
+
+}

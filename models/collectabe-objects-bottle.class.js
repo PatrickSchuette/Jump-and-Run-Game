@@ -6,14 +6,32 @@ class CollectableBottle extends MoveableObject {
         right: false
     }
     showDrawFrame = true;
+    IMAGES = [
+        '../img/Ball_animation/Bll_animation2_1.png',
+        '../img/Ball_animation/Bll_animation2_2.png',
+        '../img/Ball_animation/Bll_animation2_3.png',
+        '../img/Ball_animation/Bll_animation2_4.png',
+        '../img/Ball_animation/Bll_animation2_5.png',
+        '../img/Ball_animation/Bll_animation2_6.png',
+        '../img/Ball_animation/Bll_animation2_7.png',
+    ]
 
     constructor(x, y, otherDirection) {
         super();
-        this.loadImage('./img/bottle/1_salsa_bottle_on_ground.png');
+        this.loadImages(this.IMAGES);
         this.x = x;
         this.y = y;
-        this.height = 120;
-        this.width = 120;
+        this.height = 80;
+        this.width = 80;
         this.otherDirection = otherDirection;
+            this.animate();
+    }
+
+    animate() {
+        setInterval(() => {
+
+            this.playAnimation(this.IMAGES);
+
+        }, 100);
     }
 }
