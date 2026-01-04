@@ -14,11 +14,20 @@ let elementRev = {
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
 
-    console.log('My world is ', world)
+    const selected = localStorage.getItem("selectedCharacter");
 
+    if (selected) {
+        // Charakter existiert → Spiel starten
+        world = new World(canvas, keyboard);
+    } else {
+        // Kein Charakter → Auswahl anzeigen
+        world = new Option(canvas, keyboard);
+    }
+
+    console.log('My world is ', world);
 }
+
 
 window.addEventListener('keydown', (e) => {
     // console.log('key: ' + e.key + ' ; Keycode: ' + e.keyCode);

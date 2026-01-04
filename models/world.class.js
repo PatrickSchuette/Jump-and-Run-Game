@@ -1,25 +1,41 @@
 class World {
-    character = new CharacterKnight();
+    character;
     level = START;
     canvas;
     ctx;
     keyboard;
     camera_x = 0;
-    statusbarHealth = new HealthStatus();
-    statusbarCoin = new CoinStatus(this.character);
-    statusbarBottle = new BottleStatus(this.character);
     throwableObjects = [];
     statusPlayMode;
 
     constructor(canvas, keyboard) {
+
+        const selected = localStorage.getItem("selectedCharacter");
+        console.log(selected);
+
+        switch (selected) { 
+            case "knight": this.character = new CharacterKnight(); break; 
+            case "mage": this.character = new CharacterMage(); break; 
+            case "rouge": this.character = new CharacterRogue(); break; 
+            default: this.character = new CharacterKnight(); 
+        }
+
+        // ⬇️ Statusbars ERST JETZT erzeugen!
+        this.statusbarHealth = new HealthStatus();
+        this.statusbarCoin = new CoinStatus(this.character);
+        this.statusbarBottle = new BottleStatus(this.character);
+
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.statusPlayMode = this.level.playMode;
+
         this.setWorld();
         this.draw();
         this.run();
     }
+
+
 
     setWorld() {
         this.character.world = this;
