@@ -13,8 +13,12 @@ let elementRev = {
     btnFight: document.getElementById("btnFight"),
     btnOptions: document.getElementById("btnOptions"),
 }
+let configureMenu = null;
+
 
 function init() {
+    ensureDefaultControls();
+
     canvas = document.getElementById('canvas');
 
     const selected = localStorage.getItem("selectedCharacter");
@@ -102,6 +106,26 @@ function startGame() {
     world.setLevel(level1());
 }
 
+elementRev.btnOptions.addEventListener("click", () => {
+    elementRev.btnOptions.blur();
+
+    if (!configureMenu) {
+        if (world && world.stop) world.stop();
+
+        configureMenu = new Configure(canvas, keyboard);
+        return;
+    }
+
+    configureMenu.close();
+    configureMenu = null;
+
+    world = new World(canvas, keyboard);
+    world.setLevel(level1());
+});
+
+
+
+
 
 // Buttons verbinden
 bindButton(elementRev.btnLeft, "LEFT");
@@ -109,3 +133,19 @@ bindButton(elementRev.btnRight, "RIGHT");
 bindButton(elementRev.btnJump, "SPACE");
 bindButton(elementRev.btnThrow, "D");
 bindButton(elementRev.btnFight, "ATTAC");
+
+function ensureDefaultControls() {
+    const existing = localStorage.getItem("controls");
+
+    if (!existing) {
+        const defaultControls = {
+            Left: "LEFT",
+            Right: "RIGHT",
+            Jump: "SPACE",
+            Fight: "F",
+            Throw: "D"
+        };
+
+        localStorage.setItem("controls", JSON.stringify(defaultControls));
+    }
+}

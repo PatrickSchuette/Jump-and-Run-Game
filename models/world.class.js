@@ -42,21 +42,22 @@ class World {
     }
 
 
-setLevel(newLevel) {
-    this.level = newLevel;
-    this.statusPlayMode = newLevel.playMode;
+    setLevel(newLevel) {
+        this.level = newLevel;
+        this.statusPlayMode = newLevel.playMode;
 
-    this.character.hadFirstContact = this.statusPlayMode;
+        this.character.hadFirstContact = this.statusPlayMode;
 
-    this.level.enemies.forEach(enemy => enemy.world = this);
+        this.level.enemies.forEach(enemy => enemy.world = this);
 
-    this.character.x = 105;
-}
+        this.character.x = 105;
+    }
 
 
 
 
     draw() {
+        if (this.animationStopped) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         this.ctx.translate(this.camera_x, 0);
@@ -218,4 +219,11 @@ setLevel(newLevel) {
     endboss() {
         return this.level.enemies.find(e => e instanceof Endboss);
     }
+
+    resume() {
+        this.animationStopped = false;
+        this.draw();
+        this.run();
+    }
+
 }
