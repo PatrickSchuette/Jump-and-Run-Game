@@ -14,7 +14,7 @@ class Character extends MoveableObject {
 
     world;
     collectableObjects = {
-        bottle: 80,
+        bottle: 0,
         coin: 0,
         maxBottle: 9,
         maxCoin: 6

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
-    <title>El pollo loco </title>
+    <title>Jump and Rund Game </title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -45,11 +45,15 @@
 <body onload="init()">
 
     <div id="game-container">
-        <h1 class="onlyDesktop">El pollo loco</h1>
+        <h1 class="onlyDesktop">Jump and Rund Game</h1>
         <div id="header">
             <button id="btnStart" class="gameButton"></button>
-            <button id="btnSound" class="gameButton"></button>
-            <button id="btnFullscreen" class="gameButton"></button>
+            <div>
+                <button id="btnOptions" class="gameButton"></button>
+                <button id="btnSound" class="gameButton"></button>
+                <button id="btnFullscreen" class="gameButton"></button>
+            </div>
+
         </div>
         <canvas id="canvas" width="720" height="480"> </canvas>
 
@@ -59,6 +63,7 @@
                 <button id="btnRight" class="gameButton"></button>
             </div>
             <div>
+                <button id="btnFight" class="gameButton"></button>
                 <button id="btnThrow" class="gameButton"></button>
                 <button id="btnJump" class="gameButton"></button>
             </div>

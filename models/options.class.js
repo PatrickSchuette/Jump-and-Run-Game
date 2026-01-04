@@ -4,10 +4,13 @@ class Option {
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
 
+        this.background = new Image(); 
+        this.background.src = "../img/World/Background2.jpg";
+
         this.characters = [
-            { name: "knight", img: "../img/character/Knight/knight.png", x: 100, y: 200 },
-            { name: "mage",   img: "../img/character/Mage/mage.png",   x: 250, y: 200 },
-            { name: "rouge", img: "../img/character/Rogue/rogue.png", x: 400, y: 200 }
+            { name: "knight", img: "../img/character/Knight/knight.png", x: 0, y: 50 },
+            { name: "mage",   img: "../img/character/Mage/mage.png",   x: 160, y: 50 },
+            { name: "rouge", img: "../img/character/Rogue/rogue.png", x: 310, y: 50 }
         ];
 
         this.loadedImages = [];
@@ -36,23 +39,35 @@ class Option {
                     x > char.x && x < char.x + 200 &&
                     y > char.y && y < char.y + 200
                 ) {
-                    // Charakter speichern
                     localStorage.setItem("selectedCharacter", char.name);
 
-                    // Spiel starten
                     world = new World(this.canvas, this.keyboard);
                 }
             });
         });
     }
 
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.characters.forEach(char => {
-            this.ctx.drawImage(char.image, char.x, char.y, 200, 200);
-        });
+    this.ctx.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
 
-        requestAnimationFrame(() => this.draw());
-    }
+    this.ctx.font = "32px Arial";
+    this.ctx.fillStyle = "red";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText("Please select your character", this.canvas.width / 2, 80);
+
+    this.characters.forEach(char => {
+        this.ctx.drawImage(char.image, char.x, char.y, 450, 450);
+
+        this.ctx.font = "20px Arial";
+        this.ctx.fillStyle = "black";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText(char.name.toUpperCase(), char.x + 200, char.y + 180);
+    });
+
+    requestAnimationFrame(() => this.draw());
+}
+
+
 }

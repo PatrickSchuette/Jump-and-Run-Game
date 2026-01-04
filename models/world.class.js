@@ -42,13 +42,18 @@ class World {
     }
 
 
-    setLevel(newLevel) {
-        this.level = newLevel;
-        this.statusPlayMode = newLevel.playMode;
-        this.character.hadFirstContact = this.statusPlayMode;
+setLevel(newLevel) {
+    this.level = newLevel;
+    this.statusPlayMode = newLevel.playMode;
+    this.character.hadFirstContact = this.statusPlayMode;
 
-        this.level.enemies.forEach(enemy => enemy.world = this);
-    }
+    this.level.enemies.forEach(enemy => enemy.world = this);
+
+
+        this.character.x = 105;
+    
+}
+
 
 
     draw() {

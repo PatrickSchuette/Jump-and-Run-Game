@@ -33,7 +33,7 @@ canvas {
 }
 
 .gameButton {
-    width: 32px;
+    width: 48px;
     aspect-ratio: 1;
     border-radius: 50%;
     background-size: cover;
@@ -42,32 +42,46 @@ canvas {
 }
 
 #btnStart {
-    background-image: url('./img/play-button.png');
+    background-image: url('./img/button/play-button.png');
 }
 
 #btnSound {
-    background-image: url('./img/sound-button.png');
+    background-image: url('./img/button/sound-button.png');
 }
 
 #btnFullscreen {
-    background-image: url('./img/fullscreen.png');
+    background-image: url('./img/button/fullscreen.png');
 }
 
 #btnLeft {
-    background-image: url('./img/arrow-left.png');
+    background-image: url('./img/button/arrow-left.png');
 }
 
 #btnRight {
-    background-image: url('./img/arrow-right.png');
+    background-image: url('./img/button/arrow-right.png');
 }
 
 #btnThrow {
-    background-image: url('./img/throw-button.png');
+    background-image: url('./img/button/throw-button.png');
+}
+
+#btnOptions {
+    background-image: url('./img/button/options.png');
+}
+
+#btnFight {
+    background-image: url('./img/button/fight.png');
 }
 
 #btnJump {
-    background-image: url('./img/jump.png');
+    background-image: url('./img/button/jump.png');
 }
+
+#header {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* ############# Smartphone ############## */
 @media only screen and (max-width: 720px) {
     canvas {
@@ -87,7 +101,7 @@ canvas {
 
 #game-container {
     position: relative;
-    width: 800px;
+    width: 720px;
     height: 600px;
 }
 

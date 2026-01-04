@@ -9,7 +9,9 @@ let elementRev = {
     btnThrow: document.getElementById("btnThrow"),
     btnStart: document.getElementById("btnStart"),
     btnSound: document.getElementById("btnSound"),
-    btnFullscreen: document.getElementById("btnFullscreen")
+    btnFullscreen: document.getElementById("btnFullscreen"),
+    btnFight: document.getElementById("btnFight"),
+    btnOptions: document.getElementById("btnOptions"),
 }
 
 function init() {
@@ -98,3 +100,4 @@ bindButton(elementRev.btnLeft, "LEFT");
 bindButton(elementRev.btnRight, "RIGHT");
 bindButton(elementRev.btnJump, "SPACE");
 bindButton(elementRev.btnThrow, "D");
+bindButton(elementRev.btnFight, "ATTAC");
