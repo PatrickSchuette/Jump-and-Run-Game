@@ -3,11 +3,11 @@ const LEVEL1 = new Level({
         count: 8,
         layers: [
 
-            '../img/World/clouds_back_layer1.png',
-            '../img/World/clouds_back_layer2.png',
-            '../img/World/sky.png',
-            '../img/World/mountains.png',
-            '../img/World/trees.png'
+            './img/world/clouds_back_layer1.png',
+            './img/world/clouds_back_layer2.png',
+            './img/world/sky.png',
+            './img/world/mountains.png',
+            './img/world/trees.png'
         ]
     },
 

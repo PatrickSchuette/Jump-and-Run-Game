@@ -4,7 +4,7 @@ class Cloud extends MoveableObject {
     height = 250;
 
     constructor() {
-        super().loadImage('../img/World/cloud1.png');
+        super().loadImage('./img/world/cloud1.png');
 
         this.x = Math.random() * 500;
         this.animate();

@@ -23,21 +23,21 @@ class enemyPlant extends enemy {
 
 
     IMAGES_WALKING = [
-        '../img/enemy/Plant/trap_plant.png',
-        '../img/enemy/Plant/trap_plant2.png',
-        '../img/enemy/Plant/trap_plant3.png',
-        '../img/enemy/Plant/trap_plant4.png',
-        '../img/enemy/Plant/trap_plant5.png',
-        '../img/enemy/Plant/trap_plant6.png'
+        './img/enemy/Plant/trap_plant.png',
+        './img/enemy/Plant/trap_plant2.png',
+        './img/enemy/Plant/trap_plant3.png',
+        './img/enemy/Plant/trap_plant4.png',
+        './img/enemy/Plant/trap_plant5.png',
+        './img/enemy/Plant/trap_plant6.png'
     ];
 
     IMAGES_DEAD = [
-        '../img/enemy/Plant/trap_plant.png',
-        '../img/enemy/Plant/trap_plant2.png',
-        '../img/enemy/Plant/trap_plant3.png',
-        '../img/enemy/Plant/trap_plant4.png',
-        '../img/enemy/Plant/trap_plant5.png',
-        '../img/enemy/Plant/trap_plant6.png'
+        './img/enemy/Plant/trap_plant.png',
+        './img/enemy/Plant/trap_plant2.png',
+        './img/enemy/Plant/trap_plant3.png',
+        './img/enemy/Plant/trap_plant4.png',
+        './img/enemy/Plant/trap_plant5.png',
+        './img/enemy/Plant/trap_plant6.png'
     ];
 
     constructor(x) {

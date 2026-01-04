@@ -23,12 +23,12 @@ class Endboss extends enemy {
     showDrawFrame = true;
 
     IMAGES_WALKING = [
-        '../img/enemy/boss/walk1.png',
-        '../img/enemy/boss/walk2.png',
-        '../img/enemy/boss/walk3.png',
-        '../img/enemy/boss/walk4.png',
-        '../img/enemy/boss/walk5.png',
-        '../img/enemy/boss/walk6.png'
+        './img/enemy/boss/walk1.png',
+        './img/enemy/boss/walk2.png',
+        './img/enemy/boss/walk3.png',
+        './img/enemy/boss/walk4.png',
+        './img/enemy/boss/walk5.png',
+        './img/enemy/boss/walk6.png'
     ];
 
     /** * Creates a new Endboss instance. 

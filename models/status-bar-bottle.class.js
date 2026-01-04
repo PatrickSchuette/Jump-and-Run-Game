@@ -1,12 +1,12 @@
 class BottleStatus extends StatusBar {
     IMAGES = [
-        '../img/Ball_animation/Bll_animation2_1.png',
-        '../img/Ball_animation/Bll_animation2_2.png',
-        '../img/Ball_animation/Bll_animation2_3.png',
-        '../img/Ball_animation/Bll_animation2_4.png',
-        '../img/Ball_animation/Bll_animation2_5.png',
-        '../img/Ball_animation/Bll_animation2_6.png',
-        '../img/Ball_animation/Bll_animation2_7.png',
+        './img/Ball_animation/Bll_animation2_1.png',
+        './img/Ball_animation/Bll_animation2_2.png',
+        './img/Ball_animation/Bll_animation2_3.png',
+        './img/Ball_animation/Bll_animation2_4.png',
+        './img/Ball_animation/Bll_animation2_5.png',
+        './img/Ball_animation/Bll_animation2_6.png',
+        './img/Ball_animation/Bll_animation2_7.png',
     ]
     percentage = 1;
     y = 100;

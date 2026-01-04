@@ -5,12 +5,12 @@ class Option {
         this.keyboard = keyboard;
 
         this.background = new Image(); 
-        this.background.src = "../img/World/Background2.jpg";
+        this.background.src = "./img/world/Background2.jpg";
 
         this.characters = [
-            { name: "knight", img: "../img/character/Knight/knight.png", x: 0, y: 50 },
-            { name: "mage",   img: "../img/character/Mage/mage.png",   x: 160, y: 50 },
-            { name: "rouge", img: "../img/character/Rogue/rogue.png", x: 310, y: 50 }
+            { name: "knight", img: "./img/character/Knight/knight.png", x: 100, y: 150 },
+            { name: "mage",   img: "./img/character/Mage/mage.png",   x: 260, y: 150 },
+            { name: "rouge", img: "./img/character/Rogue/rogue.png", x: 400, y: 150 }
         ];
 
         this.loadedImages = [];
@@ -58,12 +58,12 @@ draw() {
     this.ctx.fillText("Please select your character", this.canvas.width / 2, 80);
 
     this.characters.forEach(char => {
-        this.ctx.drawImage(char.image, char.x, char.y, 450, 450);
+        this.ctx.drawImage(char.image, char.x, char.y, 150, 150);
 
         this.ctx.font = "20px Arial";
         this.ctx.fillStyle = "black";
         this.ctx.textAlign = "center";
-        this.ctx.fillText(char.name.toUpperCase(), char.x + 200, char.y + 180);
+        this.ctx.fillText(char.name.toUpperCase(), char.x + 80, char.y + 180);
     });
 
     requestAnimationFrame(() => this.draw());

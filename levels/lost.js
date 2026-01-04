@@ -2,7 +2,7 @@ const LOST = new Level({
     background: {
         count: 3,
         layers: [
-            '../img/lost.png',
+            './img/lost.png',
         ]
     },
     clouds: 0,

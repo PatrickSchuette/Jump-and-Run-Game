@@ -16,17 +16,17 @@ class enemySpider extends enemy {
 
 
     IMAGES_WALKING = [
-        '../img/enemy/spider/walk1.png',
-        '../img/enemy/spider/walk2.png',
-        '../img/enemy/spider/walk3.png',
-        '../img/enemy/spider/walk4.png',
+        './img/enemy/spider/walk1.png',
+        './img/enemy/spider/walk2.png',
+        './img/enemy/spider/walk3.png',
+        './img/enemy/spider/walk4.png',
     ];
 
         IMAGES_DEAD = [
-        '../img/enemy/spider/death1.png',
-        '../img/enemy/spider/death2.png',
-        '../img/enemy/spider/death3.png',
-        '../img/enemy/spider/death4.png'
+        './img/enemy/spider/death1.png',
+        './img/enemy/spider/death2.png',
+        './img/enemy/spider/death3.png',
+        './img/enemy/spider/death4.png'
     ];
 
     constructor(x) {

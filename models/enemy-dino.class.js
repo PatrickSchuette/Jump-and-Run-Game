@@ -16,17 +16,17 @@ class enemyDino extends enemy {
 
 
     IMAGES_WALKING = [
-        '../img/enemy/dino/walk1.png',
-        '../img/enemy/dino/walk2.png',
-        '../img/enemy/dino/walk3.png',
-        '../img/enemy/dino/walk4.png',
+        './img/enemy/dino/walk1.png',
+        './img/enemy/dino/walk2.png',
+        './img/enemy/dino/walk3.png',
+        './img/enemy/dino/walk4.png',
     ];
 
     IMAGES_DEAD = [
-        '../img/enemy/dino/death1.png',
-        '../img/enemy/dino/death2.png',
-        '../img/enemy/dino/death3.png',
-        '../img/enemy/dino/death4.png'
+        './img/enemy/dino/death1.png',
+        './img/enemy/dino/death2.png',
+        './img/enemy/dino/death3.png',
+        './img/enemy/dino/death4.png'
     ];
 
     constructor(x) {

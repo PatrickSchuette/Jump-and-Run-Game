@@ -1,15 +1,15 @@
 class CoinStatus extends StatusBar {
     IMAGES = [
-        '../img/star/star.png',
-        '../img/star/star2.png',
-        '../img/star/star3.png',
-        '../img/star/star4.png',
-        '../img/star/star5.png',
-        '../img/star/star6.png',
-        '../img/star/star7.png',
-        '../img/star/star8.png',
-        '../img/star/star9.png',
-        '../img/star/star10.png',
+        './img/star/star.png',
+        './img/star/star2.png',
+        './img/star/star3.png',
+        './img/star/star4.png',
+        './img/star/star5.png',
+        './img/star/star6.png',
+        './img/star/star7.png',
+        './img/star/star8.png',
+        './img/star/star9.png',
+        './img/star/star10.png',
     ]
     y = 50;
 

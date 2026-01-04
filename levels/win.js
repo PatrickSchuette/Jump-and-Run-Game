@@ -2,7 +2,7 @@ const WIN = new Level({
     background: {
         count: 3,
         layers: [
-            '../img/win.png',
+            './img/win.png',
         ]
     },
     clouds: 0,

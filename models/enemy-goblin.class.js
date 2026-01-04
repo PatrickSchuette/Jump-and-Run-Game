@@ -16,19 +16,19 @@ class enemyGoblin extends enemy {
 
 
     IMAGES_WALKING = [
-        '../img/enemy/goblin/walk1.png',
-        '../img/enemy/goblin/walk2.png',
-        '../img/enemy/goblin/walk3.png',
-        '../img/enemy/goblin/walk4.png',
-        '../img/enemy/goblin/walk5.png',
-        '../img/enemy/goblin/walk6.png',
+        './img/enemy/goblin/walk1.png',
+        './img/enemy/goblin/walk2.png',
+        './img/enemy/goblin/walk3.png',
+        './img/enemy/goblin/walk4.png',
+        './img/enemy/goblin/walk5.png',
+        './img/enemy/goblin/walk6.png',
     ];
 
     IMAGES_DEAD = [
-        '../img/enemy/goblin/death1.png',
-        '../img/enemy/goblin/death2.png',
-        '../img/enemy/goblin/death3.png',
-        '../img/enemy/goblin/death4.png'
+        './img/enemy/goblin/death1.png',
+        './img/enemy/goblin/death2.png',
+        './img/enemy/goblin/death3.png',
+        './img/enemy/goblin/death4.png'
     ];
 
     constructor(x) {

@@ -2,7 +2,7 @@ const START = new Level({
     background: {
         count: 3,
         layers: [
-            '../img/startscreen_1.png',
+            './img/startscreen_1.png',
         ]
     },
     clouds: 0,

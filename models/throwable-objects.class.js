@@ -4,20 +4,20 @@ class ThrowableObject extends MoveableObject {
     distance = 200;
 
     IMAGES = [
-        '../img/Ball_animation/Bll_animation1_1.png',
-        '../img/Ball_animation/Bll_animation1_2.png',
-        '../img/Ball_animation/Bll_animation1_3.png',
-        '../img/Ball_animation/Bll_animation1_4.png',
-        '../img/Ball_animation/Bll_animation1_5.png',
-        '../img/Ball_animation/Bll_animation1_6.png',
-        '../img/Ball_animation/Bll_animation1_7.png',
-        '../img/Ball_animation/Bll_animation2_1.png',
-        '../img/Ball_animation/Bll_animation2_2.png',
-        '../img/Ball_animation/Bll_animation2_3.png',
-        '../img/Ball_animation/Bll_animation2_4.png',
-        '../img/Ball_animation/Bll_animation2_5.png',
-        '../img/Ball_animation/Bll_animation2_6.png',
-        '../img/Ball_animation/Bll_animation2_7.png',
+        './img/Ball_animation/Bll_animation1_1.png',
+        './img/Ball_animation/Bll_animation1_2.png',
+        './img/Ball_animation/Bll_animation1_3.png',
+        './img/Ball_animation/Bll_animation1_4.png',
+        './img/Ball_animation/Bll_animation1_5.png',
+        './img/Ball_animation/Bll_animation1_6.png',
+        './img/Ball_animation/Bll_animation1_7.png',
+        './img/Ball_animation/Bll_animation2_1.png',
+        './img/Ball_animation/Bll_animation2_2.png',
+        './img/Ball_animation/Bll_animation2_3.png',
+        './img/Ball_animation/Bll_animation2_4.png',
+        './img/Ball_animation/Bll_animation2_5.png',
+        './img/Ball_animation/Bll_animation2_6.png',
+        './img/Ball_animation/Bll_animation2_7.png',
     ]
 
     constructor(x, y, otherDirection) {
