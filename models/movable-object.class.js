@@ -20,13 +20,15 @@ class MoveableObject extends DrawableObject {
         left: true,
         right: true
     }
-    hitEnergy = 5;
+    dead = false;
+    hitEnergy = 10;
+    throwEnergy = 15;
     parentArray = null;
 
-constructor() {
+    constructor() {
         super();
         this.loadImage('./img/ball-energy.png');
-}
+    }
 
     /** move moveable Object to the right Direction */
     moveRight() {
@@ -39,17 +41,19 @@ constructor() {
     }
 
     /**check if the Moveale Objact has the first Contact ith another Object or have seen preovosly 
-     * @param {MoveableObject} mo Movable Object which is checked    */
-    checkFirstContact(mo) {
-        const dx = (this.x + this.width / 2) - (mo.x + mo.width / 2);
-        const dy = (this.y + this.height / 2) - (mo.y + mo.height / 2);
+     * @param {World} world Movable Object which is checked    */
+    checkFirstContact(world) {
+        const cameraLeft = world.camera_x * -1;
+        const cameraRight = cameraLeft + world.canvas.width;
 
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const enemyCenter = this.x + this.width / 2;
 
-        if (distance < 550) {
+        // Gegner wird erst aktiv, wenn er sichtbar ist
+        if (enemyCenter > cameraLeft && enemyCenter < cameraRight) {
             this.hadFirstContact = true;
         }
     }
+
 
 
 
@@ -90,20 +94,21 @@ constructor() {
         const a = this.getHitbox();
         const b = mo.getHitbox();
 
-        const touchingRight = a.right >= b.left && a.left < b.left && a.bottom > b.top && a.top < b.bottom;
-        const touchingLeft = a.left <= b.right && a.right > b.right && a.bottom > b.top && a.top < b.bottom;
-        const touchingTop = a.top <= b.bottom && a.bottom > b.bottom && a.right > b.left && a.left < b.right;
-        const touchingBottom = a.bottom >= b.top && a.top < b.top && a.right > b.left && a.left < b.right;
-        const collision = touchingRight || touchingLeft || touchingTop || touchingBottom;
+        const collision =
+            a.left < b.right &&
+            a.right > b.left &&
+            a.top < b.bottom &&
+            a.bottom > b.top;
 
         return {
             collision,
-            right: touchingRight,
-            left: touchingLeft,
-            top: touchingTop,
-            bottom: touchingBottom
+            right: a.right > b.left && a.left < b.left,
+            left: a.left < b.right && a.right > b.right,
+            top: a.top < b.bottom && a.bottom > b.bottom,
+            bottom: a.bottom > b.top && a.top < b.top
         };
     }
+
 
     /**
      * Returns the calculated hitbox boundaries of this object,
@@ -126,11 +131,12 @@ constructor() {
      * @param {number} hitEnergy - Amount of damage to apply.
      * @param {boolean} isDead - Whether the object is already dead.
      */
-    hit(hitEnergy, isDead) {
-        if (isDead) return;
+    hit(hitEnergy, dead) {
+        if (dead) return;
         this.energy -= hitEnergy;
-        if (this.energy < 0) {
+        if (this.energy <= 0) {
             this.energy = 0;
+            this.dead = true;
         } else {
             this.lastHit = new Date().getTime();
         }

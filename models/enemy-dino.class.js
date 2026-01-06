@@ -5,10 +5,10 @@ class enemyDino extends enemy {
     width = 270;
 
     offset = {
-        top: 150,
-        bottom: 160,
-        left: 220,
-        right: 260
+        top:55,
+        bottom: 60,
+        left: 10,
+        right: 40
     }
 
     hitEnergy = 10;

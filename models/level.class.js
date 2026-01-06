@@ -80,6 +80,7 @@ class Level {
         const enemy = new ClassRef(x);
 
         enemy.parentArray = this.enemies;
+        if (this.world) enemy.world = this.world;
         this.enemies.push(enemy);
     }
 
@@ -100,7 +101,7 @@ class Level {
     spawnCollectable(ClassRef) {
         const x = 200 + Math.random() * this.level_end_x;
         const y = 100 + Math.random() * 200;
-        
+
         const obj = new ClassRef(x, y);
 
         obj.parentArray = this.collectables;

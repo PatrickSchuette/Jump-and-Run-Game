@@ -6,7 +6,8 @@ class enemy extends MoveableObject {
         right: false
     }
 
-    isDead = false;
+    energy = 5;
+
     hasDeathPhysics = false;
     deathSpeedX = 0;
     showDrawFrame = true;
@@ -25,14 +26,14 @@ animate() {
 
     // Bewegung
     this.moveInterval = IntervalManager.setInterval(() => {
-        if (!this.isDead) {
+        if (!this.dead) {
             this.moveLeft();
         }
     }, 1000 / 60);
 
     // Animation
     this.animationInterval = IntervalManager.setInterval(() => {
-        if (!this.isDead) {
+        if (!this.dead) {
             this.playAnimation(this.IMAGES_WALKING);
         } else {
             this.playDeathAnimationOnce();

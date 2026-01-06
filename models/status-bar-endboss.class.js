@@ -19,8 +19,9 @@ class EndbossStatus extends StatusBar {
     x = 630;
     textOffsetX = -70;
 
-    constructor() {
+    constructor(boss) {
         super();
+        this.boss = boss;
 
         this.loadImage(this.IMAGES[0]);
         this.loadImages(this.IMAGES);
@@ -35,5 +36,9 @@ class EndbossStatus extends StatusBar {
     }
 
 
+draw(ctx) {
+    this.percentage = this.boss.energy; 
+    super.draw(ctx);
+}
 
 }

@@ -16,12 +16,12 @@ function level1() {
         enemies: {
             enemyGoblin: 1,
             enemyDino: 1,
-            enemyPlant: 3,
+            enemyPlant: 1,
             enemySpider: 1
         },
         collactableObjects: {
-            coins: 5,
-            bottle: 5
+            coins: 6,
+            bottle: 10
         },
         playMode: true
     });

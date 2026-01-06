@@ -1,9 +1,9 @@
 class Character extends MoveableObject {
-    y = -100;
-    height = 650;
-    width = 550;
+    y = 190;
+    height = 320;
+    width = 200;
     speed = 10;
-    groundY = 10;
+    groundY = 177.5;
 
     IMAGES_WALKING = [];
     IMAGES_JUMPING = [];
@@ -21,10 +21,10 @@ class Character extends MoveableObject {
     }
 
     offset = {
-        top: 300,
-        bottom: 200,
-        left: 180,
-        right: 250
+        top: 100,
+        bottom: 45,
+        left: 10,
+        right: 10
     }
 
     showDrawFrame = true;
@@ -87,9 +87,9 @@ class Character extends MoveableObject {
 
     extandOffsetAttac() {
         if (this.world.keyboard.ATTAC) {
-            this.offset.right = 180;
+            this.offset.right = -40;
         } else {
-            this.offset.right = 290;
+            this.offset.right = 10;
         }
     }
 

@@ -5,10 +5,10 @@ class enemyGoblin extends enemy {
     width = 190;
 
     offset = {
-        top: 150,
-        bottom: 140,
-        left: 60,
-        right: 60
+        top: 45,
+        bottom: 55,
+        left: 45,
+        right: 45
     };
 
     hitEnergy = 5;

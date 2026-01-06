@@ -5,10 +5,10 @@ class enemySpider extends enemy {
     width = 270;
 
     offset = {
-        top: 150,
-        bottom: 160,
-        left: 220,
-        right: 260
+        top: 70,
+        bottom: 70,
+        left: 75,
+        right: 60
     }
 
     hitEnergy = 10;

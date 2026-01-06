@@ -20,7 +20,6 @@ class World {
             default: this.character = new CharacterKnight();
         }
 
-        // ⬇️ Statusbars ERST JETZT erzeugen!
         this.statusbarHealth = new HealthStatus();
         this.statusbarCoin = new CoinStatus(this.character);
         this.statusbarBottle = new BottleStatus(this.character);
@@ -39,7 +38,10 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.level.world = this;
+        this.level.enemies.forEach(enemy => enemy.world = this);
     }
+
 
 
     setLevel(newLevel) {
@@ -108,7 +110,7 @@ class World {
         if (mo.otherDirection) this.flipImage(mo);
 
         mo.draw(this.ctx);
-        //  mo.drawFrame(this.ctx);
+        mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) this.flipImageBack(mo);
     }
@@ -144,14 +146,31 @@ class World {
     checkThrowObjects() {
         if (this.keyboard.D) {
             if (this.character.collectableObjects.bottle > 0) {
-                let bottle = new ThrowableObject(this.character.x + 300, this.character.y + 350, this.character.otherDirection);
+
+                // Hitbox-Breite und -Höhe
+                const hitboxWidth = this.character.width - this.character.offset.left - this.character.offset.right;
+                const hitboxHeight = this.character.height - this.character.offset.top - this.character.offset.bottom;
+
+                // Mitte der Hitbox
+                const centerX = this.character.x + this.character.offset.left + hitboxWidth / 2;
+                const centerY = this.character.y + this.character.offset.top + hitboxHeight / 2;
+
+                // Wurfpunkt abhängig von Blickrichtung
+                const throwX = centerX + (this.character.otherDirection ? -40 : 40);
+                const throwY = centerY;
+
+                // Flasche erzeugen
+                let bottle = new ThrowableObject(throwX, throwY, this.character.otherDirection);
                 bottle.parentArray = this.throwableObjects;
                 this.throwableObjects.push(bottle);
+
+                // Verbrauch
                 this.character.collectableObjects.bottle--;
                 this.statusbarBottle.setPercentage(this.character.collectableObjects.bottle);
             }
         }
     }
+
 
     checkCollisionEnemy() {
         this.level.enemies.forEach((enemy) => {
@@ -159,24 +178,23 @@ class World {
             const col = this.character.isColliding(enemy);
 
             if (col.collision) {
-                if (this.keyboard.ATTAC && !enemy.isDead) {
-                    enemy.isDead = true;
-                    enemy.hitEnergy = 0;
+                if (this.keyboard.ATTAC && !enemy.dead) {
+                    enemy.hit(this.character.hitEnergy, enemy.dead);
                 }
 
-                else if (!enemy.isDead) {
-                    this.character.hit(enemy.hitEnergy, enemy.isDead);
+                else if (!enemy.dead) {
+                    this.character.hit(enemy.hitEnergy, enemy.dead);
                     this.statusbarHealth.setPercentage(this.character.energy);
                 }
             }
 
-            enemy.checkFirstContact(this.character);
+            enemy.checkFirstContact(this);
         });
     }
 
     checkDeadEndboss(enemy) {
         if (!(enemy instanceof Endboss)) return;
-        if (enemy.isDead) this.setLevel(win());
+        if (enemy.dead) this.setLevel(win());
     }
 
     checkCollisionThrowable() {
@@ -185,19 +203,18 @@ class World {
             this.level.enemies.forEach((enemy) => {
 
                 if (bottle.isColliding(enemy).collision) {
-                    enemy.hit(bottle.hitEnergy, enemy.isDead);
-                    bottle.removeFromWorld();
-
-                    if (enemy.isDead) {
-                        enemy.isDead = true;
-                        enemy.hitEnergy = 0;
+                    enemy.hit(bottle.hitEnergy, enemy.dead);
+                    if (enemy.energy <= 0) {
+                        enemy.dead = true;
                     }
+                    bottle.removeFromWorld();
                 }
 
-                enemy.checkFirstContact(bottle);
+                enemy.checkFirstContact(this);
             });
         });
     }
+
 
     handleCollect(obj, type, max, statusbar) {
         if (this.character.collectableObjects[type] < max) {
