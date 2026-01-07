@@ -12,9 +12,9 @@ let elementRev = {
     btnFullscreen: document.getElementById("btnFullscreen"),
     btnFight: document.getElementById("btnFight"),
     btnOptions: document.getElementById("btnOptions"),
+    gameArea: document.getElementById('game-container')
 }
 let configureMenu = null;
-
 
 function init() {
     ensureDefaultControls();
@@ -124,6 +124,46 @@ elementRev.btnOptions.addEventListener("click", () => {
 });
 
 
+elementRev.btnFullscreen.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+        openFullscreen();
+    } else {
+        closeFullscreen();
+    }
+});
+
+
+function openFullscreen() {
+    if (elementRev.gameArea.requestFullscreen) {
+        elementRev.gameArea.requestFullscreen();
+    } else if (elementRev.gameArea.webkitRequestFullscreen) {
+        elementRev.gameArea.webkitRequestFullscreen();
+    } else if (elementRev.gameArea.msRequestFullscreen) {
+        elementRev.gameArea.msRequestFullscreen();
+    }
+}
+
+function closeFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+
+document.addEventListener("fullscreenchange", () => {
+    if (document.fullscreenElement) {
+        console.log('Fullscreen');
+        elementRev.btnFullscreen.style.backgroundImage = "url('./img/button/no-fullscreen.png')";
+    } else {
+        console.log('kein Fullscreen');
+        elementRev.btnFullscreen.style.backgroundImage = "url('./img/button/fullscreen.png')";
+    }
+});
+
 
 
 
@@ -149,3 +189,16 @@ function ensureDefaultControls() {
         localStorage.setItem("controls", JSON.stringify(defaultControls));
     }
 }
+
+
+function checkAutoFullscreen() {
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isLandscape = window.innerWidth > window.innerHeight;
+
+    if (isMobile && isLandscape && !document.fullscreenElement) {
+        openFullscreen();
+    }
+}
+
+window.addEventListener("resize", checkAutoFullscreen);
+window.addEventListener("load", checkAutoFullscreen);
