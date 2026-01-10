@@ -26,7 +26,7 @@ class CoinStatus extends StatusBar {
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
-        }, 100);
+        }, 100, 'StatusBarCoin: Animation');
     }
 
 }

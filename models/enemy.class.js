@@ -29,7 +29,7 @@ animate() {
         if (!this.dead) {
             this.moveLeft();
         }
-    }, 1000 / 60);
+    }, 1000 / 60, 'Enemy: Move');
 
     // Animation
     this.animationInterval = IntervalManager.setInterval(() => {
@@ -38,7 +38,7 @@ animate() {
         } else {
             this.playDeathAnimationOnce();
         }
-    }, intervalTime);
+    }, intervalTime, 'Enemy: Animation');
 }
 
 playDeathAnimationOnce() {

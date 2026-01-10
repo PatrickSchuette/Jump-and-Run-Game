@@ -132,9 +132,9 @@ class World {
             this.checkCollisionCollactable();
             this.checkCollisionEnemy();
             this.checkThrowObjects();
-        }, 200);
+        }, 200, `World:collision-check`);
 
-        IntervalManager.setInterval(() => { this.checkCollisionThrowable(); }, 25);
+        IntervalManager.setInterval(() => { this.checkCollisionThrowable(); }, 25, 'World: CheckThrowableObject');
     }
 
     stop() {

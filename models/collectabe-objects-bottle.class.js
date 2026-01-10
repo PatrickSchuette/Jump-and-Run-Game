@@ -32,6 +32,6 @@ class CollectableBottle extends MoveableObject {
 
             this.playAnimation(this.IMAGES);
 
-        }, 100);
+        }, 100, 'CollactableBottle: Animation');
     }
 }

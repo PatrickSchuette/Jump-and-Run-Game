@@ -52,6 +52,6 @@ class ThrowableObject extends MoveableObject {
                 clearInterval(this.throwInterval);
                 this.removeFromWorld();
             }
-        }, 25);
+        }, 25, 'ThrowableObject: Throw');
     }
 }

@@ -62,7 +62,7 @@ class Character extends MoveableObject {
 
             this.world.camera_x = - this.x + 100;
 
-        }, 1000 / 60);
+        }, 1000 / 60, 'Character: Keyboard');
 
 
         IntervalManager.setInterval(() => {
@@ -81,7 +81,7 @@ class Character extends MoveableObject {
             } else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
-        }, 50);
+        }, 50, 'Character: Animation');
 
     }
 

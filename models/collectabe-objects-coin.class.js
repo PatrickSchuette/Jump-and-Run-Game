@@ -35,6 +35,6 @@ class CollectableCoin extends MoveableObject {
 
             this.playAnimation(this.IMAGES);
 
-        }, 100);
+        }, 100, 'CollactabeCoin: Animation');
     }
 }
