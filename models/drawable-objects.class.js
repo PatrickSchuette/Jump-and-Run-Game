@@ -14,8 +14,8 @@ class DrawableObject {
         this.img.src = path;
     }
 
-        draw(ctx) {
-            if (!this.img) return;
+    draw(ctx) {
+        if (!this.img) return;
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
@@ -33,18 +33,18 @@ class DrawableObject {
             ctx.beginPath();
             ctx.lineWidth = 3;
             ctx.strokeStyle = 'red';
-ctx.rect(
-    this.x + this.offset.left,
-    this.y + this.offset.top,
-    this.width - this.offset.left - this.offset.right,
-    this.height - this.offset.top - this.offset.bottom
-);
+            ctx.rect(
+                this.x + this.offset.left,
+                this.y + this.offset.top,
+                this.width - this.offset.left - this.offset.right,
+                this.height - this.offset.top - this.offset.bottom
+            );
 
             ctx.stroke();
         }
     }
 
-        loadImages(arr) {
+    loadImages(arr) {
         arr.forEach(path => {
             let img = new Image();
             img.src = path;
@@ -52,15 +52,30 @@ ctx.rect(
         });
     }
 
-        /** 
-     * Plays an animation by cycling through image frames. 
-     * @param {string[]} images - Array of image paths.
-     */
+    /** 
+ * Plays an animation by cycling through image frames. 
+ * @param {string[]} images - Array of image paths.
+ */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
     }
-    
+
+    createSound(path) {
+        const audio = new Audio(path);
+        audio.volume = 0.7;
+        return audio;
+    }
+
+    playActionSound(sound) {
+        if (soundStatus) {
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+    }
+
+
 }

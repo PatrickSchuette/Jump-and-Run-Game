@@ -12,6 +12,10 @@ class Character extends MoveableObject {
     IMAGES_DEAD = [];
     IMAGES_ATTAC = [];
 
+    sndJump = this.createSound('./audio/jump.wav');
+    sndHit = this.createSound('./audio/hurt.mp3');
+    sndWalk = this.createSound('./audio/walking.wav');
+
     world;
     collectableObjects = {
         bottle: 0,
@@ -49,11 +53,13 @@ class Character extends MoveableObject {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
+                this.playActionSound(this.sndWalk);
             }
 
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
                 this.otherDirection = true;
+                this.playActionSound(this.sndWalk);
             }
 
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
@@ -93,16 +99,16 @@ class Character extends MoveableObject {
         }
     }
 
-playDeathAnimationOnce() {
-    if (this.isDeathSequenceRunning) return; // verhindert mehrfaches Auslösen
-    this.isDeathSequenceRunning = true;
+    playDeathAnimationOnce() {
+        if (this.isDeathSequenceRunning) return; // verhindert mehrfaches Auslösen
+        this.isDeathSequenceRunning = true;
 
-    this.playAnimation(this.IMAGES_DEAD);
+        this.playAnimation(this.IMAGES_DEAD);
 
-    setTimeout(() => {
-        this.world.setLevel(lost()); // richtig: über world
-    }, 2000);
-}
+        setTimeout(() => {
+            this.world.setLevel(lost()); // richtig: über world
+        }, 2000);
+    }
 
 
 

@@ -7,11 +7,11 @@ class World {
     camera_x = 0;
     throwableObjects = [];
     statusPlayMode;
+    statusShowFrame;
 
     constructor(canvas, keyboard) {
 
         const selected = localStorage.getItem("selectedCharacter");
-        console.log(selected);
 
         switch (selected) {
             case "knight": this.character = new CharacterKnight(); break;
@@ -19,6 +19,8 @@ class World {
             case "rouge": this.character = new CharacterRogue(); break;
             default: this.character = new CharacterKnight();
         }
+
+        this.ensureDDrawingFrame();
 
         this.statusbarHealth = new HealthStatus();
         this.statusbarCoin = new CoinStatus(this.character);
@@ -34,15 +36,11 @@ class World {
         this.run();
     }
 
-
-
     setWorld() {
         this.character.world = this;
         this.level.world = this;
         this.level.enemies.forEach(enemy => enemy.world = this);
     }
-
-
 
     setLevel(newLevel) {
         this.level = newLevel;
@@ -54,9 +52,6 @@ class World {
 
         this.character.x = 105;
     }
-
-
-
 
     draw() {
         if (this.animationStopped) return;
@@ -110,7 +105,7 @@ class World {
         if (mo.otherDirection) this.flipImage(mo);
 
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        if(this.statusShowFrame) mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) this.flipImageBack(mo);
     }
@@ -242,5 +237,19 @@ class World {
         this.draw();
         this.run();
     }
+
+ensureDDrawingFrame() {
+    let existing = localStorage.getItem("drawingFrame");
+
+    // Falls noch nicht vorhanden → Standardwert setzen
+    if (existing === null) {
+        localStorage.setItem("drawingFrame", "false");
+        existing = "false";
+    }
+
+    // String → Boolean konvertieren
+    this.statusShowFrame = (existing === "true");
+}
+
 
 }

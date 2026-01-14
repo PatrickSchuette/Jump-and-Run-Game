@@ -15,6 +15,12 @@ let elementRev = {
     gameArea: document.getElementById('game-container')
 }
 let configureMenu = null;
+let soundStatus = localStorage.getItem("soundStatus") === "true";
+let bgMusic = new Audio('./audio/game-sound.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.4;
+let userInteracted = false;
+
 
 function init() {
     ensureDefaultControls();
@@ -22,6 +28,9 @@ function init() {
     canvas = document.getElementById('canvas');
 
     const selected = localStorage.getItem("selectedCharacter");
+
+    if (localStorage.getItem("soundStatus") === null) localStorage.setItem("soundStatus", "true");
+    playSound();
 
     if (selected) {
         // Charakter existiert → Spiel starten
@@ -164,16 +173,32 @@ document.addEventListener("fullscreenchange", () => {
     }
 });
 
+elementRev.btnSound.addEventListener("click", () => {
+    elementRev.btnSound.blur();
+    soundStatus = !soundStatus;
+    playSound();
+});
 
+function playSound() {
+    localStorage.setItem("soundStatus", soundStatus);
 
+    if (soundStatus && userInteracted) {
+        bgMusic.play();
+        elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-button.png')";
+    } else {
+        bgMusic.pause();
+        elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-off.png')";
+    }
 
-// Buttons verbinden
+}
+
 bindButton(elementRev.btnLeft, "LEFT");
 bindButton(elementRev.btnRight, "RIGHT");
 bindButton(elementRev.btnJump, "SPACE");
 bindButton(elementRev.btnThrow, "D");
 bindButton(elementRev.btnFight, "ATTAC");
 
+/**check if default controll Keys ar stored in local Storage and create if neccessary */
 function ensureDefaultControls() {
     const existing = localStorage.getItem("controls");
 
@@ -190,15 +215,9 @@ function ensureDefaultControls() {
     }
 }
 
-
-function checkAutoFullscreen() {
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const isLandscape = window.innerWidth > window.innerHeight;
-
-    if (isMobile && isLandscape && !document.fullscreenElement) {
-        openFullscreen();
+window.addEventListener("pointerdown", () => {
+    if (!userInteracted) {
+        userInteracted = true;
+        if (soundStatus) bgMusic.play();
     }
-}
-
-window.addEventListener("resize", checkAutoFullscreen);
-window.addEventListener("load", checkAutoFullscreen);
+});
