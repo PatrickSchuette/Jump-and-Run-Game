@@ -92,10 +92,6 @@ canvas {
 }
 
 #mobile-controls {
-    position: absolute;
-    bottom: -150px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     gap: 20px;
     justify-content: space-between;
@@ -156,3 +152,36 @@ body:-webkit-full-screen {
     display: none !important;
 }
 
+@media screen and (max-height: 480px) {
+    body {
+        background-image: none;
+    }
+
+    .onlyDesktop {
+        display: none;
+    }
+
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    canvas {
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+
+    #mobile-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #header {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
