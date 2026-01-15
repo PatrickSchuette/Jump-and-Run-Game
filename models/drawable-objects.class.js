@@ -69,13 +69,13 @@ class DrawableObject {
         return audio;
     }
 
-    playActionSound(sound) {
-        if (soundStatus) {
-            sound.currentTime = 0;
-            sound.play();
-        }
-
+playActionSound(sound) {
+    if (soundStatus && sound.paused) {
+        sound.currentTime = 0;
+        sound.play();
     }
+}
+
 
 
 }
