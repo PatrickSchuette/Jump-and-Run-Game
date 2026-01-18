@@ -1,7 +1,7 @@
 function level1() {
     return new Level({
         background: {
-            count: 8,
+            count: 12,
             layers: [
 
                 './img/world/clouds_back_layer1.png',
@@ -12,12 +12,12 @@ function level1() {
             ]
         },
 
-        clouds: 3,
+        clouds: 6,
         enemies: {
-            enemyGoblin: 1,
-            enemyDino: 1,
-            enemyPlant: 1,
-            enemySpider: 1
+            enemyGoblin: 3,
+            enemyDino: 3,
+            enemyPlant: 5,
+            enemySpider: 4
         },
         collactableObjects: {
             coins: 6,
