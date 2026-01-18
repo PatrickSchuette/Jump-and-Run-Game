@@ -8,7 +8,6 @@ class Configure {
 
         this.controls = this.loadControls();
 
-        // Change Character Button
         this.changeCharBtn = {
             x: this.canvas.width / 3 - 150,
             y: this.canvas.height - 120,
@@ -16,19 +15,23 @@ class Configure {
             height: 60
         };
 
-        // Checkbox für Hitbox-Anzeige
         this.checkbox = {
             x: this.canvas.width / 3 + 180,
             y: this.canvas.height - 110,
             size: 30
         };
 
-        // Klick-Listener
         this.canvas.addEventListener("click", (e) => this.handleClick(e));
 
         this.draw();
     }
 
+    /**
+     * Loads control mappings from localStorage.
+     * Falls back to default mappings if none exist or parsing fails.
+     *
+     * @returns {Object<string,string>} A mapping of action → key.
+     */
     loadControls() {
         const raw = localStorage.getItem("controls");
 
@@ -50,6 +53,12 @@ class Configure {
         }
     }
 
+    /**
+     * Continuously draws the configuration menu overlay.
+     * Renders background dimming, control mappings, checkbox,
+     * and the "Change Character" button.
+     * Uses requestAnimationFrame for smooth rendering.
+     */
     draw() {
         if (!this.active) return;
 
@@ -69,61 +78,67 @@ class Configure {
             y += 40;
         }
 
-        // Checkbox zeichnen
         this.drawCheckbox();
 
-        // Change Character Button zeichnen
         this.drawChangeCharacterButton();
 
         requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Draws the hitbox toggle checkbox and its label.
+     * Reflects the current state stored in localStorage.
+     */
     drawCheckbox() {
         const cb = this.checkbox;
 
-        // Rahmen
         this.ctx.strokeStyle = "white";
         this.ctx.lineWidth = 3;
         this.ctx.strokeRect(cb.x, cb.y, cb.size, cb.size);
 
-        // Haken, wenn aktiv
         if (localStorage.getItem("drawingFrame") === "true") {
             this.ctx.fillStyle = "white";
             this.ctx.fillRect(cb.x + 4, cb.y + 4, cb.size - 8, cb.size - 8);
         }
 
-        // Text
         this.ctx.fillStyle = "white";
         this.ctx.font = "28px Arial";
         this.ctx.textAlign = "left";
         this.ctx.fillText("Show Hitbox", cb.x + cb.size + 20, cb.y + cb.size - 5);
     }
 
+    /**
+     * Draws the "Change Character" button including background,
+     * border and centered text.
+     */
     drawChangeCharacterButton() {
         const btn = this.changeCharBtn;
 
-        // Hintergrund
         this.ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
         this.ctx.fillRect(btn.x, btn.y, btn.width, btn.height);
 
-        // Rahmen
         this.ctx.strokeStyle = "white";
         this.ctx.lineWidth = 3;
         this.ctx.strokeRect(btn.x, btn.y, btn.width, btn.height);
 
-        // Text
         this.ctx.fillStyle = "white";
         this.ctx.font = "32px Arial";
         this.ctx.textAlign = "center";
         this.ctx.fillText("Change Character", this.canvas.width / 3, btn.y + 40);
     }
 
+    /**
+     * Handles click events inside the configuration menu.
+     * - Toggles hitbox display when clicking the checkbox.
+     * - Switches to the character selection screen when clicking the button.
+     * @event HTMLCanvasElement#click
+     * @param {MouseEvent} e - The click event.
+     */
     handleClick(e) {
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // --- Change Character Button ---
         const btn = this.changeCharBtn;
         const insideBtn =
             x > btn.x &&
@@ -138,7 +153,6 @@ class Configure {
             return;
         }
 
-        // --- Checkbox ---
         const cb = this.checkbox;
         const insideCheckbox =
             x > cb.x &&
@@ -152,13 +166,15 @@ class Configure {
 
             localStorage.setItem("drawingFrame", next ? "true" : "false");
 
-            // World soll neuen Wert nutzen
             if (world && world.ensureDDrawingFrame) {
                 world.ensureDDrawingFrame();
             }
         }
     }
 
+    /**
+     * Closes the configuration menu and stops rendering.
+     */
     close() {
         this.active = false;
     }

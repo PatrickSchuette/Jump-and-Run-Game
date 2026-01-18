@@ -21,40 +21,43 @@ class enemy extends MoveableObject {
 
     }
 
-animate() {
-    let intervalTime = !this.isDead ? 100 : 200; // Death langsamer
+    /**
+     * Starts movement and animation intervals for the enemy.
+     * - Moves left continuously while alive.
+     * - Plays walking animation while alive.
+     * - Plays death animation once when dead.
+     *
+     * Uses IntervalManager to register intervals.
+     */
+    animate() {
+        this.moveInterval = IntervalManager.setInterval(() => {
+            if (!this.dead) {
+                this.moveLeft();
+            }
+        }, 1000 / 60, 'Enemy: Move');
 
-    // Bewegung
-    this.moveInterval = IntervalManager.setInterval(() => {
-        if (!this.dead) {
-            this.moveLeft();
-        }
-    }, 1000 / 60, 'Enemy: Move');
-
-    // Animation
-    this.animationInterval = IntervalManager.setInterval(() => {
-        if (!this.dead) {
-            this.playAnimation(this.IMAGES_WALKING);
-        } else {
-            this.playDeathAnimationOnce();
-        }
-    }, intervalTime, 'Enemy: Animation');
-}
-
-playDeathAnimationOnce() {
-    const frames = this.IMAGES_DEAD.length;
-
-    // aktuelles Bild setzen
-    this.img = this.imageCache[this.IMAGES_DEAD[this.deathFrameIndex]];
-
-    this.deathFrameIndex++;
-
-    // Wenn letzter Frame erreicht → entfernen
-    if (this.deathFrameIndex >= frames) {
-        this.removeFromWorld();
+        this.animationInterval = IntervalManager.setInterval(() => {
+            if (!this.dead) {
+                this.playAnimation(this.IMAGES_WALKING);
+            } else {
+                this.playDeathAnimationOnce();
+            }
+        }, 100, 'Enemy: Animation');
     }
-}
 
+    /**
+     * Plays the enemy's death animation frame by frame.
+     * Once the last frame is reached, the enemy is removed from the world.
+     */
+    playDeathAnimationOnce() {
+        const frames = this.IMAGES_DEAD.length;
 
+        this.img = this.imageCache[this.IMAGES_DEAD[this.deathFrameIndex]];
 
+        this.deathFrameIndex++;
+
+        if (this.deathFrameIndex >= frames) {
+            this.removeFromWorld();
+        }
+    }
 }

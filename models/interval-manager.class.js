@@ -2,6 +2,13 @@ class IntervalManager {}
 
 IntervalManager.intervals = [];
 
+/**
+ * Creates a new interval and registers it in the IntervalManager registry.
+ * @param {Function} fn - The callback function executed on each interval tick.
+ * @param {number} time - Interval delay in milliseconds.
+ * @param {string} [label="unnamed"] - Optional label for debugging and tracking.
+ * @returns {number} The interval ID returned by setInterval.
+ */
 IntervalManager.setInterval = function (fn, time, label = "unnamed") {
     const id = setInterval(fn, time);
 
@@ -14,6 +21,10 @@ IntervalManager.setInterval = function (fn, time, label = "unnamed") {
     return id;
 };
 
+/**
+ * Clears all intervals that were registered through IntervalManager
+ * and resets the registry. Used when switching worlds or stopping the game.
+ */
 IntervalManager.clearAll = function () {
     IntervalManager.intervals.forEach(obj => clearInterval(obj.id));
     IntervalManager.intervals = [];

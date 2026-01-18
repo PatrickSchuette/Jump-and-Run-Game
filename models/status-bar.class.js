@@ -13,6 +13,11 @@ class StatusBar extends DrawableObject {
         this.setPercentage(this.percentage);
     }
 
+    /**
+     * Sets the current percentage value of the status bar.
+     * Also updates internal layout properties such as position and size.
+     * @param {number} percentage - The current value to display.
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
 
@@ -22,6 +27,10 @@ class StatusBar extends DrawableObject {
         this.height = 50;
     }
 
+    /**
+     * Draws the status bar image and its percentage text onto the canvas.
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+     */
     draw(ctx) {
         super.draw(ctx);
 

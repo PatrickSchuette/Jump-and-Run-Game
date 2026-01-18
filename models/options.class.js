@@ -4,12 +4,12 @@ class Option {
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
 
-        this.background = new Image(); 
+        this.background = new Image();
         this.background.src = "./img/world/Background2.jpg";
 
         this.characters = [
             { name: "knight", img: "./img/character/Knight/knight.png", x: 100, y: 150 },
-            { name: "mage",   img: "./img/character/Mage/mage.png",   x: 260, y: 150 },
+            { name: "mage", img: "./img/character/Mage/mage.png", x: 260, y: 150 },
             { name: "rouge", img: "./img/character/Rogue/rogue.png", x: 400, y: 150 }
         ];
 
@@ -20,6 +20,9 @@ class Option {
         this.draw();
     }
 
+    /**
+     * Loads all character preview images into memory.
+     */
     loadImages() {
         this.characters.forEach(char => {
             const img = new Image();
@@ -28,6 +31,11 @@ class Option {
         });
     }
 
+    /**
+     * Registers a click listener on the canvas to detect character selection.
+     * @event HTMLCanvasElement#click
+     * @param {MouseEvent} e - The click event.
+     */
     registerClick() {
         this.canvas.addEventListener("click", (e) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -47,27 +55,32 @@ class Option {
         });
     }
 
-draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    /**
+     * Continuously draws the character selection screen,
+     * including background, character images, and labels.
+     * Uses requestAnimationFrame for smooth rendering.
+     */
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.font = "32px Arial";
-    this.ctx.fillStyle = "red";
-    this.ctx.textAlign = "center";
-    this.ctx.fillText("Please select your character", this.canvas.width / 2, 80);
-
-    this.characters.forEach(char => {
-        this.ctx.drawImage(char.image, char.x, char.y, 150, 150);
-
-        this.ctx.font = "20px Arial";
-        this.ctx.fillStyle = "black";
+        this.ctx.font = "32px Arial";
+        this.ctx.fillStyle = "red";
         this.ctx.textAlign = "center";
-        this.ctx.fillText(char.name.toUpperCase(), char.x + 80, char.y + 180);
-    });
+        this.ctx.fillText("Please select your character", this.canvas.width / 2, 80);
 
-    requestAnimationFrame(() => this.draw());
-}
+        this.characters.forEach(char => {
+            this.ctx.drawImage(char.image, char.x, char.y, 150, 150);
+
+            this.ctx.font = "20px Arial";
+            this.ctx.fillStyle = "black";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText(char.name.toUpperCase(), char.x + 80, char.y + 180);
+        });
+
+        requestAnimationFrame(() => this.draw());
+    }
 
 
 }

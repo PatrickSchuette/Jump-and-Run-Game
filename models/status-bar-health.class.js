@@ -25,6 +25,10 @@ class HealthStatus extends StatusBar {
             this.animate();
     }
 
+    /**
+     * Starts the statusbar animation by cycling through all images
+     * at a fixed interval.
+     */
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);

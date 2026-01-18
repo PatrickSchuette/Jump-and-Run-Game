@@ -12,15 +12,18 @@ class BottleStatus extends StatusBar {
     y = 100;
 
     constructor(character) {
-        super(); 
+        super();
         this.maxValue = character.collectableObjects.maxBottle;
         this.percentage = character.collectableObjects.bottle;
-        this.loadImages(this.IMAGES); 
-      //  this.setPercentage(this.percentage); 
+        this.loadImages(this.IMAGES);
         this.textSuffix = " / " + this.maxValue;
-            this.animate();
+        this.animate();
     }
 
+    /**
+     * Starts the statusbar animation by cycling through all images
+     * at a fixed interval.
+     */
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);

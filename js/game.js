@@ -21,7 +21,10 @@ bgMusic.loop = true;
 bgMusic.volume = 0.4;
 let userInteracted = false;
 
-
+/**
+ * Initializes the game, loads settings, prepares canvas, sound, and world state.
+ * Creates either the character selection screen or the game world depending on saved data.
+ */
 function init() {
     ensureDefaultControls();
 
@@ -33,21 +36,18 @@ function init() {
     playSound();
 
     if (selected) {
-        // Charakter existiert → Spiel starten
         world = new World(canvas, keyboard);
     } else {
-        // Kein Charakter → Auswahl anzeigen
         world = new Option(canvas, keyboard);
     }
-
-    console.log('My world is ', world);
 }
 
-
+/**
+ * Handles keyboard keydown events and maps them to game controls.
+ * @event window#keydown
+ * @param {KeyboardEvent} e - The keyboard event.
+ */
 window.addEventListener('keydown', (e) => {
-    // console.log('key: ' + e.key + ' ; Keycode: ' + e.keyCode);
-
-    if (e.keyCode == 80) playGameButton();//on startscreen start game with p
     if (world.statusPlayMode) {
         switch (e.keyCode) {
             case 39: keyboard.RIGHT = true; break;
@@ -61,6 +61,11 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+/**
+ * Handles keyboard keyup events and resets game control flags.
+ * @event window#keyup
+ * @param {KeyboardEvent} e - The keyboard event.
+ */
 window.addEventListener('keyup', (e) => {
     switch (e.keyCode) {
         case 39: keyboard.RIGHT = false; break;
@@ -73,7 +78,12 @@ window.addEventListener('keyup', (e) => {
     }
 });
 
-
+/**
+ * Binds pointer and mouse events to a virtual button and maps them to keyboard flags.
+ *
+ * @param {HTMLElement} btn - The button element to bind.
+ * @param {string} key - The keyboard property name to toggle.
+ */
 function bindButton(btn, key) {
     btn.addEventListener("pointerdown", () => {
         keyboard[key] = true;
@@ -95,15 +105,25 @@ function bindButton(btn, key) {
     });
 }
 
+/**
+ * Starts the game when the start button is clicked.
+ * @event HTMLElement#click
+ */
 elementRev.btnStart.addEventListener("click", () => {
     startGame();
 });
 
+/**
+ * Starts the game when the start screen is active and the user presses "P".
+ */
 function playGameButton() {
     if (world.level === START) startGame();
 }
 
-
+/**
+ * Starts a new game world instance and loads the first level.
+ * Stops any existing world before creating a new one.
+ */
 function startGame() {
     elementRev.btnStart.blur();
 
@@ -115,12 +135,15 @@ function startGame() {
     world.setLevel(level1());
 }
 
+/**
+ * Opens or closes the configuration menu.
+ * @event HTMLElement#click
+ */
 elementRev.btnOptions.addEventListener("click", () => {
     elementRev.btnOptions.blur();
 
     if (!configureMenu) {
         if (world && world.stop) world.stop();
-
         configureMenu = new Configure(canvas, keyboard);
         return;
     }
@@ -132,7 +155,10 @@ elementRev.btnOptions.addEventListener("click", () => {
     world.setLevel(level1());
 });
 
-
+/**
+ * Toggles fullscreen mode when the fullscreen button is clicked.
+ * @event HTMLElement#click
+ */
 elementRev.btnFullscreen.addEventListener("click", () => {
     if (!document.fullscreenElement) {
         openFullscreen();
@@ -141,7 +167,9 @@ elementRev.btnFullscreen.addEventListener("click", () => {
     }
 });
 
-
+/**
+ * Requests fullscreen mode for the game container.
+ */
 function openFullscreen() {
     if (elementRev.gameArea.requestFullscreen) {
         elementRev.gameArea.requestFullscreen();
@@ -152,6 +180,9 @@ function openFullscreen() {
     }
 }
 
+/**
+ * Exits fullscreen mode if currently active.
+ */
 function closeFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -162,23 +193,34 @@ function closeFullscreen() {
     }
 }
 
-
+/**
+ * Updates the fullscreen button icon when fullscreen mode changes.
+ * @event document#fullscreenchange
+ */
 document.addEventListener("fullscreenchange", () => {
     if (document.fullscreenElement) {
-        console.log('Fullscreen');
+        elementRev.btnFullscreen.blur();
         elementRev.btnFullscreen.style.backgroundImage = "url('./img/button/no-fullscreen.png')";
     } else {
-        console.log('kein Fullscreen');
+        elementRev.btnFullscreen.blur();
         elementRev.btnFullscreen.style.backgroundImage = "url('./img/button/fullscreen.png')";
     }
 });
 
+/**
+ * Toggles sound on/off when the sound button is clicked.
+ * @event HTMLElement#click
+ */
 elementRev.btnSound.addEventListener("click", () => {
     elementRev.btnSound.blur();
     soundStatus = !soundStatus;
     playSound();
 });
 
+/**
+ * Toggles background music based on user settings and interaction state.
+ * Updates the sound button icon accordingly.
+ */
 function playSound() {
     localStorage.setItem("soundStatus", soundStatus);
 
@@ -198,7 +240,10 @@ bindButton(elementRev.btnJump, "SPACE");
 bindButton(elementRev.btnThrow, "D");
 bindButton(elementRev.btnFight, "ATTAC");
 
-/**check if default controll Keys ar stored in local Storage and create if neccessary */
+/**
+ * Ensures that default control mappings exist in localStorage.
+ * Creates them if missing.
+ */
 function ensureDefaultControls() {
     const existing = localStorage.getItem("controls");
 
@@ -215,6 +260,10 @@ function ensureDefaultControls() {
     }
 }
 
+/**
+ * Unlocks audio playback on first user interaction (required by browsers).
+ * @event window#pointerdown
+ */
 window.addEventListener("pointerdown", () => {
     if (!userInteracted) {
         userInteracted = true;

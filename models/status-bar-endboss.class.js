@@ -29,6 +29,10 @@ class EndbossStatus extends StatusBar {
         this.animate();
     }
 
+    /**
+     * Starts the statusbar animation by cycling through all images
+     * at a fixed interval.
+     */
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
@@ -36,9 +40,9 @@ class EndbossStatus extends StatusBar {
     }
 
 
-draw(ctx) {
-    this.percentage = this.boss.energy; 
-    super.draw(ctx);
-}
+    draw(ctx) {
+        this.percentage = this.boss.energy;
+        super.draw(ctx);
+    }
 
 }

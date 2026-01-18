@@ -33,11 +33,13 @@ class ThrowableObject extends MoveableObject {
         this.throw();
     }
 
+    /**
+     * Initiates the bottle throw.
+     * Sets horizontal and vertical speed and starts gravity.
+     */
     throw() {
-        let throwDirection = this.otherDirection;
         this.startX = this.x;
 
-        
         this.throwInterval = IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
             if (this.otherDirection) {
@@ -47,7 +49,7 @@ class ThrowableObject extends MoveableObject {
             }
 
             const traveled = Math.abs(this.x - this.startX);
-            
+
             if (traveled >= this.distance) {
                 clearInterval(this.throwInterval);
                 this.removeFromWorld();

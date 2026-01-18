@@ -48,6 +48,11 @@ class Character extends MoveableObject {
         this.animate();
     }
 
+
+/**
+ * Starts all character animation loops:
+ * Uses IntervalManager to register intervals.
+ */    
     animate() {
         IntervalManager.setInterval(() => {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -97,6 +102,9 @@ class Character extends MoveableObject {
 
     }
 
+    /**
+     * Extand the hitframe durring attak to the range of the knight sword
+     */
     extandOffsetAttac() {
         if (this.world.keyboard.ATTAC) {
             this.offset.right = -40;
@@ -105,18 +113,18 @@ class Character extends MoveableObject {
         }
     }
 
+    /**
+     * play the death sequent of character once
+     */
     playDeathAnimationOnce() {
-        if (this.isDeathSequenceRunning) return; // verhindert mehrfaches Auslösen
+        if (this.isDeathSequenceRunning) return;
         this.isDeathSequenceRunning = true;
 
         this.playAnimation(this.IMAGES_DEAD);
 
         setTimeout(() => {
-            this.world.setLevel(lost()); // richtig: über world
+            this.world.setLevel(lost());
         }, 2000);
     }
 
-
-
-    jump() { }
 }

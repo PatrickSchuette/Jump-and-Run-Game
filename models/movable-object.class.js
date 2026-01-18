@@ -40,24 +40,27 @@ class MoveableObject extends DrawableObject {
         if (this.hadFirstContact) this.x -= this.speed;
     }
 
-    /**check if the Moveale Objact has the first Contact ith another Object or have seen preovosly 
-     * @param {World} world Movable Object which is checked    */
+    /**
+     * Checks whether the object has entered the visible camera area.
+     * Once visible, the object becomes active (hadFirstContact = true).
+     * @param {World} world - The current game world instance.
+     */
     checkFirstContact(world) {
         const cameraLeft = world.camera_x * -1;
         const cameraRight = cameraLeft + world.canvas.width;
 
         const enemyCenter = this.x + this.width / 2;
 
-        // Gegner wird erst aktiv, wenn er sichtbar ist
         if (enemyCenter > cameraLeft && enemyCenter < cameraRight) {
             this.hadFirstContact = true;
         }
     }
 
-
-
-
-    /**IF Object is in the Air over Ground, starts the gravity to ground */
+    /**
+     * Applies gravity to the object by repeatedly adjusting its vertical
+     * position and vertical speed. Runs in an interval until the object
+     * reaches the ground.
+     */
     applyGravity() {
         IntervalManager.setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -67,7 +70,11 @@ class MoveableObject extends DrawableObject {
         }, 1000 / 25, 'MovableObject: Gravity');
     }
 
-    /**check if Object is in the Air or on the Ground */
+    /**
+     * Determines whether the object is currently above the ground.
+     * Throwable objects are always considered above ground.
+     * @returns {boolean} True if the object is in the air.
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
@@ -111,11 +118,9 @@ class MoveableObject extends DrawableObject {
 
 
     /**
-     * Returns the calculated hitbox boundaries of this object,
-     * including all offset adjustments.
-     *
-     * @returns {{left: number, right: number, top: number, bottom: number}}
-     * An object containing the hitbox coordinates.
+     * Computes the object's hitbox boundaries including offset adjustments.
+     * @returns {{left:number, right:number, top:number, bottom:number}}
+     * The hitbox coordinates.
      */
     getHitbox() {
         return {
@@ -127,9 +132,9 @@ class MoveableObject extends DrawableObject {
     }
 
     /**
-     * Applies damage to the object.
+     * Applies damage to the object. If energy reaches zero, the object dies.
      * @param {number} hitEnergy - Amount of damage to apply.
-     * @param {boolean} isDead - Whether the object is already dead.
+     * @param {boolean} dead - Whether the object is already dead.
      */
     hit(hitEnergy, dead) {
         if (dead) return;
@@ -143,8 +148,9 @@ class MoveableObject extends DrawableObject {
     }
 
     /**
-     * Returns whether the object is currently in a hurt state.
-     * @returns {boolean}
+     * Checks whether the object is currently in a hurt state.
+     * Hurt state lasts for 0.7 seconds after the last hit.
+     * @returns {boolean} True if the object is still hurt.
      */
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit; //Difference in ms
@@ -153,14 +159,17 @@ class MoveableObject extends DrawableObject {
     }
 
     /**
-     * Returns whether the object has no energy left.
-     * @returns {boolean}
+     * Checks whether the object has no energy left.
+     * @returns {boolean} True if the object is dead.
      */
     isDead() {
         return this.energy == 0;
     }
 
-    /** Removes this object from its parent array, if assigned. */
+    /**
+     * Removes the object from its parent array and clears its death interval.
+     * Used for enemies, projectiles and collectables.
+     */
     removeFromWorld() {
         clearInterval(this.deathInterval);
         if (this.parentArray) {

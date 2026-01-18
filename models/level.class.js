@@ -32,7 +32,11 @@ class Level {
     }
 
 
-    /** Generates background objects for the level. */
+    /**
+     * Generates background objects for the level by repeating layered images.
+     * @param {number} count - Number of background segments.
+     * @param {string[]} layers - Image paths for each background layer.
+     */
     generateBackground(count, layers) {
         const startOffset = -1;
 
@@ -45,20 +49,21 @@ class Level {
         }
     }
 
-    /** 
-      * Generates cloud objects. 
-      * @param {number} amount - Number of clouds to create. 
-    */
+    /**
+     * Generates cloud objects and adds them to the level.
+     * @param {number} amount - Number of clouds to create.
+     */
     generateClouds(amount) {
         for (let i = 0; i < amount; i++) {
             this.clouds.push(new Cloud());
         }
     }
 
-    /** 
-      * Generates enemy objects (chickens and optionally endboss). 
-      * @param {number} amount - Number of chickens to create. 
-    */
+    /**
+     * Generates enemies based on the provided configuration.
+     * Automatically spawns an endboss if playMode is enabled.
+     * @param {Object<string, number>} enemyConfig - Mapping of enemy type names to spawn counts.
+     */
     generateEnemies(enemyConfig) {
         if (!enemyConfig) return;
 
@@ -75,7 +80,11 @@ class Level {
         }
     }
 
-
+    /**
+     * Spawns a single enemy instance at a given x-position.
+     * @param {Function} ClassRef - The enemy class constructor.
+     * @param {number} x - The x-position where the enemy should spawn.
+     */
     spawnEnemy(ClassRef, x) {
         const enemy = new ClassRef(x);
 
@@ -84,20 +93,28 @@ class Level {
         this.enemies.push(enemy);
     }
 
+    /**
+     * Generates collectable objects (coins, bottles) based on configuration.
+     * @param {Object} config - Collectable configuration.
+     * @param {number} config.coins - Number of coins to spawn.
+     * @param {number} config.bottle - Number of bottles to spawn.
+     */
     generateCollectables(config) {
         if (!config) return;
 
-        // Coins
         for (let i = 0; i < (config.coins || 0); i++) {
             this.spawnCollectable(CollectableCoin);
         }
 
-        // Bottles
         for (let i = 0; i < (config.bottle || 0); i++) {
             this.spawnCollectable(CollectableBottle);
         }
     }
 
+    /**
+     * Spawns a collectable object at a random position within the level.
+     * @param {Function} ClassRef - The collectable class constructor.
+     */
     spawnCollectable(ClassRef) {
         const x = 200 + Math.random() * this.level_end_x;
         const y = 100 + Math.random() * 200;
@@ -108,9 +125,10 @@ class Level {
         this.collectables.push(obj);
     }
 
-    /** * Calculates the x-position where the level ends. 
-     * @param {number} backgroundCount - Number of background segments. 
-     * @returns {number} 
+    /**
+     * Calculates the x-position where the level ends based on background count.
+     * @param {number} backgroundCount - Number of background segments.
+     * @returns {number} The x-position marking the end of the level.
      */
     calculateLevelEndX(backgroundCount) {
         return (backgroundCount - 2) * this.segmentWidth - 150;

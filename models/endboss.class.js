@@ -31,8 +31,6 @@ class Endboss extends enemy {
         './img/enemy/boss/walk6.png'
     ];
 
-    /** * Creates a new Endboss instance. 
-     * * @param {number} x - Initial x-position of the boss. */
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
