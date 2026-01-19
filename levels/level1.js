@@ -8,7 +8,8 @@ function level1() {
                 './img/world/clouds_back_layer2.png',
                 './img/world/sky.png',
                 './img/world/mountains.png',
-                './img/world/trees.png'
+                './img/world/trees.png',
+                './img/world/ground.png'
             ]
         },
 

@@ -215,7 +215,7 @@ class World {
             const col = this.character.isColliding(enemy);
 
             if (col.collision) {
-                if (this.keyboard.ATTAC && !enemy.dead) {
+                if (this.character.isAttacking && !enemy.dead) {
                     enemy.hit(this.character.hitEnergy, enemy.dead);
                 }
 

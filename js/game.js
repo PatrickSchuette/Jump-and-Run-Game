@@ -56,7 +56,7 @@ window.addEventListener('keydown', (e) => {
             case 40: keyboard.DOWN = true; break;
             case 32: keyboard.SPACE = true; break;
             case 68: keyboard.D = true; break;
-            case 70: keyboard.ATTAC = true; break;
+            case 70: if (!keyboard.ATTAC_PRESSED) { keyboard.ATTAC = true; keyboard.ATTAC_PRESSED = true;}; break;
         }
     }
 });
@@ -74,7 +74,7 @@ window.addEventListener('keyup', (e) => {
         case 40: keyboard.DOWN = false; break;
         case 32: keyboard.SPACE = false; break;
         case 68: keyboard.D = false; break;
-        case 70: keyboard.ATTAC = false; break;
+        case 70: keyboard.ATTAC = false; keyboard.ATTAC_PRESSED = false; break;
     }
 });
 
@@ -238,7 +238,27 @@ bindButton(elementRev.btnLeft, "LEFT");
 bindButton(elementRev.btnRight, "RIGHT");
 bindButton(elementRev.btnJump, "SPACE");
 bindButton(elementRev.btnThrow, "D");
-bindButton(elementRev.btnFight, "ATTAC");
+bindButtonAttack(elementRev.btnFight);
+
+function bindButtonAttack(btn) {
+    btn.addEventListener("pointerdown", () => {
+        if (!keyboard.ATTAC_PRESSED) {
+            keyboard.ATTAC = true;
+            keyboard.ATTAC_PRESSED = true;
+        }
+    });
+
+    btn.addEventListener("pointerup", () => {
+        keyboard.ATTAC = false;
+        keyboard.ATTAC_PRESSED = false;
+    });
+
+    btn.addEventListener("pointerleave", () => {
+        keyboard.ATTAC = false;
+        keyboard.ATTAC_PRESSED = false;
+    });
+}
+
 
 /**
  * Ensures that default control mappings exist in localStorage.

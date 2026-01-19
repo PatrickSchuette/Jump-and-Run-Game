@@ -22,18 +22,25 @@ class Character extends MoveableObject {
         coin: 0,
         maxBottle: 9,
         maxCoin: 6
-    }
+    };
 
     offset = {
         top: 100,
         bottom: 45,
         left: 10,
         right: 10
-    }
+    };
+
+    hitEnergy = 20;
+    throwEnergy = 25;
+
+    isAttacking = false;
+    attackDuration = 150;
+    attackCooldown = 800;
+    canAttack = true;
 
     showDrawFrame = true;
     isDeathSequenceRunning = false;
-
 
     constructor() {
         super();
@@ -44,77 +51,112 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTAC);
         this.applyGravity();
-
         this.animate();
     }
 
-
-/**
- * Starts all character animation loops:
- * Uses IntervalManager to register intervals.
- */    
+    /**
+     * Starts all animation loops for movement and sprite playback.
+     * Delegates logic to smaller helper functions.
+     */
     animate() {
-        IntervalManager.setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                this.otherDirection = false;
-                this.playActionSound(this.sndWalk);
-            }
-
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-                this.playActionSound(this.sndWalk);
-            }
-
-            if(!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()){
-                this.sndWalk.pause(); 
-                this.sndWalk.currentTime = 0;
-            }
-
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-                this.speedY = 30;
-                this.playActionSound(this.sndJump);
-            }
-
-            this.world.camera_x = - this.x + 100;
-
-        }, 1000 / 60, 'Character: Keyboard');
-
-
-        IntervalManager.setInterval(() => {
-            this.extandOffsetAttac();
-            if (this.isDead()) {
-                this.playDeathAnimationOnce();
-                return;
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
-            } else if (this.world.keyboard.ATTAC) {
-                this.playAnimation(this.IMAGES_ATTAC);
-            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else {
-                this.playAnimation(this.IMAGES_IDLE);
-            }
-        }, 50, 'Character: Animation');
-
+        IntervalManager.setInterval(() => this.handleMovement(), 1000 / 60, 'Character: Keyboard');
+        IntervalManager.setInterval(() => this.handleAnimation(), 50, 'Character: Animation');
     }
 
     /**
-     * Extand the hitframe durring attak to the range of the knight sword
+     * Handles keyboard movement, jumping, walking sound,
+     * and camera tracking.
      */
-    extandOffsetAttac() {
-        if (this.world.keyboard.ATTAC) {
-            this.offset.right = -40;
+    handleMovement() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            this.otherDirection = false;
+            this.playActionSound(this.sndWalk);
+        }
+
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true;
+            this.playActionSound(this.sndWalk);
+        }
+
+        if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
+            this.sndWalk.pause();
+            this.sndWalk.currentTime = 0;
+        }
+
+        if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            this.speedY = 30;
+            this.playActionSound(this.sndJump);
+        }
+
+        if (this.world.keyboard.ATTAC && !this.world.keyboard.canAttack && this.canAttack && !this.isAttacking) {
+            this.startAttack();
+            this.world.keyboard.ATTAC_PRESSED = true;
+        }
+
+        this.world.camera_x = -this.x + 100;
+    }
+
+    /**
+     * Handles sprite animation selection based on character state.
+     */
+    handleAnimation() {
+        this.extandOffsetAttac();
+
+        if (this.isDead()) {
+            this.playDeathAnimationOnce();
+            return;
+        }
+
+        if (this.isAboveGround()) {
+            this.playAnimation(this.IMAGES_JUMPING);
+        } else if (this.isAttacking) {
+            this.playAnimation(this.IMAGES_ATTAC);
+        } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            this.playAnimation(this.IMAGES_WALKING);
+        } else if (this.isHurt()) {
+            this.playAnimation(this.IMAGES_HURT);
         } else {
-            this.offset.right = 10;
+            this.playAnimation(this.IMAGES_IDLE);
         }
     }
 
     /**
-     * play the death sequent of character once
+     * Extends the hitbox during attack to match sword reach.
+     */
+    extandOffsetAttac() {
+        this.offset.right = this.isAttacking ? -40 : 10;
+    }
+
+    /**
+     * Initiates a melee attack action.
+     * 
+     * Sets the character into an attacking state, temporarily extends the hitbox
+     * to match the weapon reach, triggers the attack animation, and schedules both
+     * the end of the attack window and the cooldown period. While attacking, the
+     * character can deal damage to enemies on collision. The attack cannot be
+     * triggered again until the cooldown has finished.
+     */
+    startAttack() {
+        this.isAttacking = true;
+        this.canAttack = false;
+
+        this.extandOffsetAttac();
+
+        this.playAnimation(this.IMAGES_ATTAC);
+
+        setTimeout(() => {
+            this.isAttacking = false;
+            this.extandOffsetAttac();
+        }, this.attackDuration);
+
+        setTimeout(() => { this.canAttack = true; }, this.attackCooldown);
+    }
+
+
+    /**
+     * Plays the death animation once and triggers level reset.
      */
     playDeathAnimationOnce() {
         if (this.isDeathSequenceRunning) return;
@@ -126,5 +168,4 @@ class Character extends MoveableObject {
             this.world.setLevel(lost());
         }, 2000);
     }
-
 }
