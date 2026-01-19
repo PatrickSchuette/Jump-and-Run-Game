@@ -22,27 +22,45 @@ class enemy extends MoveableObject {
     }
 
     /**
-     * Starts movement and animation intervals for the enemy.
-     * - Moves left continuously while alive.
-     * - Plays walking animation while alive.
-     * - Plays death animation once when dead.
-     *
-     * Uses IntervalManager to register intervals.
+     * Starts the movement interval for the enemy.
+     * Moves left continuously while the enemy is alive.
      */
-    animate() {
+    startMovementLoop() {
         this.moveInterval = IntervalManager.setInterval(() => {
             if (!this.dead) {
                 this.moveLeft();
             }
         }, 1000 / 60, 'Enemy: Move');
+    }
 
+    /**
+     * Starts the animation interval for the enemy.
+     * Delegates animation selection to updateAnimationState().
+     */
+    startAnimationLoop() {
         this.animationInterval = IntervalManager.setInterval(() => {
-            if (!this.dead) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else {
-                this.playDeathAnimationOnce();
-            }
+            this.updateAnimationState();
         }, 100, 'Enemy: Animation');
+    }
+
+    /**
+     * Selects the correct animation based on whether the enemy is alive or dead.
+     */
+    updateAnimationState() {
+        if (!this.dead) {
+            this.playAnimation(this.IMAGES_WALKING);
+        } else {
+            this.playDeathAnimationOnce();
+        }
+    }
+
+    /**
+     * Starts movement and animation intervals for the enemy.
+     * Movement and animation logic are handled in separate loops.
+     */
+    animate() {
+        this.startMovementLoop();
+        this.startAnimationLoop();
     }
 
     /**

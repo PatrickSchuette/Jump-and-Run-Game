@@ -11,33 +11,63 @@ class World {
     intervals;
 
     constructor(canvas, keyboard) {
+        this.character = this.initCharacter();
+        this.initCanvas(canvas);
+        this.initStatusBars();
+
+        this.level = start();
+        this.initWorldState(keyboard);
+
+        this.draw();
+        this.run();
+        this.intervals = IntervalManager.intervals;
+    }
+
+
+    /**
+     * Creates the player character based on the selected character stored
+     * in localStorage. Defaults to the knight if no valid selection exists.
+     */
+    initCharacter() {
         const selected = localStorage.getItem("selectedCharacter");
 
         switch (selected) {
-            case "knight": this.character = new CharacterKnight(); break;
-            case "mage": this.character = new CharacterMage(); break;
-            case "rouge": this.character = new CharacterRogue(); break;
-            default: this.character = new CharacterKnight();
+            case "knight": return new CharacterKnight();
+            case "mage": return new CharacterMage();
+            case "rouge": return new CharacterRogue();
+            default: return new CharacterKnight();
         }
+    }
 
-        this.ensureDDrawingFrame();
-
+    /**
+     * Initializes all status bars for health, coins, bottles and endboss.
+     */
+    initStatusBars() {
         this.statusbarHealth = new HealthStatus();
         this.statusbarCoin = new CoinStatus(this.character);
         this.statusbarBottle = new BottleStatus(this.character);
+    }
 
-        this.ctx = canvas.getContext('2d');
+    /**
+     * Initializes canvas and rendering context.
+     * @param {HTMLCanvasElement} canvas - The canvas element used for rendering.
+     */
+    initCanvas(canvas) {
         this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+    }
+
+    /**
+     * Initializes world state such as keyboard input, play mode and
+     * world references for character and enemies.
+     * @param {Keyboard} keyboard - The keyboard handler instance.
+     */
+    initWorldState(keyboard) {
         this.keyboard = keyboard;
         this.statusPlayMode = this.level.playMode;
-
         this.setWorld();
-        this.draw();
-        this.run();
-
-        this.intervals = IntervalManager.intervals;
-
     }
+
 
     /**
      * Assigns the world reference to the character, level and all enemies.
@@ -66,49 +96,74 @@ class World {
     }
 
     /**
-     * Main rendering loop of the game world.
-     * Draws background, clouds, character, enemies, collectables,
-     * throwable objects and status bars.
+     * Draws all background-related objects such as terrain and clouds.
+     */
+    drawBackground() {
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.clouds);
+    }
+
+    /**
+     * Draws all status bars including player health, coins, bottles
+     * and the endboss bar if applicable.
+     */
+    drawUI() {
+        this.addToMap(this.statusbarHealth);
+        this.addToMap(this.statusbarCoin);
+        this.addToMap(this.statusbarBottle);
+
+        const boss = this.endboss();
+        if (boss && boss.hadFirstContact) {
+            if (!this.statusbarEndboss) {
+                this.statusbarEndboss = new EndbossStatus(boss);
+            }
+            this.addToMap(this.statusbarEndboss);
+        }
+    }
+
+    /**
+     * Draws all active world objects including the player, enemies,
+     * collectables and throwable objects.
+     */
+    drawWorldObjects() {
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.collectables);
+        this.addObjectsToMap(this.throwableObjects);
+    }
+
+    /**
+     * Resets the canvas translation to its original state.
+     */
+    resetCamera() {
+        this.ctx.translate(-this.camera_x, 0);
+    }
+
+    /**
+     * Main rendering loop of the game world. Handles camera movement,
+     * background rendering, UI rendering and world object drawing.
      * Uses requestAnimationFrame for continuous rendering.
      */
     draw() {
         if (this.animationStopped) return;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
-
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds);
+        this.drawBackground();
 
         if (this.statusPlayMode) {
             this.ctx.translate(-this.camera_x, 0);
-
-            this.addToMap(this.statusbarHealth);
-            this.addToMap(this.statusbarCoin);
-            this.addToMap(this.statusbarBottle);
-
-            const boss = this.endboss();
-            if (boss && boss.hadFirstContact) {
-                if (!this.statusbarEndboss) {
-                    this.statusbarEndboss = new EndbossStatus(boss);
-                }
-                this.addToMap(this.statusbarEndboss);
-            }
-
+            this.drawUI();
             this.ctx.translate(this.camera_x, 0);
-
-            this.addToMap(this.character);
-            this.addObjectsToMap(this.level.enemies);
-            this.addObjectsToMap(this.level.collectables);
-            this.addObjectsToMap(this.throwableObjects);
+            this.drawWorldObjects();
         }
-        this.ctx.translate(-this.camera_x, 0)
 
-        self = this;
-        requestAnimationFrame(function () {
-            self.draw()
-        });
+        this.resetCamera();
+
+        requestAnimationFrame(() => this.draw());
     }
+
 
     /**
      * Draws an array of drawable objects onto the canvas.
@@ -178,66 +233,125 @@ class World {
     }
 
     /**
-     * Checks whether the player is throwing a bottle.
-     * Spawns a ThrowableObject at the correct position and direction,
-     * reduces bottle count and updates the bottle status bar.
+     * Determines whether the player is allowed to throw a bottle.
+     * @returns {boolean} True if the throw key is pressed and at least one bottle is available.
+     */
+    canThrowBottle() {
+        return this.keyboard.D && this.character.collectableObjects.bottle > 0;
+    }
+
+    /**
+     * Calculates the spawn position for a thrown bottle based on the
+     * character's hitbox and facing direction.
+     * @returns {{x:number, y:number}} The calculated throw coordinates.
+     */
+    calculateThrowPosition() {
+        const hitboxWidth = this.character.width - this.character.offset.left - this.character.offset.right;
+        const hitboxHeight = this.character.height - this.character.offset.top - this.character.offset.bottom;
+
+        const centerX = this.character.x + this.character.offset.left + hitboxWidth / 2;
+        const centerY = this.character.y + this.character.offset.top + hitboxHeight / 2;
+
+        const offsetX = this.character.otherDirection ? -40 : 40;
+
+        return { x: centerX + offsetX, y: centerY };
+    }
+
+    /**
+     * Spawns a new throwable bottle at the given coordinates and registers it
+     * inside the world's throwable object list.
+     * @param {number} x - The x-coordinate of the bottle spawn.
+     * @param {number} y - The y-coordinate of the bottle spawn.
+     */
+    spawnBottle(x, y) {
+        const bottle = new ThrowableObject(x, y, this.character.otherDirection);
+        bottle.parentArray = this.throwableObjects;
+        this.throwableObjects.push(bottle);
+    }
+
+    /**
+     * Decreases the player's bottle count and updates the bottle status bar.
+     */
+    consumeBottle() {
+        this.character.collectableObjects.bottle--;
+        this.statusbarBottle.setPercentage(this.character.collectableObjects.bottle);
+    }
+
+    /**
+     * Handles bottle throwing logic. If the player has bottles available and
+     * the throw key is pressed, a new throwable object is spawned and the
+     * inventory is updated.
      */
     checkThrowObjects() {
-        if (this.keyboard.D) {
-            if (this.character.collectableObjects.bottle > 0) {
+        if (!this.canThrowBottle()) return;
 
-                const hitboxWidth = this.character.width - this.character.offset.left - this.character.offset.right;
-                const hitboxHeight = this.character.height - this.character.offset.top - this.character.offset.bottom;
-                const centerX = this.character.x + this.character.offset.left + hitboxWidth / 2;
-                const centerY = this.character.y + this.character.offset.top + hitboxHeight / 2;
+        const pos = this.calculateThrowPosition();
+        this.spawnBottle(pos.x, pos.y);
+        this.consumeBottle();
+    }
 
-                const throwX = centerX + (this.character.otherDirection ? -40 : 40);
-                const throwY = centerY;
-
-                let bottle = new ThrowableObject(throwX, throwY, this.character.otherDirection);
-                bottle.parentArray = this.throwableObjects;
-                this.throwableObjects.push(bottle);
-
-                this.character.collectableObjects.bottle--;
-                this.statusbarBottle.setPercentage(this.character.collectableObjects.bottle);
-            }
+    /**
+     * Applies damage to an enemy if the player is currently attacking.
+     * @param {enemy} enemy - The enemy being checked.
+     */
+    handlePlayerAttack(enemy) {
+        if (this.character.isAttacking && !enemy.dead) {
+            enemy.hit(this.character.hitEnergy, enemy.dead);
         }
     }
 
     /**
-     * Checks collisions between the character and all enemies.
-     * Handles attack damage, enemy damage, hurt animations
-     * and triggers endboss death logic.
+     * Applies damage to the player if the enemy collides with them
+     * and the enemy is still alive.
+     * @param {enemy} enemy - The enemy being checked.
      */
-    checkCollisionEnemy() {
-        this.level.enemies.forEach((enemy) => {
-            this.checkDeadEndboss(enemy)
-            const col = this.character.isColliding(enemy);
-
-            if (col.collision) {
-                if (this.character.isAttacking && !enemy.dead) {
-                    enemy.hit(this.character.hitEnergy, enemy.dead);
-                }
-
-                else if (!enemy.dead) {
-                    this.character.hit(enemy.hitEnergy, enemy.dead);
-                    this.statusbarHealth.setPercentage(this.character.energy);
-                }
-            }
-
-            enemy.checkFirstContact(this);
-        });
+    handleEnemyAttack(enemy) {
+        if (!enemy.dead) {
+            this.character.hit(enemy.hitEnergy, enemy.dead);
+            this.statusbarHealth.setPercentage(this.character.energy);
+        }
     }
 
     /**
-     * Checks whether the given enemy is an endboss and has died.
-     * If so, switches the world to the win screen.
-     *
-     * @param {enemy} enemy - The enemy to check.
+     * Handles all collision-related interactions between the player
+     * and a single enemy, including attack damage, enemy damage and
+     * endboss death checks.
+     * @param {enemy} enemy - The enemy to process.
      */
-    checkDeadEndboss(enemy) {
-        if (!(enemy instanceof Endboss)) return;
-        if (enemy.dead) this.setLevel(win());
+    processEnemyCollision(enemy) {
+        const col = this.character.isColliding(enemy);
+
+        if (col.collision) {
+            if (this.character.isAttacking) {
+                this.handlePlayerAttack(enemy);
+            } else {
+                this.handleEnemyAttack(enemy);
+            }
+        }
+
+        this.checkEndbossDeath(enemy);
+        enemy.checkFirstContact(this);
+    }
+
+    /**
+     * Iterates over all enemies and processes collision logic for each one.
+     */
+    checkCollisionEnemy() {
+        this.level.enemies.forEach(enemy => {
+            this.processEnemyCollision(enemy);
+        });
+    }
+
+
+    /**
+     * Checks whether the enemy is an endboss and triggers the win
+     * condition if the boss has died.
+     * @param {enemy} enemy - The enemy being checked.
+     */
+    checkEndbossDeath(enemy) {
+        if (enemy instanceof Endboss && enemy.dead) {
+            this.setLevel(win());
+        }
     }
 
     /**
@@ -248,12 +362,9 @@ class World {
         this.throwableObjects.forEach((bottle) => {
 
             this.level.enemies.forEach((enemy) => {
-
                 if (bottle.isColliding(enemy).collision) {
                     enemy.hit(bottle.hitEnergy, enemy.dead);
-                    if (enemy.energy <= 0) {
-                        enemy.dead = true;
-                    }
+                    if (enemy.energy <= 0) { enemy.dead = true; }
                     bottle.removeFromWorld();
                 }
 

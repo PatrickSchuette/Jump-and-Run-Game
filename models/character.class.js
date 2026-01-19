@@ -64,10 +64,9 @@ class Character extends MoveableObject {
     }
 
     /**
-     * Handles keyboard movement, jumping, walking sound,
-     * and camera tracking.
-     */
-    handleMovement() {
+    * Handles horizontal movement and walking sound playback.
+    */
+    handleHorizontalMovement() {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
             this.moveRight();
             this.otherDirection = false;
@@ -84,42 +83,79 @@ class Character extends MoveableObject {
             this.sndWalk.pause();
             this.sndWalk.currentTime = 0;
         }
+    }
 
+    /**
+     * Handles jump input and applies vertical movement.
+     */
+    handleJump() {
         if (this.world.keyboard.SPACE && !this.isAboveGround()) {
             this.speedY = 30;
             this.playActionSound(this.sndJump);
         }
+    }
 
-        if (this.world.keyboard.ATTAC && !this.world.keyboard.canAttack && this.canAttack && !this.isAttacking) {
+    /**
+     * Handles attack input and triggers the attack sequence if allowed.
+     */
+    handleAttackInput() {
+        if (this.world.keyboard.ATTAC && this.canAttack && !this.isAttacking) {
             this.startAttack();
-            this.world.keyboard.ATTAC_PRESSED = true;
         }
+    }
+
+    /**
+     * Processes all player movement input including walking, jumping,
+     * attacking and camera tracking. Delegates logic to smaller helper
+     * functions for clarity and maintainability.
+     */
+    handleMovement() {
+        this.handleHorizontalMovement();
+        this.handleJump();
+        this.handleAttackInput();
 
         this.world.camera_x = -this.x + 100;
     }
 
     /**
-     * Handles sprite animation selection based on character state.
+     * Determines the current animation state based on character conditions.
+     * Returns a string key representing the animation to play.
+     */
+    getAnimationState() {
+        if (this.isDead()) return "dead";
+        if (this.isAboveGround()) return "jump";
+        if (this.isAttacking) return "attack";
+        if (this.isHurt()) return "hurt";
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) return "walk";
+        return "idle";
+    }
+
+    /**
+     * Plays the animation associated with the given state key.
+     * Uses a lookup table for clean and maintainable animation routing.
+     */
+    playStateAnimation(state) {
+        const animations = {
+            dead: () => this.playDeathAnimationOnce(),
+            jump: () => this.playAnimation(this.IMAGES_JUMPING),
+            attack: () => this.playAnimation(this.IMAGES_ATTAC),
+            walk: () => this.playAnimation(this.IMAGES_WALKING),
+            hurt: () => this.playAnimation(this.IMAGES_HURT),
+            idle: () => this.playAnimation(this.IMAGES_IDLE)
+        };
+
+        animations[state]();
+    }
+
+    /**
+     * Selects and plays the appropriate animation based on the character's
+     * current state using a state lookup table for clarity and maintainability.
      */
     handleAnimation() {
         this.extandOffsetAttac();
 
-        if (this.isDead()) {
-            this.playDeathAnimationOnce();
-            return;
-        }
-
-        if (this.isAboveGround()) {
-            this.playAnimation(this.IMAGES_JUMPING);
-        } else if (this.isAttacking) {
-            this.playAnimation(this.IMAGES_ATTAC);
-        } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-            this.playAnimation(this.IMAGES_WALKING);
-        } else if (this.isHurt()) {
-            this.playAnimation(this.IMAGES_HURT);
-        } else {
-            this.playAnimation(this.IMAGES_IDLE);
-        }
+        const state = this.getAnimationState();
+        this.playStateAnimation(state);
     }
 
     /**

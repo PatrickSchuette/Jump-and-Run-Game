@@ -22,38 +22,87 @@ class ThrowableObject extends MoveableObject {
 
     constructor(x, y, otherDirection) {
         super();
-        this.loadImage(this.IMAGES[0]);
-        this.loadImages(this.IMAGES);
+        this.initImages();
+        this.initPosition(x, y);
+        this.initSize();
 
-        this.x = x;
-        this.y = y;
-        this.height = 60;
-        this.width = 50;
         this.otherDirection = otherDirection;
         this.throw();
     }
 
     /**
-     * Initiates the bottle throw.
-     * Sets horizontal and vertical speed and starts gravity.
+     * Loads the initial image and all animation frames for the throwable object.
+     */
+    initImages() {
+        this.loadImage(this.IMAGES[0]);
+        this.loadImages(this.IMAGES);
+    }
+
+    /**
+     * Sets the initial position of the throwable object.
+     * @param {number} x - The starting x-coordinate.
+     * @param {number} y - The starting y-coordinate.
+     */
+    initPosition(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Sets the size of the throwable object.
+     */
+    initSize() {
+        this.height = 60;
+        this.width = 50;
+    }
+
+    /**
+     * Plays the animation frames for the throwable object.
+     */
+    updateThrowAnimation() {
+        this.playAnimation(this.IMAGES);
+    }
+
+    /**
+     * Moves the bottle horizontally based on its direction.
+     */
+    moveBottle() {
+        this.x += this.otherDirection ? -10 : 10;
+    }
+
+    /**
+     * Checks whether the bottle has reached its maximum travel distance.
+     * @returns {boolean} True if the bottle should be removed.
+     */
+    hasReachedMaxDistance() {
+        const traveled = Math.abs(this.x - this.startX);
+        return traveled >= this.distance;
+    }
+
+    /**
+     * Stops the throw interval and removes the bottle from the world.
+     */
+    finishThrow() {
+        clearInterval(this.throwInterval);
+        this.removeFromWorld();
+    }
+
+    /**
+     * Initiates the bottle throw movement, including animation playback,
+     * horizontal movement and automatic removal once the maximum distance
+     * has been reached.
      */
     throw() {
         this.startX = this.x;
 
         this.throwInterval = IntervalManager.setInterval(() => {
-            this.playAnimation(this.IMAGES);
-            if (this.otherDirection) {
-                this.x -= 10;
-            } else {
-                this.x += 10;
-            }
+            this.updateThrowAnimation();
+            this.moveBottle();
 
-            const traveled = Math.abs(this.x - this.startX);
-
-            if (traveled >= this.distance) {
-                clearInterval(this.throwInterval);
-                this.removeFromWorld();
+            if (this.hasReachedMaxDistance()) {
+                this.finishThrow();
             }
         }, 25, 'ThrowableObject: Throw');
     }
+
 }

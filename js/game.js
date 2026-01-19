@@ -29,7 +29,7 @@ function init() {
     ensureDefaultControls();
 
     canvas = document.getElementById('canvas');
-
+    checkNewSeassion();
     const selected = localStorage.getItem("selectedCharacter");
 
     if (localStorage.getItem("soundStatus") === null) localStorage.setItem("soundStatus", "true");
@@ -41,6 +41,25 @@ function init() {
         world = new Option(canvas, keyboard);
     }
 }
+
+/**
+ * Check if it's a reaload or new seassion for character selection
+ */
+function checkNewSeassion() {
+    const nav = performance.getEntriesByType("navigation")[0];
+
+    const isReload =
+        nav.type === "reload" ||
+        performance.navigation.type === 1;
+
+    if (!isReload) {
+        localStorage.removeItem("selectedCharacter");
+    }
+
+    sessionStorage.setItem("tabOpen", "true");
+}
+
+
 
 /**
  * Handles keyboard keydown events and maps them to game controls.
@@ -56,7 +75,7 @@ window.addEventListener('keydown', (e) => {
             case 40: keyboard.DOWN = true; break;
             case 32: keyboard.SPACE = true; break;
             case 68: keyboard.D = true; break;
-            case 70: if (!keyboard.ATTAC_PRESSED) { keyboard.ATTAC = true; keyboard.ATTAC_PRESSED = true;}; break;
+            case 70: if (!keyboard.ATTAC_PRESSED) { keyboard.ATTAC = true; keyboard.ATTAC_PRESSED = true; }; break;
         }
     }
 });

@@ -18,10 +18,7 @@ class Level {
      * @param {Object} config Level configuration object. 
      * */
     constructor(config) {
-        this.generateBackground(
-            config.background.count,
-            config.background.layers
-        );
+        this.generateBackground(config.background.count, config.background.layers);
 
         this.level_end_x = this.calculateLevelEndX(config.background.count);
         this.playMode = config.playMode;
@@ -60,24 +57,40 @@ class Level {
     }
 
     /**
-     * Generates enemies based on the provided configuration.
-     * Automatically spawns an endboss if playMode is enabled.
-     * @param {Object<string, number>} enemyConfig - Mapping of enemy type names to spawn counts.
+     * Spawns a group of enemies of the same type.
+     * @param {Function} EnemyClass - The enemy class constructor.
+     * @param {number} count - Number of enemies to spawn.
+     */
+    spawnEnemyGroup(EnemyClass, count) {
+        for (let i = 0; i < count; i++) {
+            this.spawnEnemy(EnemyClass, this.level_end_x - 200);
+        }
+    }
+
+    /**
+     * Spawns the endboss if the level is in play mode.
+     */
+    spawnEndbossIfNeeded() {
+        if (this.playMode) {
+            this.spawnEnemy(Endboss, this.level_end_x + 150);
+        }
+    }
+
+    /**
+     * Generates all enemies for the level based on the provided configuration.
+     * Spawns enemy groups and the endboss if required.
+     *
+     * @param {Object<string, number>} enemyConfig - Mapping of enemy types to spawn counts.
      */
     generateEnemies(enemyConfig) {
         if (!enemyConfig) return;
 
         for (const [enemyName, count] of Object.entries(enemyConfig)) {
             const EnemyClass = this.EnemyTypes[enemyName];
-
-            for (let i = 0; i < count; i++) {
-                this.spawnEnemy(EnemyClass, this.level_end_x - 200);
-            }
+            this.spawnEnemyGroup(EnemyClass, count);
         }
 
-        if (this.playMode) {
-            this.spawnEnemy(Endboss, this.level_end_x + 150);
-        }
+        this.spawnEndbossIfNeeded();
     }
 
     /**
