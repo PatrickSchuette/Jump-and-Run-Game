@@ -10,16 +10,13 @@ class Configure {
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
         this.active = true;
-
         this.controls = this.loadControls();
-
         this.changeCharBtn = {
             x: this.canvas.width / 2 - 150,
             y: this.canvas.height - 120,
             width: 300,
             height: 60
         };
-
         this.canvas.addEventListener("click", (e) => this.handleClick(e));
         this.draw();
     }
@@ -89,14 +86,11 @@ class Configure {
      */
     drawChangeCharacterButton() {
         const btn = this.changeCharBtn;
-
         this.ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
         this.ctx.fillRect(btn.x, btn.y, btn.width, btn.height);
-
         this.ctx.strokeStyle = "white";
         this.ctx.lineWidth = 3;
         this.ctx.strokeRect(btn.x, btn.y, btn.width, btn.height);
-
         this.ctx.fillStyle = "white";
         this.ctx.font = "32px Arial";
         this.ctx.textAlign = "center";

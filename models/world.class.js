@@ -146,9 +146,7 @@ class World {
      */
     draw() {
         if (this.animationStopped) return;
-
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
         this.drawBackground();
 
@@ -158,9 +156,7 @@ class World {
             this.ctx.translate(this.camera_x, 0);
             this.drawWorldObjects();
         }
-
         this.resetCamera();
-
         requestAnimationFrame(() => this.draw());
     }
 
