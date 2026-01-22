@@ -43,6 +43,8 @@
     <script src="./levels/lost.js"></script>
     <script src="./levels/win.js"></script>
     <script src="./js/game.js" defer></script>
+    <script src="./js/script.js" defer></script>
+    <script src="./js/template.js" defer></script>
 </head>
 
 <body onload="init()">
@@ -71,7 +73,24 @@
                 <button id="btnJump" class="gameButton"></button>
             </div>
         </div>
+
+        <footer>
+            <button onclick="showPrivacyPolicy()">Privacy Policy</button>
+            <button onclick="showLegalNotice()">Legal Notice</button>
+        </footer>
     </div>
+
+    <dialog id="dialog" class="dialogClass">
+
+        <header>
+            <h1 id="dialogHeader"></h1>
+            <button class="btnDialogClose" onclick="closeDialog()">X</button>
+        </header>
+
+        <main>
+            <div id="dialogContext"> </div>
+        </main>
+    </dialog>
 </body>
 
 </html>
