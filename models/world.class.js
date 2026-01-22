@@ -307,10 +307,16 @@ class World {
      */
     handleEnemyAttack(enemy) {
         if (!enemy.dead) {
-            this.character.hit(enemy.hitEnergy, enemy.dead);
-            this.statusbarHealth.setPercentage(this.character.energy);
+            //const isAttacking = enemy.IMAGES_ATTAC && enemy.shouldAttack();
+            const isAttacking = enemy.isAttacking;
+
+            if (enemy.isAttacking) {
+                this.character.hit(enemy.hitEnergy, enemy.dead);
+                this.statusbarHealth.setPercentage(this.character.energy);
+            }
         }
     }
+
 
     /**
      * Handles all collision-related interactions between the player
@@ -319,6 +325,7 @@ class World {
      * @param {enemy} enemy - The enemy to process.
      */
     processEnemyCollision(enemy) {
+        enemy.distanceEnemy = Math.abs(this.character.x - enemy.x);
         const col = this.character.isColliding(enemy);
 
         if (col.collision) {

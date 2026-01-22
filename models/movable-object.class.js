@@ -24,6 +24,7 @@ class MoveableObject extends DrawableObject {
     hitEnergy = 10;
     throwEnergy = 15;
     parentArray = null;
+    distanceEnemy = null;
 
     constructor() {
         super();

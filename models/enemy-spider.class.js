@@ -28,6 +28,12 @@ class enemySpider extends enemy {
         './img/enemy/spider/death3.png',
         './img/enemy/spider/death4.png'
     ];
+    
+    IMAGES_ATTAC =[
+        'img/enemy/spider/attack1.png',
+        'img/enemy/spider/attack2.png',
+        'img/enemy/spider/attack3.png',
+    ]
 
     constructor(x) {
         super();
@@ -37,6 +43,7 @@ class enemySpider extends enemy {
 
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_ATTAC);
         this.speed = 0.15 + Math.random() * 0.25;
 
         this.animate();

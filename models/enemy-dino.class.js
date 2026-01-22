@@ -29,6 +29,14 @@ class enemyDino extends enemy {
         './img/enemy/dino/death4.png'
     ];
 
+    IMAGES_ATTAC =[
+        'img/enemy/dino/attack1.png',
+        'img/enemy/dino/attack2.png',
+        'img/enemy/dino/attack3.png',
+        'img/enemy/dino/attack4.png',
+        'img/enemy/dino/attack5.png',
+    ]
+
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
@@ -37,6 +45,7 @@ class enemyDino extends enemy {
 
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_ATTAC);
         this.speed = 0.15 + Math.random() * 0.25;
 
         this.animate();

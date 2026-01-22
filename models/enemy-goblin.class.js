@@ -31,6 +31,14 @@ class enemyGoblin extends enemy {
         './img/enemy/goblin/death4.png'
     ];
 
+    IMAGES_ATTAC =[
+        'img/enemy/goblin/attack1.png',
+        'img/enemy/goblin/attack2.png',
+        'img/enemy/goblin/attack3.png',
+        'img/enemy/goblin/attack4.png',
+        'img/enemy/goblin/attack5.png',
+    ]
+
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
@@ -39,6 +47,7 @@ class enemyGoblin extends enemy {
 
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_ATTAC);
         this.speed = 0.15 + Math.random() * 0.25;
 
         this.animate();

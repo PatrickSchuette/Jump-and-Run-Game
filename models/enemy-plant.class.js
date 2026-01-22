@@ -40,6 +40,16 @@ class enemyPlant extends enemy {
         './img/enemy/Plant/trap_plant6.png'
     ];
 
+    
+    IMAGES_ATTAC = [
+        './img/enemy/Plant/trap_plant.png',
+        './img/enemy/Plant/trap_plant2.png',
+        './img/enemy/Plant/trap_plant3.png',
+        './img/enemy/Plant/trap_plant4.png',
+        './img/enemy/Plant/trap_plant5.png',
+        './img/enemy/Plant/trap_plant6.png'
+    ];
+
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
@@ -48,6 +58,7 @@ class enemyPlant extends enemy {
 
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_ATTAC);
         this.speed = 0;
 
         this.animate();

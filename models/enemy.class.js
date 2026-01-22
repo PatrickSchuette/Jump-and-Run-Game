@@ -1,4 +1,9 @@
 class enemy extends MoveableObject {
+    isAttacking = false;
+    canAttack = true;
+    attackDuration = 300;
+    attackCooldown = 800;
+
     hitPosition = {
         top: true,
         bottom: false,
@@ -47,11 +52,27 @@ class enemy extends MoveableObject {
      * Selects the correct animation based on whether the enemy is alive or dead.
      */
     updateAnimationState() {
-        if (!this.dead) {
-            this.playAnimation(this.IMAGES_WALKING);
-        } else {
+        if (this.dead) {
             this.playDeathAnimationOnce();
+            return;
         }
+
+        if (this.shouldAttack(150)) {
+            this.startEnemyAttack();
+            this.playAnimation(this.IMAGES_ATTAC);
+        } else {
+            this.playAnimation(this.IMAGES_WALKING);
+        }
+    }
+
+    startEnemyAttack() {
+        if (!this.canAttack) return;
+
+        this.isAttacking = true;
+        this.canAttack = false;
+
+        setTimeout(() => this.isAttacking = false, this.attackDuration);
+        setTimeout(() => this.canAttack = true, this.attackCooldown);
     }
 
     /**
@@ -78,4 +99,10 @@ class enemy extends MoveableObject {
             this.removeFromWorld();
         }
     }
+
+    shouldAttack(x) {
+        if (!this.IMAGES_ATTAC) return false;
+        return this.distanceEnemy < x;
+    }
+
 }
