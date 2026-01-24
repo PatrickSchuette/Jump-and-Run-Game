@@ -13,11 +13,13 @@ class Level {
         enemyPlant,
         Endboss
     };
+    imagePlayButton = null;
 
     /** * Creates a new Level instance.  
      * @param {Object} config Level configuration object. 
      * */
     constructor(config) {
+        this.imagePlayButton = config.imagePlayButton || null;
         this.generateBackground(config.background.count, config.background.layers);
 
         this.level_end_x = this.calculateLevelEndX(config.background.count);
@@ -26,6 +28,7 @@ class Level {
         this.generateClouds(config.clouds);
         this.generateEnemies(config.enemies);
         this.generateCollectables(config.collactableObjects);
+        this.selectPlayButton();
     }
 
 
@@ -145,5 +148,11 @@ class Level {
      */
     calculateLevelEndX(backgroundCount) {
         return (backgroundCount - 2) * this.segmentWidth - 150;
+    }
+
+    selectPlayButton(){
+        const revButton = document.getElementById('btnStart');
+        if (this.imagePlayButton == null) return;
+        revButton.style.backgroundImage = `url('${this.imagePlayButton}')`;
     }
 }

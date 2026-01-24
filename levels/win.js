@@ -15,6 +15,7 @@ function win() {
             coins: 0,
             bottle: 0
         },
-        playMode: false
+        playMode: false,
+        imagePlayButton : '../img/button/play-button.png'
     });
 }

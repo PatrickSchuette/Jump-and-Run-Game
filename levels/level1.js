@@ -24,6 +24,7 @@ function level1() {
             coins: 6,
             bottle: 10
         },
-        playMode: true
+        playMode: true,
+        imagePlayButton : '../img/button/restart.png'
     });
 }

@@ -92,10 +92,10 @@ canvas {
 }
 
 #mobile-controls {
-    display: flex;
     gap: 20px;
     justify-content: space-between;
     width: 100%;
+    display: none;
 }
 
 /* ################# FULLSCREEN Modus: ############################# */
@@ -297,6 +297,7 @@ dialog h3 {
     }
 
     #mobile-controls {
+        display: flex;
         position: absolute;
         bottom: 20px;
         left: 50%;
