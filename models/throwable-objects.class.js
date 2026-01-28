@@ -1,6 +1,6 @@
 class ThrowableObject extends MoveableObject {
     showDrawFrame = true;
-    hitEnergy = 10;
+    hitEnergy = 20;
     distance = 200;
 
     IMAGES = [

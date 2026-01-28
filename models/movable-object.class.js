@@ -21,8 +21,8 @@ class MoveableObject extends DrawableObject {
         right: true
     }
     dead = false;
-    hitEnergy = 10;
-    throwEnergy = 15;
+    hitEnergy = 15;
+    throwEnergy = 25;
     parentArray = null;
     distanceEnemy = null;
 

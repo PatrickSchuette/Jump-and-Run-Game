@@ -28,11 +28,11 @@ class Character extends MoveableObject {
         top: 100,
         bottom: 45,
         left: 10,
-        right: 10
+        right: 40
     };
 
-    hitEnergy = 20;
-    throwEnergy = 25;
+    hitEnergy = 15;
+    throwEnergy = 20;
 
     isAttacking = false;
     attackDuration = 150;
@@ -162,7 +162,7 @@ class Character extends MoveableObject {
      * Extends the hitbox during attack to match sword reach.
      */
     extandOffsetAttac() {
-        this.offset.right = this.isAttacking ? -40 : 10;
+        this.offset.right = this.isAttacking ? -40 : 50;
     }
 
     /**

@@ -14,6 +14,7 @@ class World {
         this.character = this.initCharacter();
         this.initCanvas(canvas);
         this.initStatusBars();
+        this.ensureDDrawingFrame();
 
         this.level = start();
         this.initWorldState(keyboard);
@@ -366,7 +367,7 @@ class World {
 
             this.level.enemies.forEach((enemy) => {
                 if (bottle.isColliding(enemy).collision) {
-                    enemy.hit(bottle.hitEnergy, enemy.dead);
+                    enemy.hit(this.character.throwEnergy, enemy.dead);
                     if (enemy.energy <= 0) { enemy.dead = true; }
                     bottle.removeFromWorld();
                 }
@@ -397,6 +398,7 @@ class World {
      * Handles coin and bottle pickup.
      */
     checkCollisionCollactable() {
+        if (this.character.isAttacking) return;
         this.level.collectables.forEach((obj) => {
             if (this.character.isColliding(obj).collision) {
                 if (obj instanceof CollectableBottle) this.handleCollect(obj, "bottle", this.character.collectableObjects.maxBottle, this.statusbarBottle);
