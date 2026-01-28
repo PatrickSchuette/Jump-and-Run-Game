@@ -25,10 +25,10 @@ class Character extends MoveableObject {
     };
 
     offset = {
-        top: 100,
+        top: 140,
         bottom: 45,
         left: 10,
-        right: 40
+        right: 60
     };
 
     animationSpeed = {
@@ -183,7 +183,7 @@ class Character extends MoveableObject {
      * Extends the hitbox during attack to match sword reach.
      */
     extandOffsetAttac() {
-        this.offset.right = this.isAttacking ? -40 : 50;
+        this.offset.right = this.isAttacking ? -20 : 90;
     }
 
     /**
