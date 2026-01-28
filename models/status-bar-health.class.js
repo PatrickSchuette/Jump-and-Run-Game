@@ -13,6 +13,7 @@ class HealthStatus extends StatusBar {
 
     ];
     
+    displayAsPercent = true;
     maxValue = 100;
     textSuffix = "%";
     percentage = 100;

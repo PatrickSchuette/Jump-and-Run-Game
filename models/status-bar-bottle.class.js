@@ -10,12 +10,15 @@ class BottleStatus extends StatusBar {
     ]
     percentage = 1;
     y = 100;
+    displayAsPercent = false;
+    barColor = "blue";
 
     constructor(character) {
         super();
         this.maxValue = character.collectableObjects.maxBottle;
-        this.percentage = character.collectableObjects.bottle;
+        //this.percentage = character.collectableObjects.coin;
         this.loadImages(this.IMAGES);
+        this.setPercentage(character.collectableObjects.bottle);
         this.textSuffix = " / " + this.maxValue;
         this.animate();
     }

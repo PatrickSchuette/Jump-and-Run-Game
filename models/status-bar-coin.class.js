@@ -12,13 +12,15 @@ class CoinStatus extends StatusBar {
         './img/star/star10.png',
     ]
     y = 50;
+    displayAsPercent = false;
+    barColor = "goldenrod";
 
     constructor(character) {
         super();
         this.maxValue = character.collectableObjects.maxCoin;
-        this.percentage = character.collectableObjects.coin;
+        //this.percentage = character.collectableObjects.coin;
         this.loadImages(this.IMAGES);
-        //this.setPercentage(this.percentage);
+        this.setPercentage(character.collectableObjects.coin);
         this.textSuffix = " / " + this.maxValue;
         this.animate();
     }

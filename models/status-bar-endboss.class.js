@@ -17,7 +17,12 @@ class EndbossStatus extends StatusBar {
     percentage = 100;
     y = 10;
     x = 630;
+
     textOffsetX = -70;
+    barColor = "darkred";
+    barAlignLeft = true;
+    barOffsetX = 0; 
+    barCanvasOffsetX = -150;
 
     constructor(boss) {
         super();
@@ -41,7 +46,8 @@ class EndbossStatus extends StatusBar {
 
 
     draw(ctx) {
-        this.percentage = this.boss.energy;
+        //this.percentage = this.boss.energy;
+        this.setPercentage(this.boss.energy);
         super.draw(ctx);
     }
 

@@ -1,7 +1,7 @@
 class ThrowableObject extends MoveableObject {
     showDrawFrame = true;
     hitEnergy = 20;
-    distance = 200;
+    distance = 450;
 
     IMAGES = [
         './img/Ball_animation/Bll_animation1_1.png',
