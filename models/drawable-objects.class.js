@@ -87,7 +87,7 @@ class DrawableObject {
      * @param {HTMLAudioElement} sound - The sound to play.
      */
     playActionSound(sound) {
-        if (soundStatus && sound.paused) {
+        if (playSound && sound.paused) {
             sound.currentTime = 0;
             sound.play();
         }

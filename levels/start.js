@@ -16,6 +16,6 @@ function start() {
             bottle: 0
         },
         playMode: false,
-        imagePlayButton : '../img/button/play-button.png'
+        imagePlayButton : './img/button/play-button.png'
     });
 }

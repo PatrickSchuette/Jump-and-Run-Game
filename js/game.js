@@ -15,7 +15,7 @@ let elementRev = {
     gameArea: document.getElementById('game-container')
 }
 let configureMenu = null;
-let soundStatus = localStorage.getItem("soundStatus") === "true";
+let playSound;
 let bgMusic = new Audio('./audio/game-sound.mp3');
 bgMusic.loop = true;
 bgMusic.volume = 0.4;
@@ -32,8 +32,8 @@ function init() {
     checkNewSeassion();
     const selected = localStorage.getItem("selectedCharacter");
 
-    if (localStorage.getItem("soundStatus") === null) localStorage.setItem("soundStatus", "true");
-    playSound();
+    checkLocalSoundExist()
+    startSound();
 
     if (selected) {
         world = new World(canvas, keyboard);
@@ -232,25 +232,32 @@ document.addEventListener("fullscreenchange", () => {
  */
 elementRev.btnSound.addEventListener("click", () => {
     elementRev.btnSound.blur();
-    soundStatus = !soundStatus;
-    playSound();
+    playSound = !playSound;
+    startSound();
 });
 
 /**
  * Toggles background music based on user settings and interaction state.
  * Updates the sound button icon accordingly.
  */
-function playSound() {
-    localStorage.setItem("soundStatus", soundStatus);
+function startSound() {
+    localStorage.setItem("playSound", String(playSound));
 
-    if (soundStatus && userInteracted) {
+    if (playSound && userInteracted) {
         bgMusic.play();
         elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-button.png')";
-    } else {
+    } else if (!playSound) {
         bgMusic.pause();
         elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-off.png')";
     }
+}
 
+function checkLocalSoundExist() {
+    if (localStorage.getItem("playSound") === null) {
+        localStorage.setItem("playSound", "true")
+    } else {
+        playSound = localStorage.getItem("playSound") === "true";
+    };
 }
 
 bindButton(elementRev.btnLeft, "LEFT");
@@ -306,6 +313,11 @@ function ensureDefaultControls() {
 window.addEventListener("pointerdown", () => {
     if (!userInteracted) {
         userInteracted = true;
-        if (soundStatus) bgMusic.play();
+
+        if (playSound) {
+            bgMusic.play();
+            elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-button.png')";
+        }
     }
 });
+

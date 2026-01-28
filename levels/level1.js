@@ -25,6 +25,6 @@ function level1() {
             bottle: 10
         },
         playMode: true,
-        imagePlayButton : '../img/button/restart.png'
+        imagePlayButton : './img/button/restart.png'
     });
 }
