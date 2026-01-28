@@ -178,8 +178,8 @@ footer button {
     color: #3b2a14;
 
     box-shadow:
-        0 0 10px rgba(0,0,0,0.4),
-        inset 0 0 6px rgba(0,0,0,0.3);
+        0 0 10px rgba(0, 0, 0, 0.4),
+        inset 0 0 6px rgba(0, 0, 0, 0.3);
 
     cursor: pointer;
     transition: 0.2s ease;
@@ -189,15 +189,15 @@ footer button:hover {
     background: linear-gradient(180deg, #f0d9a5 0%, #c7a873 100%);
     box-shadow:
         0 0 14px rgba(255, 215, 120, 0.7),
-        inset 0 0 8px rgba(0,0,0,0.4);
+        inset 0 0 8px rgba(0, 0, 0, 0.4);
     transform: translateY(-2px);
 }
 
 footer button:active {
     transform: translateY(1px);
     box-shadow:
-        0 0 6px rgba(0,0,0,0.5),
-        inset 0 0 10px rgba(0,0,0,0.5);
+        0 0 6px rgba(0, 0, 0, 0.5),
+        inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 dialog.dialogClass {
@@ -207,32 +207,33 @@ dialog.dialogClass {
     border: none;
     border-radius: 12px;
     background: #ffffff;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
-    flex-direction: column;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
     font-family: 'lato', Arial, Helvetica, sans-serif;
+    max-width: 920px;
+    overflow: hidden;
+}
+
+dialog.dialogClass[open] {
+    display: flex;
+    flex-direction: column;
 }
 
 dialog.dialogClass header {
     position: sticky;
     top: 0;
     z-index: 10;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 16px 20px;
     background: #222;
     color: white;
-    font-size: 1.4rem;
 }
-
 
 .btnDialogClose {
     background: transparent;
     border: none;
     color: white;
-    font-size: 1.4rem;
     cursor: pointer;
     padding: 4px 8px;
 }
@@ -245,6 +246,7 @@ dialog.dialogClass main {
     display: flex;
     flex-direction: column;
     padding: 20px 28px;
+    flex: 1;
     overflow-y: auto;
 }
 
@@ -317,7 +319,7 @@ dialog h3 {
         transform: translateX(-50%);
     }
 
-    footer{
+    footer {
         display: none;
     }
 }
