@@ -146,12 +146,15 @@ function playGameButton() {
 function startGame() {
     elementRev.btnStart.blur();
 
+    if (!userInteracted) userInteracted = true;
+
     if (world && world.stop) {
         world.stop();
     }
 
     world = new World(canvas, keyboard);
     world.setLevel(level1());
+    startSound();
 }
 
 /**
@@ -243,14 +246,17 @@ elementRev.btnSound.addEventListener("click", () => {
 function startSound() {
     localStorage.setItem("playSound", String(playSound));
 
-    if (playSound && userInteracted) {
-        bgMusic.play();
-        elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-button.png')";
-    } else if (!playSound) {
-        bgMusic.pause();
-        elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-off.png')";
-    }
+    elementRev.btnSound.style.backgroundImage = playSound
+        ? "url('./img/button/sound-button.png')"
+        : "url('./img/button/sound-off.png')";
+
+    if (!playSound) { bgMusic.pause(); return; }
+    if (!userInteracted) { bgMusic.pause(); return; }
+    if (!world.statusPlayMode) { bgMusic.pause(); return; }
+
+    bgMusic.play();
 }
+
 
 function checkLocalSoundExist() {
     if (localStorage.getItem("playSound") === null) {
@@ -315,8 +321,7 @@ window.addEventListener("pointerdown", () => {
         userInteracted = true;
 
         if (playSound) {
-            bgMusic.play();
-            elementRev.btnSound.style.backgroundImage = "url('./img/button/sound-button.png')";
+            startSound();
         }
     }
 });

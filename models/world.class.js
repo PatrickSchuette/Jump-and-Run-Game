@@ -18,6 +18,7 @@ class World {
 
         this.level = start();
         this.initWorldState(keyboard);
+        this.updateMusic();
 
         this.draw();
         this.run();
@@ -94,6 +95,7 @@ class World {
         this.level.enemies.forEach(enemy => enemy.world = this);
 
         this.character.x = 105;
+        this.updateMusic();
     }
 
     /**
@@ -228,6 +230,16 @@ class World {
         this.animationStopped = true;
         IntervalManager.clearAll();
     }
+
+    /**
+     * update the Status of playing Music Sound
+     */
+    updateMusic() {
+        if (typeof startSound === "function") {
+            startSound();
+        }
+    }
+
 
     /**
      * Determines whether the player is allowed to throw a bottle.
