@@ -1,26 +1,29 @@
+/**
+ * Handles the character selection screen.
+ */
 class Option {
 
+    /**
+     * Creates the character selection screen.
+     * @param {HTMLCanvasElement} canvas - The canvas used for rendering.
+     * @param {Object} keyboard - The keyboard handler instance.
+     */
     constructor(canvas, keyboard) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
 
-        this.initCanvas(canvas);
         this.initCharacters();
         this.loadCharacterImages();
 
         this.background = new Image();
         this.background.src = "./img/world/Background2.jpg";
 
-        this.registerEvents();
-        this.startRenderLoop();
-    }
+        /** Bind click handler so it can be removed later */
+        this.boundClickHandler = this.handleClick.bind(this);
+        this.canvas.addEventListener("click", this.boundClickHandler);
 
-    /**
-     * Initializes canvas and rendering context.
-     * @param {HTMLCanvasElement} canvas - The canvas used for rendering.
-     */
-    initCanvas(canvas) {
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d");
+        this.draw();
     }
 
     /**
@@ -46,28 +49,18 @@ class Option {
     }
 
     /**
-     * Registers all event listeners for character selection.
+     * Handles click events for character selection.
+     * @param {MouseEvent} e - The click event.
      */
-    registerEvents() {
-        this.registerClick();
-    }
+    handleClick(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-    /**
-     * Starts the continuous rendering loop.
-     */
-    startRenderLoop() {
-        this.draw();
-    }
-
-
-    /**
-     * Loads all character preview images into memory.
-     */
-    loadImages() {
         this.characters.forEach(char => {
-            const img = new Image();
-            img.src = char.img;
-            char.image = img;
+            if (this.isCharacterClicked(x, y, char)) {
+                this.selectCharacter(char.name);
+            }
         });
     }
 
@@ -93,24 +86,11 @@ class Option {
      */
     selectCharacter(name) {
         localStorage.setItem("selectedCharacter", name);
+
+        // Remove click listener so selection screen is fully disabled
+        this.canvas.removeEventListener("click", this.boundClickHandler);
+
         world = new World(this.canvas, this.keyboard);
-    }
-
-    /**
-     * Registers click detection for character selection.
-     */
-    registerClick() {
-        this.canvas.addEventListener("click", (e) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            this.characters.forEach(char => {
-                if (this.isCharacterClicked(x, y, char)) {
-                    this.selectCharacter(char.name);
-                }
-            });
-        });
     }
 
     /**
@@ -121,7 +101,7 @@ class Option {
     }
 
     /**
-     * Draws the title text for the character selection screen.
+     * Draws the title text.
      */
     drawTitle() {
         this.ctx.font = "32px Arial";
@@ -145,8 +125,7 @@ class Option {
     }
 
     /**
-     * Continuously renders the character selection screen including
-     * background, title and character previews.
+     * Main render loop for the character selection screen.
      */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -157,5 +136,4 @@ class Option {
 
         requestAnimationFrame(() => this.draw());
     }
-
 }

@@ -1,3 +1,6 @@
+/**
+ * Handles the configuration menu overlay.
+ */
 class Configure {
 
     /**
@@ -11,13 +14,18 @@ class Configure {
         this.keyboard = keyboard;
         this.active = true;
         this.controls = this.loadControls();
+
         this.changeCharBtn = {
             x: this.canvas.width / 2 - 150,
             y: this.canvas.height - 120,
             width: 300,
             height: 60
         };
-        this.canvas.addEventListener("click", (e) => this.handleClick(e));
+
+        /** Bind click handler so it can be removed later */
+        this.boundClickHandler = this.handleClick.bind(this);
+        this.canvas.addEventListener("click", this.boundClickHandler);
+
         this.draw();
     }
 
@@ -37,7 +45,6 @@ class Configure {
 
     /**
      * Main draw loop for the configuration menu.
-     * Delegates rendering to smaller helper functions.
      */
     draw() {
         if (!this.active) return;
@@ -88,9 +95,11 @@ class Configure {
         const btn = this.changeCharBtn;
         this.ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
         this.ctx.fillRect(btn.x, btn.y, btn.width, btn.height);
+
         this.ctx.strokeStyle = "white";
         this.ctx.lineWidth = 3;
         this.ctx.strokeRect(btn.x, btn.y, btn.width, btn.height);
+
         this.ctx.fillStyle = "white";
         this.ctx.font = "32px Arial";
         this.ctx.textAlign = "center";
@@ -105,7 +114,7 @@ class Configure {
         const { x, y } = this.getClickPosition(e);
 
         if (this.isInsideButton(x, y, this.changeCharBtn)) {
-            this.active = false;
+            this.close();
             configureMenu = null;
             world = new Option(this.canvas, this.keyboard);
         }
@@ -141,9 +150,10 @@ class Configure {
     }
 
     /**
-     * Closes the configuration menu and stops rendering.
+     * Closes the configuration menu and removes event listeners.
      */
     close() {
         this.active = false;
+        this.canvas.removeEventListener("click", this.boundClickHandler);
     }
 }
