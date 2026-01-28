@@ -284,6 +284,36 @@ dialog h3 {
     font-size: 28px;
 }
 
+/* ############## rotate ######## */
+#rotate-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    color: white;
+    font-family: 'lato', sans-serif;
+    text-align: center;
+    padding: 20px;
+    gap: 20px;
+    display: none; /* Start hidden */
+}
+
+#rotate-overlay img {
+    width: 180px;
+    height: auto;
+    opacity: 0.9;
+}
+
+#rotate-overlay p {
+    font-size: 22px;
+    line-height: 1.4;
+}
+
+
 @media screen and (max-height: 480px) {
     body {
         background-image: none;

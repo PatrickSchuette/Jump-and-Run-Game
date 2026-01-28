@@ -326,3 +326,39 @@ window.addEventListener("pointerdown", () => {
     }
 });
 
+/**
+ * Determines whether the current device is a mobile device based on the user agent.
+ * This check is used to ensure orientation handling only applies to phones and tablets,
+ * preventing false triggers on desktop browsers with resized windows.
+ *
+ * @returns {boolean} True if the device is identified as mobile, otherwise false.
+ */
+function isMobile() {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+/**
+ * Checks the current screen orientation on mobile devices and toggles
+ * the rotate-overlay visibility accordingly. The overlay is shown when
+ * the device is in portrait mode and hidden when in landscape mode.
+ *
+ * This function is intended to be used as a resize and orientationchange
+ * event handler to react to live orientation changes.
+ */
+function checkOrientation() {
+    if (!isMobile()) return;
+
+    const overlay = document.getElementById("rotate-overlay");
+
+    if (window.innerWidth > window.innerHeight) {
+        overlay.style.display = "none";   // Landscape
+    } else {
+        overlay.style.display = "flex";   // Portrait
+    }
+}
+
+checkOrientation();
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
+
+
