@@ -198,6 +198,8 @@ class Character extends MoveableObject {
         if (this.isDeathSequenceRunning) return;
         this.isDeathSequenceRunning = true;
 
+     //   this.world.statusPlayMode = false;
+
         this.playAnimation(this.IMAGES_DEAD);
 
         setTimeout(() => {
