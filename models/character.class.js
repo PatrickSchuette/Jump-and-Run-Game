@@ -31,6 +31,16 @@ class Character extends MoveableObject {
         right: 40
     };
 
+    animationSpeed = {
+        walk: 80,
+        jump: 100,
+        idle: 120,
+        hurt: 90,
+        dead: 140,
+        attack: 60
+    };
+
+
     hitEnergy = 15;
     throwEnergy = 20;
 
@@ -136,7 +146,7 @@ class Character extends MoveableObject {
      */
     playStateAnimation(state) {
         const animations = {
-            dead: () => this.playDeathAnimationOnce(),
+            dead: () => this.playAnimation(this.IMAGES_DEAD),
             jump: () => this.playAnimation(this.IMAGES_JUMPING),
             attack: () => this.playAnimation(this.IMAGES_ATTAC),
             walk: () => this.playAnimation(this.IMAGES_WALKING),
@@ -155,8 +165,19 @@ class Character extends MoveableObject {
         this.extandOffsetAttac();
 
         const state = this.getAnimationState();
-        this.playStateAnimation(state);
+        const speed = this.animationSpeed[state];
+
+        if (state === "dead") { this.handleDeathAnimation(); return; }
+
+        const now = performance.now();
+        if (!this.lastAnimTime) this.lastAnimTime = 0;
+
+        if (now - this.lastAnimTime >= speed) {
+            this.playStateAnimation(state);
+            this.lastAnimTime = now;
+        }
     }
+
 
     /**
      * Extends the hitbox during attack to match sword reach.
@@ -190,20 +211,23 @@ class Character extends MoveableObject {
         setTimeout(() => { this.canAttack = true; }, this.attackCooldown);
     }
 
-
     /**
      * Plays the death animation once and triggers level reset.
      */
-    playDeathAnimationOnce() {
-        if (this.isDeathSequenceRunning) return;
-        this.isDeathSequenceRunning = true;
+    handleDeathAnimation() {
+        if (!this.isDeathSequenceRunning) {
+            this.isDeathSequenceRunning = true;
+            this.currentImage = 0;
+            const totalDuration = this.IMAGES_DEAD.length * this.animationSpeed.dead;
+            setTimeout(() => { this.world.setLevel(lost()); }, totalDuration + 200);
+        }
 
-     //   this.world.statusPlayMode = false;
+        const now = performance.now();
+        if (!this.lastDeathAnimTime) this.lastDeathAnimTime = 0;
 
-        this.playAnimation(this.IMAGES_DEAD);
-
-        setTimeout(() => {
-            this.world.setLevel(lost());
-        }, 2000);
+        if (now - this.lastDeathAnimTime >= this.animationSpeed.dead) {
+            this.playAnimation(this.IMAGES_DEAD);
+            this.lastDeathAnimTime = now;
+        }
     }
 }

@@ -67,7 +67,7 @@ function checkNewSeassion() {
  * @param {KeyboardEvent} e - The keyboard event.
  */
 window.addEventListener('keydown', (e) => {
-    if (world.statusPlayMode) {
+    if (world.statusPlayMode && !world.character.isDead()) {
         switch (e.keyCode) {
             case 39: keyboard.RIGHT = true; break;
             case 37: keyboard.LEFT = true; break;
