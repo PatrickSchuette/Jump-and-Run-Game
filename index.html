@@ -68,19 +68,21 @@
         </div>
         <canvas id="canvas" width="720" height="480"> </canvas>
 
-        <div id="mobile-controls">
-            <div>
-                <button id="btnLeft" class="gameButton"></button>
-                <button id="btnRight" class="gameButton"></button>
-            </div>
-            <div>
-                <button id="btnFight" class="gameButton"></button>
-                <button id="btnThrow" class="gameButton"></button>
-                <button id="btnJump" class="gameButton"></button>
+        <div class="onlyMobile">
+            <div id="mobile-controls">
+                <div>
+                    <button id="btnLeft" class="gameButton"></button>
+                    <button id="btnRight" class="gameButton"></button>
+                </div>
+                <div>
+                    <button id="btnFight" class="gameButton"></button>
+                    <button id="btnThrow" class="gameButton"></button>
+                    <button id="btnJump" class="gameButton"></button>
+                </div>
             </div>
         </div>
 
-        <footer>
+        <footer class="onlyDesktop">
             <button onclick="showPrivacyPolicy()">Privacy Policy</button>
             <button onclick="showLegalNotice()">Legal Notice</button>
         </footer>

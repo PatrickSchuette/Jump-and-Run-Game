@@ -37,6 +37,10 @@ canvas {
     display: block;
 }
 
+.onlyMobile {
+    display: none;
+}
+
 .gameButton {
     width: 48px;
     aspect-ratio: 1;
@@ -44,7 +48,20 @@ canvas {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
 }
+
+.gameButton:hover {
+    transform: scale(1.12);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+    border-color: white;
+}
+
+.gameButton:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
 
 #btnStart {
     background-image: url('./img/button/play-button.png');
@@ -100,7 +117,7 @@ canvas {
     gap: 20px;
     justify-content: space-between;
     width: 100%;
-    display: none;
+    display: flex;
 }
 
 /* ################# FULLSCREEN Modus: ############################# */
@@ -324,6 +341,10 @@ dialog h3 {
         display: none;
     }
 
+    .onlyMobile{
+        display: block;
+    }
+
     #game-container {
         width: 100vw;
         height: 100vh;
@@ -335,7 +356,6 @@ dialog h3 {
     }
 
     #mobile-controls {
-        display: flex;
         position: absolute;
         bottom: 20px;
         left: 50%;
@@ -349,7 +369,4 @@ dialog h3 {
         transform: translateX(-50%);
     }
 
-    footer {
-        display: none;
-    }
 }

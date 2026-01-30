@@ -59,8 +59,6 @@ function checkNewSeassion() {
     sessionStorage.setItem("tabOpen", "true");
 }
 
-
-
 /**
  * Handles keyboard keydown events and maps them to game controls.
  * @event window#keydown
@@ -99,7 +97,6 @@ window.addEventListener('keyup', (e) => {
 
 /**
  * Binds pointer and mouse events to a virtual button and maps them to keyboard flags.
- *
  * @param {HTMLElement} btn - The button element to bind.
  * @param {string} key - The keyboard property name to toggle.
  */
@@ -107,15 +104,12 @@ function bindButton(btn, key) {
     btn.addEventListener("pointerdown", () => {
         keyboard[key] = true;
     });
-
     btn.addEventListener("pointerup", () => {
         keyboard[key] = false;
     });
-
     btn.addEventListener("pointerleave", () => {
         keyboard[key] = false;
     });
-
     btn.addEventListener("mousedown", () => {
         keyboard[key] = true;
     });
@@ -174,7 +168,7 @@ elementRev.btnOptions.addEventListener("click", () => {
     configureMenu = null;
 
     world = new World(canvas, keyboard);
-    world.setLevel(level1());
+    world.setLevel(start());
 });
 
 /**
@@ -257,7 +251,9 @@ function startSound() {
     bgMusic.play();
 }
 
-
+/**
+ * check if a Variable in localStorage exists
+ */
 function checkLocalSoundExist() {
     if (localStorage.getItem("playSound") === null) {
         localStorage.setItem("playSound", "true")
@@ -291,7 +287,6 @@ function bindButtonAttack(btn) {
     });
 }
 
-
 /**
  * Ensures that default control mappings exist in localStorage.
  * Creates them if missing.
@@ -307,7 +302,6 @@ function ensureDefaultControls() {
             Fight: "F",
             Throw: "D"
         };
-
         localStorage.setItem("controls", JSON.stringify(defaultControls));
     }
 }
@@ -320,9 +314,7 @@ window.addEventListener("pointerdown", () => {
     if (!userInteracted) {
         userInteracted = true;
 
-        if (playSound) {
-            startSound();
-        }
+        if (playSound) { startSound(); }
     }
 });
 
@@ -330,7 +322,6 @@ window.addEventListener("pointerdown", () => {
  * Determines whether the current device is a mobile device based on the user agent.
  * This check is used to ensure orientation handling only applies to phones and tablets,
  * preventing false triggers on desktop browsers with resized windows.
- *
  * @returns {boolean} True if the device is identified as mobile, otherwise false.
  */
 function isMobile() {
@@ -341,7 +332,6 @@ function isMobile() {
  * Checks the current screen orientation on mobile devices and toggles
  * the rotate-overlay visibility accordingly. The overlay is shown when
  * the device is in portrait mode and hidden when in landscape mode.
- *
  * This function is intended to be used as a resize and orientationchange
  * event handler to react to live orientation changes.
  */
@@ -357,8 +347,50 @@ function checkOrientation() {
     }
 }
 
+/**
+ * Detects whether the current device should be treated as a tablet.
+ * This function identifies both classic iPads (via "iPad" in the user agent)
+ * and modern iPadOS devices that report themselves as "Macintosh" but expose
+ * touch capabilities through `navigator.maxTouchPoints`.
+ * @returns {boolean} True if the device is recognized as a tablet, otherwise false.
+ */
+function isTablet() {
+    const UA = navigator.userAgent;
+
+    if (/iPad/i.test(UA)) return true;
+    if (/Macintosh/i.test(UA) && navigator.maxTouchPoints > 1) return true;
+
+    return false;
+}
+
+/**
+ * Applies tablet-specific UI adjustments by toggling visibility of elements
+ * marked with `.onlyDesktop` and `.onlyMobile` classes.
+ *
+ * When a tablet device is detected, desktop-only elements are hidden and
+ * mobile-only elements are displayed. On non-tablet devices, the original
+ * CSS-defined visibility is restored by clearing inline display overrides.
+ */
+function checkTabletModus() {
+    const desktopEls = document.querySelectorAll('.onlyDesktop');
+    const mobileEls = document.querySelectorAll('.onlyMobile');
+
+    if (isTablet()) {
+        desktopEls.forEach(el => el.style.display = 'none');
+        mobileEls.forEach(el => el.style.display = 'flex');
+    } else {
+        desktopEls.forEach(el => el.style.display = '');
+        mobileEls.forEach(el => el.style.display = '');
+    }
+}
+
 checkOrientation();
-window.addEventListener("resize", checkOrientation);
+checkTabletModus();
+
+window.addEventListener("resize", () => {
+    checkOrientation();
+    checkTabletModus();
+});
+
 window.addEventListener("orientationchange", checkOrientation);
-
-
+window.addEventListener("contextmenu", event => event.preventDefault());
