@@ -30,16 +30,10 @@ function init() {
 
     canvas = document.getElementById('canvas');
     checkNewSeassion();
-    const selected = localStorage.getItem("selectedCharacter");
 
     checkLocalSoundExist()
     startSound();
-
-    if (selected) {
-        world = new World(canvas, keyboard);
-    } else {
-        world = new Option(canvas, keyboard);
-    }
+    checkCharacterSelected()
 }
 
 /**
@@ -57,6 +51,16 @@ function checkNewSeassion() {
     }
 
     sessionStorage.setItem("tabOpen", "true");
+}
+
+/** check if a selected Character is in local Storage */
+function checkCharacterSelected() {
+    const selected = localStorage.getItem("selectedCharacter");
+    if (selected) {
+        world = new World(canvas, keyboard);
+    } else {
+        world = new Option(canvas, keyboard);
+    }
 }
 
 /**
@@ -123,7 +127,11 @@ function bindButton(btn, key) {
  * @event HTMLElement#click
  */
 elementRev.btnStart.addEventListener("click", () => {
-    startGame();
+    if (!localStorage.getItem("selectedCharacter")) {
+        checkCharacterSelected();
+    } else {
+        startGame();
+    }
 });
 
 /**
@@ -357,11 +365,12 @@ function checkOrientation() {
 function isTablet() {
     const UA = navigator.userAgent;
 
-    if (/iPad/i.test(UA)) return true;
-    if (/Macintosh/i.test(UA) && navigator.maxTouchPoints > 1) return true;
+    const isIpadUA = /iPad/i.test(UA);
+    const isIpadOSDesktop = /Macintosh/i.test(UA) && ('ontouchend' in document);
 
-    return false;
+    return isIpadUA || isIpadOSDesktop;
 }
+
 
 /**
  * Applies tablet-specific UI adjustments by toggling visibility of elements
@@ -378,6 +387,7 @@ function checkTabletModus() {
     if (isTablet()) {
         desktopEls.forEach(el => el.style.display = 'none');
         mobileEls.forEach(el => el.style.display = 'flex');
+        document.getElementById("rotate-overlay").style.display = "none";
     } else {
         desktopEls.forEach(el => el.style.display = '');
         mobileEls.forEach(el => el.style.display = '');

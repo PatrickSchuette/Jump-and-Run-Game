@@ -1,4 +1,7 @@
 class CharacterKnight extends Character {
+
+    expandFightOffset = 20;
+    
     IMAGES_WALKING = [
         './img/character/Knight/Walk/walk1.png',
         './img/character/Knight/Walk/walk2.png',

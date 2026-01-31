@@ -1,4 +1,6 @@
 class CharacterMage extends Character {
+    expandFightOffset = 80;
+
     IMAGES_WALKING = [
         './img/character/Mage/Walk/walk1.png',
         './img/character/Mage/Walk/walk2.png',
