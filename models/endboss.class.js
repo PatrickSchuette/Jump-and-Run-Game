@@ -1,8 +1,8 @@
 class Endboss extends enemy {
-    y = -200;
+    y = 10;
     otherDirection = true;
-    height = 950;
-    width = 400;
+    height = 650;
+    width = 280;
 
     energy = 100;
 
@@ -14,10 +14,10 @@ class Endboss extends enemy {
     }
 
     offset = {
-        top: 300,
-        bottom: 300,
-        left: 110,
-        right: 150
+        top: 195,
+        bottom: 190,
+        left: 85,
+        right: 90
     };
 
     showDrawFrame = true;

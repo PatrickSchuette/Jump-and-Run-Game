@@ -173,9 +173,9 @@ class World {
     run() {
         IntervalManager.setInterval(() => {
             this.checkCollisionCollactable();
-            this.checkCollisionEnemy();
             this.checkThrowObjects();
         }, 200, `World:collision-check`);
+        IntervalManager.setInterval(() => { this.checkCollisionEnemy(); }, 25, 'World: CheckEnemyCollision');
         IntervalManager.setInterval(() => { this.checkCollisionThrowable(); }, 25, 'World: CheckThrowableObject');
     }
 
@@ -289,20 +289,24 @@ class World {
         });
     }
 
-    /** Check if Character is hitting enemy durring jump.*/
+    /** Check if Character is hitting enemy during jump. */
     isStompHit(player, enemy) {
-        const p = player.getHitbox();
-        const e = enemy.getHitbox();
+        const CHARACTER = player.getHitbox();
+        const ENEMY = enemy.getHitbox();
 
-        if (player.speedY >= 0) return false;
-        const isAbove = p.bottom <= e.top + 5;
+        if (player.speedY > 1) return false;
+        let isAbove = CHARACTER.bottom <= ENEMY.top + 95;
         if (!isAbove) return false;
-        const horizontalOverlap =
-            Math.min(p.right, e.right) - Math.max(p.left, e.left);
-        if (horizontalOverlap <= 0) return false;
 
-        return true;
-    }
+        let playerCenter = (CHARACTER.left + CHARACTER.right) / 2;
+        let enemyCenter = (ENEMY.left + ENEMY.right) / 2;
+
+        let enemyWidth = ENEMY.right - ENEMY.left;
+        let stompRange = enemyWidth * 1.6;
+        let distance = Math.abs(playerCenter - enemyCenter);
+
+        return distance <= stompRange;
+    }    
 
     /**
      * Handles the stomp interaction when the player lands on top of an enemy. Applies damage to the enemy and triggers a bounce effect for the player.
@@ -311,16 +315,11 @@ class World {
      */
     handleStomp(enemy) {
         if (!this.isStompHit(this.character, enemy) || enemy.dead) return false;
-        enemy.hit(this.character.hitEnergy, enemy.dead);
-        const p = this.character.getHitbox();
-        const e = enemy.getHitbox()
-        const playerHitboxHeight = p.bottom - p.top;
-        this.character.y = e.top - playerHitboxHeight - this.character.offset.top;
-        this.character.speedY = 20;
 
+        enemy.hit(this.character.hitEnergy, false);
         return true;
     }
-
+    
     /**
      * Checks whether the enemy is an endboss and triggers the win condition if the boss has died.
      * @param {enemy} enemy - The enemy being checked.
