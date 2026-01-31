@@ -127,8 +127,6 @@ class MoveableObject extends DrawableObject {
         };
     }
     
-
-
     /**
      * Computes the object's hitbox boundaries including offset adjustments.
      * @returns {{left:number, right:number, top:number, bottom:number}}
