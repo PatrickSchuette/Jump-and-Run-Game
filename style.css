@@ -221,10 +221,16 @@ dialog.dialogClass {
     width: 80%;
     height: 80%;
     padding: 0;
-    border: none;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+    border-radius: 18px;
+
+    background: linear-gradient(180deg, #fdf7e3 0%, #f3e4c3 100%);
+    border: 4px solid rgba(120, 80, 40, 0.55);
+
+    box-shadow:
+        0 0 40px rgba(0, 0, 0, 0.5),
+        inset 0 0 12px rgba(0, 0, 0, 0.15),
+        inset 0 0 40px rgba(255, 220, 150, 0.25);
+
     font-family: 'lato', Arial, Helvetica, sans-serif;
     max-width: 920px;
     overflow: hidden;
@@ -233,30 +239,37 @@ dialog.dialogClass {
 dialog.dialogClass[open] {
     display: flex;
     flex-direction: column;
+    animation: dialogPop 0.35s ease-out;
 }
 
 dialog.dialogClass header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    background: linear-gradient(180deg, #3b2a14 0%, #2a1d0f 100%);
+    color: #f7d58c;
+
+    text-shadow:
+        2px 2px 0 #000,
+        0 0 8px rgba(255, 200, 120, 0.6);
+
+    padding: 18px 24px;
+    border-bottom: 3px solid rgba(255, 220, 150, 0.3);
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    background: #222;
-    color: white;
 }
 
 .btnDialogClose {
     background: transparent;
     border: none;
-    color: white;
+    color: #f7d58c;
+    transition: 0.2s ease;
     cursor: pointer;
     padding: 4px 8px;
 }
 
 .btnDialogClose:hover {
-    color: #ff4444;
+    color: #ffb36b;
+    text-shadow: 0 0 8px rgba(255, 180, 80, 0.8);
 }
 
 dialog.dialogClass main {
@@ -265,11 +278,15 @@ dialog.dialogClass main {
     padding: 20px 28px;
     flex: 1;
     overflow-y: auto;
+    padding: 28px 32px;
+    background: rgba(255, 245, 220, 0.6);
+    backdrop-filter: blur(2px);
+    color: #3b2a14;
 }
 
 dialog::backdrop {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
 }
 
 dialog.dialogClass header h1 {
@@ -277,14 +294,11 @@ dialog.dialogClass header h1 {
     letter-spacing: 2px;
 }
 
-dialog p {
-    font-size: 22px;
-    line-height: 1.4;
-}
-
+dialog p,
 dialog li {
-    font-size: 20px;
-    line-height: 1.4;
+    font-size: 22px;
+    line-height: 1.5;
+    color: #3b2a14;
 }
 
 dialog h2 {
@@ -299,6 +313,22 @@ dialog h3 {
 
 .btnDialogClose {
     font-size: 28px;
+}
+
+@keyframes dialogPop {
+    0% {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* ############## rotate ######## */
@@ -316,7 +346,8 @@ dialog h3 {
     text-align: center;
     padding: 20px;
     gap: 20px;
-    display: none; /* Start hidden */
+    display: none;
+    /* Start hidden */
 }
 
 #rotate-overlay img {
@@ -341,7 +372,7 @@ dialog h3 {
         display: none;
     }
 
-    .onlyMobile{
+    .onlyMobile {
         display: block;
     }
 
