@@ -194,19 +194,19 @@ class World {
      */
     flipImage(mo) {
         this.ctx.save();
-        this.ctx.translate(mo.width, 0);
+
+        const hb = mo.getHitbox();
+        const centerX = hb.left + (hb.right - hb.left) / 2;
+
+        this.ctx.translate(centerX, 0);
         this.ctx.scale(-1, 1);
-        mo.x = mo.x * -1;
+        this.ctx.translate(-centerX, 0);
     }
 
-    /**
-     * Restores the rendering context after a horizontal flip.
-     * @param {DrawableObject} mo - The object being restored.
-     */
     flipImageBack(mo) {
-        mo.x = mo.x * -1;
         this.ctx.restore();
     }
+    
 
     /**
      * Starts all recurring world logic such as collision checks
@@ -246,8 +246,13 @@ class World {
      * @returns {boolean} True if the throw key is pressed and at least one bottle is available.
      */
     canThrowBottle() {
-        return this.keyboard.D && this.character.collectableObjects.bottle > 0;
+        return (
+            this.keyboard.D &&
+            this.character.collectableObjects.bottle > 0 &&
+            this.character.canThrow
+        );
     }
+    
 
     /**
      * Calculates the spawn position for a thrown bottle based on the
@@ -297,7 +302,10 @@ class World {
         const pos = this.calculateThrowPosition();
         this.spawnBottle(pos.x, pos.y);
         this.consumeBottle();
+
+        this.character.startThrowCooldown(); // Cooldown starten
     }
+    
 
     /**
      * Applies damage to an enemy if the player is currently attacking.
@@ -326,7 +334,6 @@ class World {
         }
     }
 
-
     /**
      * Handles all collision-related interactions between the player
      * and a single enemy, including attack damage, enemy damage and
@@ -336,18 +343,19 @@ class World {
     processEnemyCollision(enemy) {
         enemy.distanceEnemy = Math.abs(this.character.x - enemy.x);
         const col = this.character.isColliding(enemy);
-
         if (col.collision) {
-            if (this.character.isAttacking) {
-                this.handlePlayerAttack(enemy);
-            } else {
-                this.handleEnemyAttack(enemy);
-            }
-        }
 
+            if (this.handleStomp(enemy)) return;
+
+            if (this.handlePlayerAttack(enemy)) return;
+
+            this.handleEnemyAttack(enemy);
+        }
+        
         this.checkEndbossDeath(enemy);
         enemy.checkFirstContact(this);
     }
+
 
     /**
      * Iterates over all enemies and processes collision logic for each one.
@@ -358,6 +366,53 @@ class World {
         });
     }
 
+    /**
+     * Prüft, ob der Spieler den Gegner eindeutig von oben trifft.
+     * Nutzt die vertikale Hitbox-Mitte + Fallgeschwindigkeit.
+     */
+    isStompHit(player, enemy) {
+        const p = player.getHitbox();
+        const e = enemy.getHitbox();
+
+        const playerCenterY = (p.top + p.bottom) / 2;
+        const enemyCenterY = (e.top + e.bottom) / 2;
+
+        return (
+            player.speedY < 0 &&          // Spieler fällt
+            playerCenterY < enemyCenterY  // Spieler-Mitte liegt über Gegner-Mitte
+        );
+    }
+
+    /**
+     * Handles the stomp interaction when the player lands on top of an enemy.
+     * Applies damage to the enemy and triggers a bounce effect for the player.
+     *
+     * @param {enemy} enemy - The enemy being stomped.
+     * @returns {boolean} True if a stomp was successfully executed.
+     */
+    handleStomp(enemy) {
+        if (this.isStompHit(this.character, enemy) && !enemy.dead) {
+            enemy.hit(this.character.hitEnergy, enemy.dead);
+            this.character.speedY = 20; // Bounce effect
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Handles the player's melee attack interaction with an enemy.
+     * Applies damage to the enemy if the player is currently attacking.
+     *
+     * @param {enemy} enemy - The enemy being hit by the player's melee attack.
+     * @returns {boolean} True if a melee hit was applied.
+     */
+    handlePlayerAttack(enemy) {
+        if (this.character.isAttacking) {
+            this.handlePlayerAttack(enemy);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Checks whether the enemy is an endboss and triggers the win

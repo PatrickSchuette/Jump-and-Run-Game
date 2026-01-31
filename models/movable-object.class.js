@@ -99,8 +99,8 @@ class MoveableObject extends DrawableObject {
      * An object describing whether a collision occurred and from which side.
      */
     isColliding(mo) {
-        const a = this.getHitbox();
-        const b = mo.getHitbox();
+        const a = this.getHitbox();   
+        const b = mo.getHitbox();    
 
         const collision =
             a.left < b.right &&
@@ -110,12 +110,23 @@ class MoveableObject extends DrawableObject {
 
         return {
             collision,
-            right: a.right > b.left && a.left < b.left,
-            left: a.left < b.right && a.right > b.right,
-            top: a.top < b.bottom && a.bottom > b.bottom,
-            bottom: a.bottom > b.top && a.top < b.top
+
+            character: {
+                fromRight: a.right > b.left && a.left < b.left,
+                fromLeft: a.left < b.right && a.right > b.right,
+                fromTop: a.bottom <= b.top,
+                fromBottom: a.top >= b.bottom
+            },
+
+            enemy: {
+                fromRight: b.right > a.left && b.left < a.left,
+                fromLeft: b.left < a.right && b.right > a.right,
+                fromTop: b.bottom <= a.top,
+                fromBottom: b.top >= a.bottom
+            }
         };
     }
+    
 
 
     /**

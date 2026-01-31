@@ -8,6 +8,14 @@
     src: url('./fonts/latoRegular.ttf') format(truetype);
 }
 
+.onlyDesktop {
+    display: inherit;
+}
+
+.onlyMobile {
+    display: none;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -31,14 +39,6 @@ h1 {
 canvas {
     background-color: black;
     display: block;
-}
-
-.onlyDesktop {
-    display: block;
-}
-
-.onlyMobile {
-    display: none;
 }
 
 .gameButton {

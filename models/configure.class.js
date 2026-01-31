@@ -72,7 +72,7 @@ class Configure {
         this.ctx.fillStyle = "white";
         this.ctx.font = "48px Arial";
         this.ctx.textAlign = "center";
-        this.ctx.fillText("Configuration", this.canvas.width / 2, 100);
+        this.ctx.fillText("Configuration", this.canvas.width / 2, 130);
     }
 
     /**

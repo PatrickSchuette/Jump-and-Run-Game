@@ -49,6 +49,9 @@ class Character extends MoveableObject {
     attackCooldown = 800;
     canAttack = true;
 
+    throwCooldown = 650; 
+    canThrow = true;
+
     showDrawFrame = true;
     isDeathSequenceRunning = false;
 
@@ -210,6 +213,18 @@ class Character extends MoveableObject {
 
         setTimeout(() => { this.canAttack = true; }, this.attackCooldown);
     }
+
+    /**
+     * Starts the throw cooldown, preventing the player from throwing again
+     * until the cooldown duration has passed.
+     */
+    startThrowCooldown() {
+        this.canThrow = false;
+        setTimeout(() => {
+            this.canThrow = true;
+        }, this.throwCooldown);
+    }
+
 
     /**
      * Plays the death animation once and triggers level reset.
