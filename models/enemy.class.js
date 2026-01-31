@@ -11,7 +11,16 @@ class enemy extends MoveableObject {
         right: false
     }
 
+    offset = {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
+    };
+
     energy = 5;
+    baseOffsetRight = 0;
+    expandAttackOffsetRight = 0;
 
     hasDeathPhysics = false;
     deathSpeedX = 0;
@@ -65,16 +74,32 @@ class enemy extends MoveableObject {
         }
     }
 
+    /** starting Enemy Attack. */
     startEnemyAttack() {
         if (!this.canAttack) return;
 
         this.isAttacking = true;
         this.canAttack = false;
+        this.expandAttackOffset();
 
-        setTimeout(() => this.isAttacking = false, this.attackDuration);
+        setTimeout(() => {
+            this.isAttacking = false;
+            this.expandAttackOffset();
+        }, this.attackDuration);
+
         setTimeout(() => this.canAttack = true, this.attackCooldown);
     }
+    
 
+    /** durring attack the offset range of the object is changed */
+    expandAttackOffset() {
+        if (this.isAttacking) {
+            this.offset.right = this.expandAttackOffsetRight;
+        } else {
+            this.offset.right = this.baseOffsetRight;
+        }
+    }
+    
     /**
      * Starts movement and animation intervals for the enemy.
      * Movement and animation logic are handled in separate loops.

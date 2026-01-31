@@ -41,13 +41,16 @@ class Character extends MoveableObject {
     };
 
     expandFightOffset = 20;
-    hitEnergy = 15;
-    throwEnergy = 20;
+    hitEnergy = 10;
+    throwEnergy = 15;
 
     isAttacking = false;
     attackDuration = 150;
     attackCooldown = 800;
     canAttack = true;
+
+    isHurtCooldown = false;
+    hurtDuration = 600; 
 
     throwCooldown = 650; 
     canThrow = true;
@@ -85,13 +88,11 @@ class Character extends MoveableObject {
             this.otherDirection = false;
             this.playActionSound(this.sndWalk);
         }
-
         if (this.world.keyboard.LEFT && this.x > 0) {
             this.moveLeft();
             this.otherDirection = true;
             this.playActionSound(this.sndWalk);
         }
-
         if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
             this.sndWalk.pause();
             this.sndWalk.currentTime = 0;
@@ -225,7 +226,6 @@ class Character extends MoveableObject {
         }, this.throwCooldown);
     }
 
-
     /**
      * Plays the death animation once and triggers level reset.
      */
@@ -245,4 +245,53 @@ class Character extends MoveableObject {
             this.lastDeathAnimTime = now;
         }
     }
+
+    /**
+     * Applies damage to the character unless a hurt cooldown is active.
+     * 
+     * Reduces the character's energy by the given damage amount, plays the hurt
+     * sound effect, and triggers the hurt cooldown period. If the character's
+     * energy reaches zero or below, the death sequence is initiated. While the
+     * hurt cooldown is active, the character cannot take additional damage.
+     *
+     * @param {number} damage - The amount of damage to apply.
+     */
+    hit(damage) {
+        if (this.isHurtCooldown || this.isDead()) return;
+
+        this.energy -= damage;
+        this.playActionSound(this.sndHit);
+
+        if (this.energy <= 0) {
+            this.die();
+            return;
+        }
+
+        this.startHurtCooldown();
+    }
+
+    /**
+     * Activates the hurt cooldown state, preventing the character from taking
+     * further damage for a short duration. Also resets the animation frame index
+     * to ensure the hurt animation starts from the beginning.
+     */
+    startHurtCooldown() {
+        this.isHurtCooldown = true;
+        this.currentImage = 0;
+
+        setTimeout(() => {
+            this.isHurtCooldown = false;
+        }, this.hurtDuration);
+    }
+
+    /**
+     * Indicates whether the character is currently in a hurt cooldown state.
+     *
+     * @returns {boolean} True if the character is temporarily invulnerable,
+     *                    otherwise false.
+     */
+    isHurt() {
+        return this.isHurtCooldown;
+    }
+    
 }

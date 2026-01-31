@@ -10,6 +10,7 @@ class enemyPlant extends enemy {
         left: 10,
         right: 10
     }
+    baseOffsetRight = 10;
 
     hitPosition = {
         top: false,

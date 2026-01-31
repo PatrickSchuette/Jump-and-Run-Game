@@ -10,6 +10,7 @@ class enemyDino extends enemy {
         left: 10,
         right: 40
     }
+    baseOffsetRight = 40;
 
     hitEnergy = 10;
     otherDirection = true;

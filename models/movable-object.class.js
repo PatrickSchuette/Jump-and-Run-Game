@@ -99,25 +99,17 @@ class MoveableObject extends DrawableObject {
      * An object describing whether a collision occurred and from which side.
      */
     isColliding(mo) {
-        const a = this.getHitbox();   
-        const b = mo.getHitbox();    
-
-        const collision =
-            a.left < b.right &&
-            a.right > b.left &&
-            a.top < b.bottom &&
-            a.bottom > b.top;
-
+        const a = this.getHitbox();
+        const b = mo.getHitbox();
+        const collision = a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
         return {
             collision,
-
             character: {
                 fromRight: a.right > b.left && a.left < b.left,
                 fromLeft: a.left < b.right && a.right > b.right,
                 fromTop: a.bottom <= b.top,
                 fromBottom: a.top >= b.bottom
             },
-
             enemy: {
                 fromRight: b.right > a.left && b.left < a.left,
                 fromLeft: b.left < a.right && b.right > a.right,
@@ -126,7 +118,7 @@ class MoveableObject extends DrawableObject {
             }
         };
     }
-    
+
     /**
      * Computes the object's hitbox boundaries including offset adjustments.
      * @returns {{left:number, right:number, top:number, bottom:number}}
@@ -163,8 +155,8 @@ class MoveableObject extends DrawableObject {
      * @returns {boolean} True if the object is still hurt.
      */
     isHurt() {
-        let timePassed = new Date().getTime() - this.lastHit; //Difference in ms
-        timePassed = timePassed / 1000; //Difference in s
+        let timePassed = new Date().getTime() - this.lastHit; 
+        timePassed = timePassed / 1000; 
         return timePassed < 0.7;
     }
 

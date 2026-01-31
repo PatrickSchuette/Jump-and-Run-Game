@@ -29,3 +29,12 @@ IntervalManager.clearAll = function () {
     IntervalManager.intervals.forEach(obj => clearInterval(obj.id));
     IntervalManager.intervals = [];
 };
+
+/** clear specifif Intervall */
+IntervalManager.clearInterval = function (label) {
+    const index = IntervalManager.intervals.findIndex(obj => obj.label === label);
+    if (index !== -1) {
+        clearInterval(IntervalManager.intervals[index].id);
+        IntervalManager.intervals.splice(index, 1);
+    }
+};
