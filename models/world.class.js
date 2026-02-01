@@ -174,6 +174,7 @@ class World {
         IntervalManager.setInterval(() => {
             this.checkCollisionCollactable();
             this.checkThrowObjects();
+            this.updateDynamicLevelEnd();
         }, 200, `World:collision-check`);
         IntervalManager.setInterval(() => { this.checkCollisionEnemy(); }, 25, 'World: CheckEnemyCollision');
         IntervalManager.setInterval(() => { this.checkCollisionThrowable(); }, 25, 'World: CheckThrowableObject');
@@ -297,7 +298,6 @@ class World {
         return false;
     }
 
-
     /**Iterates over all enemies and processes collision logic for each one.*/
     checkCollisionEnemy() {
         this.level.enemies.forEach(enemy => {
@@ -345,6 +345,18 @@ class World {
             this.setLevel(win());
         }
     }
+
+    updateDynamicLevelEnd() {
+        const boss = this.endboss();
+        if (!boss) return;
+
+        const hb = boss.getHitbox();
+        const newEnd = hb.left - 20;
+
+        if (newEnd < this.level.level_end_x) {
+            this.level.level_end_x = newEnd + 120;
+        }
+    }    
 
     /** Checks collisions between throwable objects and enemies.Applies damage, removes bottles on impact and triggers enemy death. */
     checkCollisionThrowable() {

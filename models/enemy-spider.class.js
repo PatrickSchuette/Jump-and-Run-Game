@@ -24,14 +24,14 @@ class enemySpider extends enemy {
         './img/enemy/spider/walk4.png',
     ];
 
-        IMAGES_DEAD = [
+    IMAGES_DEAD = [
         './img/enemy/spider/death1.png',
         './img/enemy/spider/death2.png',
         './img/enemy/spider/death3.png',
         './img/enemy/spider/death4.png'
     ];
-    
-    IMAGES_ATTAC =[
+
+    IMAGES_ATTAC = [
         'img/enemy/spider/attack1.png',
         'img/enemy/spider/attack2.png',
         'img/enemy/spider/attack3.png',
@@ -41,7 +41,7 @@ class enemySpider extends enemy {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
 
-        this.x = 450 + Math.random() * x;
+        this.x = x;//   this.x = 450 + Math.random() * x;
 
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);

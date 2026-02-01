@@ -14,6 +14,7 @@ class Level {
         Endboss
     };
     imagePlayButton = null;
+    maxX = 0;
 
     /** * Creates a new Level instance.  
      * @param {Object} config Level configuration object. 
@@ -26,11 +27,13 @@ class Level {
         this.playMode = config.playMode;
 
         this.generateClouds(config.clouds);
-        this.generateEnemies(config.enemies);
-        this.generateCollectables(config.collactableObjects);
-        this.selectPlayButton();
-    }
+        this.generateEnemies(config.enemies);     
 
+        this.maxX = this.level_end_x - 250;      
+        this.generateCollectables(config.collactableObjects);
+
+        this.selectPlayButton();
+    }    
 
     /**
      * Generates background objects for the level by repeating layered images.
@@ -66,25 +69,22 @@ class Level {
      */
     spawnEnemyGroup(EnemyClass, count) {
         for (let i = 0; i < count; i++) {
-            this.spawnEnemy(EnemyClass, this.level_end_x - 200);
+            const x = this.getValidEnemySpawnX(250, this.maxX);
+            this.spawnEnemy(EnemyClass, x);
         }
     }
-
-    /**
-     * Spawns the endboss if the level is in play mode.
-     */
+    
+    /** If the level is a playable Level spawn a Endboss */
     spawnEndbossIfNeeded() {
         if (!this.playMode) return;
 
-        const bossX = this.level_end_x + 150;
+        const bossX = this.level_end_x + 150;      
         const boss = this.spawnEnemy(Endboss, bossX);
 
-        // Levelgrenze direkt vor den Boss setzen
         const bossHitbox = boss.getHitbox();
-        this.level_end_x = bossHitbox.left - 20; // kleiner Puffer
+        this.level_end_x = bossHitbox.left - 20;   
     }
     
-
     /**
      * Generates all enemies for the level based on the provided configuration.
      * Spawns enemy groups and the endboss if required.
@@ -140,14 +140,58 @@ class Level {
      * @param {Function} ClassRef - The collectable class constructor.
      */
     spawnCollectable(ClassRef) {
-        const x = 200 + Math.random() * this.level_end_x;
+        const x = this.getValidSpawnX(this.collectables, 150, this.maxX);
         const y = 100 + Math.random() * 200;
 
         const obj = new ClassRef(x, y);
-
         obj.parentArray = this.collectables;
         this.collectables.push(obj);
     }
+    
+    /**
+     * Generates a random X position that keeps a minimum distance
+     * from all existing enemies (regardless of type).
+     *
+     * @param {number} minDistance - Required minimum X distance.
+     * @returns {number} A valid X position.
+     */
+    getValidEnemySpawnX(minDistance, maxX = this.maxX) {
+        if (!maxX || maxX <= 0) {
+            maxX = this.level_end_x - 250;
+        }
+
+        let x;
+        let tries = 0;
+
+        do {
+            x = 200 + Math.random() * maxX;
+            tries++;
+            if (tries > 50) break;
+        } while (this.enemies.some(e => Math.abs(e.x - x) < minDistance));
+
+        return x;
+    }
+    
+    /**
+     * Generates a random X position that keeps a minimum distance
+     * from all existing collectables.
+     *
+     * @param {Object[]} objects - Array of collectables with an x property.
+     * @param {number} minDistance - Required minimum X distance.
+     * @returns {number} A valid X position.
+     */
+    getValidSpawnX(objects, minDistance, maxX) {
+        let x;
+        let tries = 0;
+
+        do {
+            x = 200 + Math.random() * maxX;
+            tries++;
+            if (tries > 50) break;
+        } while (objects.some(obj => Math.abs(obj.x - x) < minDistance));
+
+        return x;
+    }   
 
     /**
      * Calculates the x-position where the level ends based on background count.
