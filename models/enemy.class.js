@@ -41,11 +41,12 @@ class enemy extends MoveableObject {
      */
     startMovementLoop() {
         this.moveInterval = IntervalManager.setInterval(() => {
-            if (!this.dead) {
+            if (!this.dead && this.state !== 'idle') {
                 this.moveLeft();
             }
         }, 1000 / 60, 'Enemy: Move');
     }
+    
 
     /**
      * Starts the animation interval for the enemy.
@@ -66,7 +67,7 @@ class enemy extends MoveableObject {
             return;
         }
 
-        if (this.shouldAttack(150)) {
+        if (this.shouldAttack(80)) {
             this.startEnemyAttack();
             this.playAnimation(this.IMAGES_ATTAC);
         } else {

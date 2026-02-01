@@ -4,9 +4,9 @@ class Endboss extends enemy {
     height = 650;
     width = 280;
 
-    state = 'idle';
+    state = null;
     hurtCooldown = false;
-        energy = 100;
+    energy = 100;
 
     hitPosition = {
         top: false,
@@ -22,7 +22,9 @@ class Endboss extends enemy {
         right: 90
     };
     baseOffsetRight = 90;
-    expandAttackOffsetRight = 20;
+    expandAttackOffsetRight = 5;
+
+    canSpike = true;
 
     showDrawFrame = true;
 
@@ -59,22 +61,36 @@ class Endboss extends enemy {
         'img/enemy/boss/attack5.png',
     ]
 
+    IMAGES_IDLE = [
+        'img/enemy/boss/idle1.png',
+        'img/enemy/boss/idle2.png',
+        'img/enemy/boss/idle3.png',
+    ]
+
+    /**
+     * Creates a new Endboss instance at the given x‑position.
+     * Loads all animation frames and starts movement + animation loops.
+     * @param {number} x - Initial horizontal position of the boss.
+     */
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
-
         this.x = x;
 
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTAC);
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_IDLE);
         this.speed = 0.15 + Math.random() * 0.5;
-
         this.animate();
+    }
 
-    }  
-    
+    /** Applies damage to the boss. If health reaches zero, 
+    *  the boss enters the death state. Otherwise, the hurt animation 
+    *  is played and a temporary hurt cooldown is activated. 
+    * @param {number} damage - Amount of damage taken. 
+    */
     hit(damage) {
         if (this.hurtCooldown || this.dead) return;
 
@@ -87,7 +103,12 @@ class Endboss extends enemy {
 
         this.playHurt();
     }
-    
+
+    /**
+     * Plays the hurt animation sequence and temporarily disables
+     * other actions. After the animation finishes, the boss returns
+     * to the idle state.
+     */
     playHurt() {
         this.state = 'hurt';
         this.hurtCooldown = true;
@@ -100,30 +121,101 @@ class Endboss extends enemy {
 
             if (this.currentImage >= this.IMAGES_HURT.length) {
                 IntervalManager.clearInterval('Endboss:Hurt');
-                this.state = 'idle';
+                this.state = null;
                 this.hurtCooldown = false;
                 this.currentImage = 0;
             }
         }, 100, 'Endboss:Hurt');
     }
-    
+
+    /**
+     * Selects and plays the correct animation based on the boss state:
+     */
     updateAnimationState() {
-        if (this.dead) {
-            this.playDeathAnimationOnce();
-            return;
-        }
+        if (this.handleDeathState()) return;
+        if (this.handleHurtState()) return;
+        if (this.handleIdleState()) return;
+        if (this.handleSpikeState()) return;
+        if (this.handleMeleeState()) return;
 
-        if (this.hurtCooldown) return; // Hurt blockiert alles
+        this.playWalking();
+    }
 
-        if (this.shouldAttack(150)) {
-            this.startEnemyAttack();
-            this.playAnimation(this.IMAGES_ATTAC);
-            return;
-        }
+    /**
+     * Handles the boss death state. Plays the death animation
+     * and stops further animation processing.
+     * @returns {boolean} True if the boss is dead and the death animation was triggered.
+     */
+    handleDeathState() {
+        if (!this.dead) return false;
+        this.playDeathAnimationOnce();
+        return true;
+    }
 
+    /**
+     * Handles the hurt cooldown state. When active, the boss
+     * cannot perform any actions until the hurt animation finishes.
+     *
+     * @returns {boolean} True if the boss is currently in hurt cooldown.
+     */
+    handleHurtState() {
+        if (!this.hurtCooldown) return false;
+        return true;
+    }
+
+    /**
+     * Handles the idle state. Plays the idle animation and prevents
+     * the boss from moving or attacking while idle.
+     *
+     * @returns {boolean} True if the boss is in idle state.
+     */
+    handleIdleState() {
+        if (this.state !== 'idle') return false;
+        this.playAnimation(this.IMAGES_IDLE);
+        return true;
+    }
+
+    /**
+     * Determines whether the boss should perform a spike attack.
+     * The attack is triggered only when the player is within a
+     * specific distance range and the spike cooldown allows it.
+     *
+     * @returns {boolean} True if a spike attack was triggered.
+     */
+    handleSpikeState() {
+        const inRange = this.distanceEnemy < 320 && this.distanceEnemy > 180;
+        if (!this.canSpike || !inRange) return false;
+
+        this.spawnSpikeAttack();
+        return true;
+    }
+
+    /**
+    * Handles the melee attack state. If the player is close enough,
+    * the boss performs a melee attack and plays the attack animation.
+    *
+    * @returns {boolean} True if a melee attack was triggered.
+    */
+    handleMeleeState() {
+        if (!this.shouldAttack(150)) return false;
+
+        this.startEnemyAttack();
+        this.playAnimation(this.IMAGES_ATTAC);
+        return true;
+    }
+    /**
+     * Plays the walking animation for the boss. This is the default
+     * animation when no other state takes priority.
+     */
+    playWalking() {
         this.playAnimation(this.IMAGES_WALKING);
     }
-    
+
+
+    /**
+     * Starts a melee attack if the boss is allowed to attack.
+     * Temporarily increases hitbox range and triggers attack cooldown.
+     */
     startEnemyAttack() {
         if (!this.canAttack || this.hurtCooldown) return;
 
@@ -133,6 +225,27 @@ class Endboss extends enemy {
         setTimeout(() => this.isAttacking = false, this.attackDuration);
         setTimeout(() => this.canAttack = true, this.attackCooldown);
     }
-    
-    
+
+    /**
+     * Spawns a SpikeWave projectile in front of the boss.
+     * The boss enters an idle state during the attack and
+     * resumes normal behavior afterward.
+     */
+    spawnSpikeAttack() {
+        if (!this.canSpike) return;
+        this.canSpike = false;
+        this.state = 'idle';
+        const x = this.x + (this.otherDirection ? -50 : 250);
+        const groundY = 250;
+        const spike = new SpikeWave(x, groundY, this.otherDirection);
+
+        spike.parentArray = this.world.level.enemies;
+        this.world.level.enemies.push(spike);
+
+        setTimeout(() => { this.state = null; }, 1500); // set Time how long Endboss is in Idle State
+        setTimeout(() => this.canSpike = true, 7000); // Set Time to next rewspawn
+    }
+
+
+
 }

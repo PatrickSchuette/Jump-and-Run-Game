@@ -272,13 +272,29 @@ class World {
     processEnemyCollision(enemy) {
         enemy.distanceEnemy = Math.abs(this.character.x - enemy.x);
         const col = this.character.isColliding(enemy);
+
         if (col.collision) {
+            if (this.checkCollisionSpike(enemy)) return;
             if (this.handleStomp(enemy)) return;
             if (this.handlePlayerAttack(enemy)) return;
             this.handleEnemyAttack(enemy);
         }
+
         this.checkEndbossDeath(enemy);
         enemy.checkFirstContact(this);
+    }
+
+    checkCollisionSpike(enemy) {
+        if (!(enemy instanceof SpikeWave)) return false;
+
+        if (this.character.isColliding(enemy).collision) {
+            this.character.hit(enemy.damage, false);
+            this.statusbarHealth.setPercentage(this.character.energy);
+            enemy.removeFromWorld();
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -306,7 +322,7 @@ class World {
         let distance = Math.abs(playerCenter - enemyCenter);
 
         return distance <= stompRange;
-    }    
+    }
 
     /**
      * Handles the stomp interaction when the player lands on top of an enemy. Applies damage to the enemy and triggers a bounce effect for the player.
@@ -319,7 +335,7 @@ class World {
         enemy.hit(this.character.hitEnergy, false);
         return true;
     }
-    
+
     /**
      * Checks whether the enemy is an endboss and triggers the win condition if the boss has died.
      * @param {enemy} enemy - The enemy being checked.

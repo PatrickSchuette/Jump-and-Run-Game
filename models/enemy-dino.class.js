@@ -11,6 +11,7 @@ class enemyDino extends enemy {
         right: 40
     }
     baseOffsetRight = 40;
+    expandAttackOffsetRight = 40;
 
     hitEnergy = 10;
     otherDirection = true;

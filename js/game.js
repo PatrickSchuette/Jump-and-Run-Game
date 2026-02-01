@@ -175,9 +175,9 @@ elementRev.btnOptions.addEventListener("click", () => {
     configureMenu.close();
     configureMenu = null;
 
-    world = new World(canvas, keyboard);
-    world.setLevel(start());
+    checkCharacterSelected();
 });
+
 
 /**
  * Toggles fullscreen mode when the fullscreen button is clicked.
@@ -327,16 +327,6 @@ window.addEventListener("pointerdown", () => {
 });
 
 /**
- * Determines whether the current device is a mobile device based on the user agent.
- * This check is used to ensure orientation handling only applies to phones and tablets,
- * preventing false triggers on desktop browsers with resized windows.
- * @returns {boolean} True if the device is identified as mobile, otherwise false.
- */
-function isMobile() {
-    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
-/**
  * Checks the current screen orientation on mobile devices and toggles
  * the rotate-overlay visibility accordingly. The overlay is shown when
  * the device is in portrait mode and hidden when in landscape mode.
@@ -344,8 +334,6 @@ function isMobile() {
  * event handler to react to live orientation changes.
  */
 function checkOrientation() {
-    if (!isMobile()) return;
-
     const overlay = document.getElementById("rotate-overlay");
 
     if (window.innerWidth > window.innerHeight) {
@@ -356,29 +344,25 @@ function checkOrientation() {
 }
 
 /**
- * Detects whether the current device should be treated as a tablet.
- * This function identifies both classic iPads (via "iPad" in the user agent)
- * and modern iPadOS devices that report themselves as "Macintosh" but expose
- * touch capabilities through `navigator.maxTouchPoints`.
+ * Detects whether the current device should be treated as a tablet. This function identifies both classic iPads (via "iPad" in the user agent) and modern iPadOS devices that report themselves as "Macintosh" but expose touch capabilities through `navigator.maxTouchPoints`.
  * @returns {boolean} True if the device is recognized as a tablet, otherwise false.
  */
 function isTablet() {
     const UA = navigator.userAgent;
+    let isCoarse = window.matchMedia("(pointer: coarse)").matches;
+    let isWideEnough = window.matchMedia("(min-width: 768px)").matches;
 
-    const isIpadUA = /iPad/i.test(UA);
-    const isIpadOSDesktop = /Macintosh/i.test(UA) && ('ontouchend' in document);
+    const isSurfaceDuo = /Surface Duo/i.test(UA);
+    if (isSurfaceDuo){
+        isCoarse = true;
+        isWideEnough = true;
+    }
 
-    return isIpadUA || isIpadOSDesktop;
+    return isCoarse && isWideEnough;
 }
 
-
 /**
- * Applies tablet-specific UI adjustments by toggling visibility of elements
- * marked with `.onlyDesktop` and `.onlyMobile` classes.
- *
- * When a tablet device is detected, desktop-only elements are hidden and
- * mobile-only elements are displayed. On non-tablet devices, the original
- * CSS-defined visibility is restored by clearing inline display overrides.
+ * Applies tablet-specific UI adjustments by toggling visibility of elements marked with `.onlyDesktop` and `.onlyMobile` classes. When a tablet device is detected, desktop-only elements are hidden and mobile-only elements are displayed. On non-tablet devices, the original CSS-defined visibility is restored by clearing inline display overrides.
  */
 function checkTabletModus() {
     const desktopEls = document.querySelectorAll('.onlyDesktop');
@@ -393,6 +377,7 @@ function checkTabletModus() {
         mobileEls.forEach(el => el.style.display = '');
     }
 }
+
 
 checkOrientation();
 checkTabletModus();

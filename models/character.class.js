@@ -293,5 +293,13 @@ class Character extends MoveableObject {
     isHurt() {
         return this.isHurtCooldown;
     }
+
+    die() {
+        this.energy = 0;
+        this.dead = true;
+        this.currentImage = 0;
+        this.isDeathSequenceRunning = false;
+    }
+    
     
 }

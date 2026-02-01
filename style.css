@@ -8,6 +8,10 @@
     src: url('./fonts/latoRegular.ttf') format(truetype);
 }
 
+:root {
+    --low-height-threshold: 420px;
+}
+
 .onlyDesktop {
     display: inherit;
 }
@@ -362,7 +366,7 @@ dialog h3 {
 }
 
 
-@media screen and (max-height: 480px) {
+@media screen and (max-height: 420px){
     body {
         background-image: none;
         margin: 0 0;
@@ -400,4 +404,43 @@ dialog h3 {
         transform: translateX(-50%);
     }
 
+}
+
+@media screen and (max-height: 600px), (pointer: coarse) {
+    body {
+        background-image: none;
+        margin: 0 0;
+    }
+
+    .onlyDesktop {
+        display: none;
+    }
+
+    .onlyMobile {
+        display: block;
+    }
+
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    canvas {
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+
+    #mobile-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #header {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }

@@ -11,6 +11,7 @@ class enemyGoblin extends enemy {
         right: 45
     };
     baseOffsetRight = 45;
+    expandAttackOffsetRight = 45;
 
     hitEnergy = 5;
     otherDirection = true;

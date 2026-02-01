@@ -74,10 +74,16 @@ class Level {
      * Spawns the endboss if the level is in play mode.
      */
     spawnEndbossIfNeeded() {
-        if (this.playMode) {
-            this.spawnEnemy(Endboss, this.level_end_x + 150);
-        }
+        if (!this.playMode) return;
+
+        const bossX = this.level_end_x + 150;
+        const boss = this.spawnEnemy(Endboss, bossX);
+
+        // Levelgrenze direkt vor den Boss setzen
+        const bossHitbox = boss.getHitbox();
+        this.level_end_x = bossHitbox.left - 20; // kleiner Puffer
     }
+    
 
     /**
      * Generates all enemies for the level based on the provided configuration.
@@ -107,6 +113,8 @@ class Level {
         enemy.parentArray = this.enemies;
         if (this.world) enemy.world = this.world;
         this.enemies.push(enemy);
+
+        return enemy;
     }
 
     /**

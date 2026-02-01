@@ -11,6 +11,7 @@ class enemySpider extends enemy {
         right: 60
     }
     baseOffsetRight = 60;
+    expandAttackOffsetRight = 60;
 
     hitEnergy = 10;
     otherDirection = true;
