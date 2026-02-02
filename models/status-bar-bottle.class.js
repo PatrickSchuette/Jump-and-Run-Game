@@ -30,7 +30,7 @@ class BottleStatus extends StatusBar {
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
-        }, 100, 'StatusBarBottle: Animation', 'statusbar');
+        }, 100, 'StatusBarBottle: Animation', 'ui');
     }
 }
 

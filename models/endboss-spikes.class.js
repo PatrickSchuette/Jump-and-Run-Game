@@ -42,11 +42,11 @@ class SpikeWave extends MoveableObject {
     spawn() {
         this.animationInterval = IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
-        }, 80, 'SpikeWave:anim', 'Spike');
+        }, 80, 'SpikeWave:anim', 'enemy');
 
         this.moveInterval = IntervalManager.setInterval(() => {
             this.x += this.directionLeft ? -this.moveSpeed : this.moveSpeed;
-        }, 25, 'SpikeWave:move', 'Spike');
+        }, 25, 'SpikeWave:move', 'enemy');
 
         setTimeout(() => this.removeFromWorld(), this.lifetime);
     }

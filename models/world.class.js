@@ -75,6 +75,7 @@ class World {
      */
     setLevel(newLevel) {
         IntervalManager.clearByOwner("world");
+        this.run();
         this.level = newLevel;
         this.statusPlayMode = newLevel.playMode;
         this.character.hadFirstContact = this.statusPlayMode;
@@ -357,7 +358,7 @@ class World {
         if (newEnd < this.level.level_end_x) {
             this.level.level_end_x = newEnd + 120;
         }
-    }    
+    }
 
     /** Checks collisions between throwable objects and enemies.Applies damage, removes bottles on impact and triggers enemy death. */
     checkCollisionThrowable() {
