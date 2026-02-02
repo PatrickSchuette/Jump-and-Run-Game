@@ -153,6 +153,7 @@ function startGame() {
 
     if (world && world.stop) {
         world.stop();
+        IntervalManager.clearAll();
     }
 
     world = new World(canvas, keyboard);

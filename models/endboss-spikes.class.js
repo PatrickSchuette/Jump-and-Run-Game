@@ -4,7 +4,7 @@ class SpikeWave extends MoveableObject {
     lifetime = 5000;
     showDrawFrame = true;
 
-    offset = { top: 120, bottom: 120, left: 40, right: 40 };
+    offset = { top: 120, bottom: 120, left: 30, right: 30 };
 
     IMAGES = [
         './img/spikes/spikes13.png',
@@ -27,7 +27,7 @@ class SpikeWave extends MoveableObject {
 
         this.x = x;
         this.y = groundY;
-        this.width = 200;
+        this.width = 180;
         this.height = 350;
 
         this.directionLeft = directionLeft;
@@ -42,11 +42,11 @@ class SpikeWave extends MoveableObject {
     spawn() {
         this.animationInterval = IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
-        }, 80, 'SpikeWave:anim');
+        }, 80, 'SpikeWave:anim', 'Spike');
 
         this.moveInterval = IntervalManager.setInterval(() => {
             this.x += this.directionLeft ? -this.moveSpeed : this.moveSpeed;
-        }, 25, 'SpikeWave:move');
+        }, 25, 'SpikeWave:move', 'Spike');
 
         setTimeout(() => this.removeFromWorld(), this.lifetime);
     }

@@ -75,8 +75,8 @@ class Character extends MoveableObject {
      * Delegates logic to smaller helper functions.
      */
     animate() {
-        IntervalManager.setInterval(() => this.handleMovement(), 1000 / 60, 'Character: Keyboard');
-        IntervalManager.setInterval(() => this.handleAnimation(), 50, 'Character: Animation');
+        IntervalManager.setInterval(() => this.handleMovement(), 1000 / 60, 'Character: Keyboard', 'Character');
+        IntervalManager.setInterval(() => this.handleAnimation(), 50, 'Character: Animation', 'Character');
     }
 
     /**

@@ -102,7 +102,7 @@ class ThrowableObject extends MoveableObject {
             if (this.hasReachedMaxDistance()) {
                 this.finishThrow();
             }
-        }, 25, 'ThrowableObject: Throw');
+        }, 25, 'ThrowableObject: Throw', 'throwable');
     }
 
 }

@@ -74,6 +74,7 @@ class World {
      * @param {Level} newLevel - The new level instance to load.
      */
     setLevel(newLevel) {
+        IntervalManager.clearByOwner("world");
         this.level = newLevel;
         this.statusPlayMode = newLevel.playMode;
         this.character.hadFirstContact = this.statusPlayMode;
@@ -175,9 +176,9 @@ class World {
             this.checkCollisionCollactable();
             this.checkThrowObjects();
             this.updateDynamicLevelEnd();
-        }, 200, `World:collision-check`);
-        IntervalManager.setInterval(() => { this.checkCollisionEnemy(); }, 25, 'World: CheckEnemyCollision');
-        IntervalManager.setInterval(() => { this.checkCollisionThrowable(); }, 25, 'World: CheckThrowableObject');
+        }, 200, `World:collision-check`, 'world');
+        IntervalManager.setInterval(() => { this.checkCollisionEnemy(); }, 25, 'World: CheckEnemyCollision', 'world');
+        IntervalManager.setInterval(() => { this.checkCollisionThrowable(); }, 25, 'World: CheckThrowableObject', 'world');
     }
 
     /**Stops all world activity by clearing intervals and halting rendering. */

@@ -33,7 +33,7 @@ class HealthStatus extends StatusBar {
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
-        }, 100, 'StatusBarHealth: Animation');
+        }, 100, 'StatusBarHealth: Animation', 'statusbar');
     }
 }
 

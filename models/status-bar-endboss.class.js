@@ -41,7 +41,7 @@ class EndbossStatus extends StatusBar {
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);
-        }, 100, 'StatusBarEndboss: Animation');
+        }, 100, 'StatusBarEndboss: Animation', 'statusbar');
     }
 
 

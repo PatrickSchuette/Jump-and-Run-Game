@@ -9,13 +9,14 @@ IntervalManager.intervals = [];
  * @param {string} [label="unnamed"] - Optional label for debugging and tracking.
  * @returns {number} The interval ID returned by setInterval.
  */
-IntervalManager.setInterval = function (fn, time, label = "unnamed") {
+IntervalManager.setInterval = function (fn, time, label = "unnamed", owner = "global") {
     const id = setInterval(fn, time);
 
     IntervalManager.intervals.push({
         id,
         label,
-        time
+        time,
+        owner
     });
 
     return id;
@@ -28,6 +29,16 @@ IntervalManager.setInterval = function (fn, time, label = "unnamed") {
 IntervalManager.clearAll = function () {
     IntervalManager.intervals.forEach(obj => clearInterval(obj.id));
     IntervalManager.intervals = [];
+};
+
+IntervalManager.clearByOwner = function (owner) {
+    IntervalManager.intervals = IntervalManager.intervals.filter(obj => {
+        if (obj.owner === owner) {
+            clearInterval(obj.id);
+            return false;
+        }
+        return true;
+    });
 };
 
 /** clear specifif Intervall */

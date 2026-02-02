@@ -125,7 +125,7 @@ class Endboss extends enemy {
                 this.hurtCooldown = false;
                 this.currentImage = 0;
             }
-        }, 100, 'Endboss:Hurt');
+        }, 100, 'Endboss:Hurt', 'endboss');
     }
 
     /**

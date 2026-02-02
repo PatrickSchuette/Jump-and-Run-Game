@@ -29,9 +29,7 @@ class CollectableBottle extends MoveableObject {
 
     animate() {
         IntervalManager.setInterval(() => {
-
             this.playAnimation(this.IMAGES);
-
-        }, 100, 'CollactableBottle: Animation');
+        }, 100, 'CollactableBottle: Animation', 'bottle');
     }
 }

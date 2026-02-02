@@ -44,7 +44,7 @@ class enemy extends MoveableObject {
             if (!this.dead && this.state !== 'idle') {
                 this.moveLeft();
             }
-        }, 1000 / 60, 'Enemy: Move');
+        }, 1000 / 60, 'Enemy: Move', 'enemy');
     }
     
 
@@ -55,7 +55,7 @@ class enemy extends MoveableObject {
     startAnimationLoop() {
         this.animationInterval = IntervalManager.setInterval(() => {
             this.updateAnimationState();
-        }, 100, 'Enemy: Animation');
+        }, 100, 'Enemy: Animation', 'enemy');
     }
 
     /**

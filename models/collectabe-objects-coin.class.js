@@ -32,9 +32,7 @@ class CollectableCoin extends MoveableObject {
 
     animate() {
         IntervalManager.setInterval(() => {
-
             this.playAnimation(this.IMAGES);
-
-        }, 100, 'CollactabeCoin: Animation');
+        }, 100, 'CollactabeCoin: Animation', 'coin');
     }
 }
