@@ -142,10 +142,11 @@ class Configure {
         return (
             x > btn.x &&
             x < btn.x + btn.width &&
-            y > btn.y &&
+            y > btn.y - 40 && 
             y < btn.y + btn.height
         );
     }
+    
 
     /**
      * Closes the configuration menu and removes event listeners.
