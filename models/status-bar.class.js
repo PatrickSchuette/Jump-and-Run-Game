@@ -18,6 +18,11 @@ class StatusBar extends DrawableObject {
     textAlignLeft = false;
     iconOffsetX = 0;
 
+    /**
+     * Creates a new generic status bar instance.
+     * Initializes default values, loads icon frames and generates
+     * the initial SVG progress bar based on the starting percentage.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES);
@@ -39,7 +44,6 @@ class StatusBar extends DrawableObject {
 
     /**
      * Draws the complete status bar (icon, bar, text) onto the canvas.
-     *
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
      */
     draw(ctx) {
@@ -50,7 +54,6 @@ class StatusBar extends DrawableObject {
 
     /**
      * Draws the animated or static icon of the status bar.
-     *
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
      */
     drawIcon(ctx) {
@@ -62,7 +65,6 @@ class StatusBar extends DrawableObject {
 
     /**
      * Draws the SVG-based progress bar at the configured position.
-     *
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
      */
     drawBar(ctx) {
@@ -73,7 +75,6 @@ class StatusBar extends DrawableObject {
 
     /**
      * Draws the numerical value or percentage text of the status bar.
-     *
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
      */
     drawText(ctx) {
@@ -88,10 +89,8 @@ class StatusBar extends DrawableObject {
         ctx.fillText(text, this.x + this.textOffsetX, this.y + this.textOffsetY);
     }
 
-
     /**
      * Converts an SVG string into an Image object.
-     * 
      * @param {string} svgString - SVG markup.
      * @returns {HTMLImageElement} - Image created from the SVG.
      */
@@ -103,7 +102,6 @@ class StatusBar extends DrawableObject {
 
     /**
      * Generates the SVG markup for the bar based on the current value.
-     * 
      * @param {number} value - Current bar value.
      * @returns {string} - SVG markup.
      */
@@ -124,7 +122,7 @@ class StatusBar extends DrawableObject {
     }
 
     /**
-     * Regenerates the SVG image based on the current percentage.
+     * Regenerates the SVG progress bar image based on the current percentage.
      */
     updateSVG() {
         const svg = this.createStatusSVG(this.percentage);

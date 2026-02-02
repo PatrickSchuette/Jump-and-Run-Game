@@ -10,6 +10,11 @@ class World {
     statusShowFrame;
     intervals;
 
+    /**
+     * Creates a new game world instance. Initializes character, canvas, level, UI, intervals and rendering loop.
+     * @param {HTMLCanvasElement} canvas - Canvas used for rendering.
+     * @param {Keyboard} keyboard - Keyboard handler instance.
+     */
     constructor(canvas, keyboard) {
         this.character = this.initCharacter();
         this.initCanvas(canvas);
@@ -61,8 +66,7 @@ class World {
         this.setWorld();
     }
 
-
-    /** Assigns the world reference to the character, level and all enemies. Ensures that all objects can access world properties such as camera and collisions. */
+    /** Assigns the world reference to the character, level and all enemies, enabling them to access world‑level properties such as camera and collisions.    */
     setWorld() {
         this.character.world = this;
         this.level.world = this;
@@ -70,8 +74,8 @@ class World {
     }
 
     /**
-     * Replaces the current level with a new one. Updates play mode, resets character position and assigns world references.
-     * @param {Level} newLevel - The new level instance to load.
+     * Replaces the current level with a new one, resets world intervals, updates play mode and repositions the character.
+     * @param {Level} newLevel - The new level instance.
      */
     setLevel(newLevel) {
         IntervalManager.clearByOwner("world");
@@ -167,6 +171,7 @@ class World {
         this.ctx.translate(-centerX, 0);
     }
 
+    /** Flip Image back to default view */
     flipImageBack(mo) {
         this.ctx.restore();
     }
@@ -275,28 +280,28 @@ class World {
     processEnemyCollision(enemy) {
         enemy.distanceEnemy = Math.abs(this.character.x - enemy.x);
         const col = this.character.isColliding(enemy);
-
         if (col.collision) {
             if (this.checkCollisionSpike(enemy)) return;
             if (this.handleStomp(enemy)) return;
             if (this.handlePlayerAttack(enemy)) return;
             this.handleEnemyAttack(enemy);
         }
-
         this.checkEndbossDeath(enemy);
         enemy.checkFirstContact(this);
     }
 
+    /**
+     * Handles all collision-related interactions between the player and a single enemy, including attack damage, enemy damage and endboss death checks.
+     * @param {enemy} enemy - The enemy to process.
+     */
     checkCollisionSpike(enemy) {
         if (!(enemy instanceof SpikeWave)) return false;
-
         if (this.character.isColliding(enemy).collision) {
             this.character.hit(enemy.damage, false);
             this.statusbarHealth.setPercentage(this.character.energy);
             enemy.removeFromWorld();
             return true;
         }
-
         return false;
     }
 
@@ -311,18 +316,14 @@ class World {
     isStompHit(player, enemy) {
         const CHARACTER = player.getHitbox();
         const ENEMY = enemy.getHitbox();
-
         if (player.speedY > 1) return false;
         let isAbove = CHARACTER.bottom <= ENEMY.top + 95;
         if (!isAbove) return false;
-
         let playerCenter = (CHARACTER.left + CHARACTER.right) / 2;
         let enemyCenter = (ENEMY.left + ENEMY.right) / 2;
-
         let enemyWidth = ENEMY.right - ENEMY.left;
         let stompRange = enemyWidth * 1.6;
         let distance = Math.abs(playerCenter - enemyCenter);
-
         return distance <= stompRange;
     }
 
@@ -333,7 +334,6 @@ class World {
      */
     handleStomp(enemy) {
         if (!this.isStompHit(this.character, enemy) || enemy.dead) return false;
-
         enemy.hit(this.character.hitEnergy, false);
         return true;
     }
@@ -348,13 +348,12 @@ class World {
         }
     }
 
+    /** Dynamically adjusts the level's end boundary based on the endboss position, preventing the player from walking past the boss.  */
     updateDynamicLevelEnd() {
         const boss = this.endboss();
         if (!boss) return;
-
         const hb = boss.getHitbox();
         const newEnd = hb.left - 20;
-
         if (newEnd < this.level.level_end_x) {
             this.level.level_end_x = newEnd + 120;
         }

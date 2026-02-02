@@ -63,7 +63,11 @@ class CharacterKnight extends Character {
         './img/character/Knight/Attack/attack4.png',
     ];
     
-
+    /**
+     * Creates a new Knight character.
+     * Loads all knight‑specific animation frames and initializes movement,
+     * combat and gravity behavior.
+     */
     constructor() {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);

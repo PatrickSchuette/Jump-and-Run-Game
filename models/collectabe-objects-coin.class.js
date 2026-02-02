@@ -30,6 +30,7 @@ class CollectableCoin extends MoveableObject {
         this.animate();
     }
 
+    /** Plays the coin's idle animation by cycling through its frames. */
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);

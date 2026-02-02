@@ -20,6 +20,15 @@ class ThrowableObject extends MoveableObject {
         './img/Ball_animation/Bll_animation2_7.png',
     ]
 
+    /**
+     * Creates a new throwable object (bottle) at the given position.
+     * Loads all animation frames, initializes size and direction,
+     * and immediately starts the throw movement including animation
+     * and automatic removal after reaching maximum distance.
+     * @param {number} x - Initial X position where the bottle is spawned.
+     * @param {number} y - Initial Y position where the bottle is spawned.
+     * @param {boolean} otherDirection - Whether the bottle travels to the left.
+     */
     constructor(x, y, otherDirection) {
         super();
         this.initImages();

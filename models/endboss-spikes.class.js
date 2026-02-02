@@ -22,9 +22,13 @@ class SpikeWave extends MoveableObject {
         './img/spikes/spikes1.png'
     ];
 
+    /**
+     * Base constructor for all enemy types.
+     * Initializes shared enemy properties such as hitbox, energy and movement.
+     * @param {number} x - Initial X position of the enemy.
+     */
     constructor(x, groundY, directionLeft) {
         super();
-
         this.x = x;
         this.y = groundY;
         this.width = 180;

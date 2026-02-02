@@ -1,3 +1,4 @@
+/** Render function for Legal Notice */
 function renderLegalNotice(){
     return `
       <h1 class="outlined">Legal Notice</h1>
@@ -72,7 +73,7 @@ function renderLegalNotice(){
     `;
 }
 
-
+/** Render function for Privacy Policy */
 function renderPrivacyPolicy(){
     return `
       <h2 class="outlined">Privacy Policy</h2>

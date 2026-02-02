@@ -31,6 +31,10 @@ IntervalManager.clearAll = function () {
     IntervalManager.intervals = [];
 };
 
+/**
+ * Clears all intervals that were registered through IntervalManager by specific owner
+ * and resets the registry. Used when switching worlds or stopping the game.
+ */
 IntervalManager.clearByOwner = function (owner) {
     IntervalManager.intervals = IntervalManager.intervals.filter(obj => {
         if (obj.owner === owner) {

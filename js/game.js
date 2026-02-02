@@ -22,8 +22,7 @@ bgMusic.volume = 0.4;
 let userInteracted = false;
 
 /**
- * Initializes the game, loads settings, prepares canvas, sound, and world state.
- * Creates either the character selection screen or the game world depending on saved data.
+ * Initializes the game, loads settings, prepares canvas, sound, and world state. Creates either the character selection screen or the game world depending on saved data.
  */
 function init() {
     ensureDefaultControls();
@@ -31,13 +30,15 @@ function init() {
     canvas = document.getElementById('canvas');
     checkNewSeassion();
 
-    checkLocalSoundExist()
+    checkLocalSoundExist();
+    setBindButton();
+    setUI();
     startSound();
     checkCharacterSelected()
 }
 
 /**
- * Check if it's a reaload or new seassion for character selection
+ * Detects whether the page load is a fresh session or a reload. Resets character selection and debug settings on a new session.
  */
 function checkNewSeassion() {
     const nav = performance.getEntriesByType("navigation")[0];
@@ -54,7 +55,9 @@ function checkNewSeassion() {
     sessionStorage.setItem("tabOpen", "true");
 }
 
-/** check if a selected Character is in local Storage */
+/**
+ * Loads either the character selection screen or the game world depending on whether a character is stored in localStorage.
+ */
 function checkCharacterSelected() {
     const selected = localStorage.getItem("selectedCharacter");
     if (selected) {
@@ -136,15 +139,14 @@ elementRev.btnStart.addEventListener("click", () => {
 });
 
 /**
- * Starts the game when the start screen is active and the user presses "P".
+ * Starts the game when the start screen is active and the user presses the play key.
  */
 function playGameButton() {
     if (world.level === START) startGame();
 }
 
 /**
- * Starts a new game world instance and loads the first level.
- * Stops any existing world before creating a new one.
+ * Creates a new game world, resets intervals, loads level 1 and ensures background music is updated.
  */
 function startGame() {
     elementRev.btnStart.blur();
@@ -167,19 +169,15 @@ function startGame() {
  */
 elementRev.btnOptions.addEventListener("click", () => {
     elementRev.btnOptions.blur();
-
     if (!configureMenu) {
         if (world && world.stop) world.stop();
         configureMenu = new Configure(canvas, keyboard);
         return;
     }
-
     configureMenu.close();
     configureMenu = null;
-
     checkCharacterSelected();
 });
-
 
 /**
  * Toggles fullscreen mode when the fullscreen button is clicked.
@@ -244,8 +242,7 @@ elementRev.btnSound.addEventListener("click", () => {
 });
 
 /**
- * Toggles background music based on user settings and interaction state.
- * Updates the sound button icon accordingly.
+ * Toggles background music based on user settings and interaction state. Updates the sound button icon accordingly.
  */
 function startSound() {
     localStorage.setItem("playSound", String(playSound));
@@ -253,7 +250,6 @@ function startSound() {
     elementRev.btnSound.style.backgroundImage = playSound
         ? "url('./img/button/sound-button.png')"
         : "url('./img/button/sound-off.png')";
-
     if (!playSound) { bgMusic.pause(); return; }
     if (!userInteracted) { bgMusic.pause(); return; }
     if (!world.statusPlayMode) { bgMusic.pause(); return; }
@@ -272,12 +268,21 @@ function checkLocalSoundExist() {
     };
 }
 
-bindButton(elementRev.btnLeft, "LEFT");
-bindButton(elementRev.btnRight, "RIGHT");
-bindButton(elementRev.btnJump, "SPACE");
-bindButton(elementRev.btnThrow, "D");
-bindButtonAttack(elementRev.btnFight);
+/**
+ * Bind all buttons to the event Listener Actions
+ */
+function setBindButton() {
+    bindButton(elementRev.btnLeft, "LEFT");
+    bindButton(elementRev.btnRight, "RIGHT");
+    bindButton(elementRev.btnJump, "SPACE");
+    bindButton(elementRev.btnThrow, "D");
+    bindButtonAttack(elementRev.btnFight);
+}
 
+/**
+ * Binds attack‑specific pointer events to the attack button, ensuring the attack cannot be triggered repeatedly while held.
+ * @param {HTMLElement} btn - The attack button element.
+ */
 function bindButtonAttack(btn) {
     btn.addEventListener("pointerdown", () => {
         if (!keyboard.ATTAC_PRESSED) {
@@ -298,12 +303,10 @@ function bindButtonAttack(btn) {
 }
 
 /**
- * Ensures that default control mappings exist in localStorage.
- * Creates them if missing.
+ * Ensures that default control mappings exist in localStorage. Creates them if they are missing.
  */
 function ensureDefaultControls() {
     const existing = localStorage.getItem("controls");
-
     if (!existing) {
         const defaultControls = {
             Left: "LEFT",
@@ -329,11 +332,7 @@ window.addEventListener("pointerdown", () => {
 });
 
 /**
- * Checks the current screen orientation on mobile devices and toggles
- * the rotate-overlay visibility accordingly. The overlay is shown when
- * the device is in portrait mode and hidden when in landscape mode.
- * This function is intended to be used as a resize and orientationchange
- * event handler to react to live orientation changes.
+ * Shows or hides the rotate‑device overlay depending on whether the device is in portrait or landscape orientation.
  */
 function checkOrientation() {
     const overlay = document.getElementById("rotate-overlay");
@@ -346,8 +345,8 @@ function checkOrientation() {
 }
 
 /**
- * Detects whether the current device should be treated as a tablet. This function identifies both classic iPads (via "iPad" in the user agent) and modern iPadOS devices that report themselves as "Macintosh" but expose touch capabilities through `navigator.maxTouchPoints`.
- * @returns {boolean} True if the device is recognized as a tablet, otherwise false.
+ * Detects whether the current device should be treated as a tablet based on screen size, pointer type and known device signatures.
+ * @returns {boolean} True if the device is considered a tablet.
  */
 function isTablet() {
     const UA = navigator.userAgent;
@@ -355,7 +354,7 @@ function isTablet() {
     let isWideEnough = window.matchMedia("(min-width: 768px)").matches;
 
     const isSurfaceDuo = /Surface Duo/i.test(UA);
-    if (isSurfaceDuo){
+    if (isSurfaceDuo) {
         isCoarse = true;
         isWideEnough = true;
     }
@@ -364,7 +363,7 @@ function isTablet() {
 }
 
 /**
- * Applies tablet-specific UI adjustments by toggling visibility of elements marked with `.onlyDesktop` and `.onlyMobile` classes. When a tablet device is detected, desktop-only elements are hidden and mobile-only elements are displayed. On non-tablet devices, the original CSS-defined visibility is restored by clearing inline display overrides.
+ * Applies tablet‑specific UI adjustments by toggling visibility of elements marked as desktop‑only or mobile‑only.
  */
 function checkTabletModus() {
     const desktopEls = document.querySelectorAll('.onlyDesktop');
@@ -380,14 +379,17 @@ function checkTabletModus() {
     }
 }
 
-
-checkOrientation();
-checkTabletModus();
+/**
+ * Set eventListener for UI Interface of mobile Devices
+ */
+function setUI(){
+   checkOrientation();
+checkTabletModus(); 
+}
 
 window.addEventListener("resize", () => {
     checkOrientation();
     checkTabletModus();
 });
-
 window.addEventListener("orientationchange", checkOrientation);
 window.addEventListener("contextmenu", event => event.preventDefault());

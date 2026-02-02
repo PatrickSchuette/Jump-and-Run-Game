@@ -26,6 +26,10 @@ class MoveableObject extends DrawableObject {
     parentArray = null;
     distanceEnemy = null;
 
+    /**
+     * Base constructor for all moveable objects.
+     * Loads default image, initializes physics properties and hitbox.
+     */
     constructor() {
         super();
         this.loadImage('./img/ball-energy.png');

@@ -16,22 +16,20 @@ class Level {
     imagePlayButton = null;
     maxX = 0;
 
-    /** * Creates a new Level instance.  
-     * @param {Object} config Level configuration object. 
-     * */
+    /**
+     * Creates a new level instance based on the provided configuration.
+     * Generates background, clouds, enemies, collectables and play button.
+     * @param {Object} config - Level configuration object.
+     */
     constructor(config) {
         this.imagePlayButton = config.imagePlayButton || null;
         this.generateBackground(config.background.count, config.background.layers);
-
         this.level_end_x = this.calculateLevelEndX(config.background.count);
         this.playMode = config.playMode;
-
         this.generateClouds(config.clouds);
         this.generateEnemies(config.enemies);     
-
         this.maxX = this.level_end_x - 250;      
         this.generateCollectables(config.collactableObjects);
-
         this.selectPlayButton();
     }    
 
@@ -88,7 +86,6 @@ class Level {
     /**
      * Generates all enemies for the level based on the provided configuration.
      * Spawns enemy groups and the endboss if required.
-     *
      * @param {Object<string, number>} enemyConfig - Mapping of enemy types to spawn counts.
      */
     generateEnemies(enemyConfig) {
@@ -151,7 +148,6 @@ class Level {
     /**
      * Generates a random X position that keeps a minimum distance
      * from all existing enemies (regardless of type).
-     *
      * @param {number} minDistance - Required minimum X distance.
      * @returns {number} A valid X position.
      */
@@ -159,23 +155,19 @@ class Level {
         if (!maxX || maxX <= 0) {
             maxX = this.level_end_x - 250;
         }
-
         let x;
         let tries = 0;
-
         do {
             x = 200 + Math.random() * maxX;
             tries++;
             if (tries > 50) break;
         } while (this.enemies.some(e => Math.abs(e.x - x) < minDistance));
-
         return x;
     }
     
     /**
      * Generates a random X position that keeps a minimum distance
      * from all existing collectables.
-     *
      * @param {Object[]} objects - Array of collectables with an x property.
      * @param {number} minDistance - Required minimum X distance.
      * @returns {number} A valid X position.
@@ -202,6 +194,7 @@ class Level {
         return (backgroundCount - 2) * this.segmentWidth - 150;
     }
 
+    /** Handle of selecting Play Button */
     selectPlayButton(){
         const revButton = document.getElementById('btnStart');
         if (this.imagePlayButton == null) return;

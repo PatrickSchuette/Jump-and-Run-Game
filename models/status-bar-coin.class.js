@@ -15,6 +15,12 @@ class CoinStatus extends StatusBar {
     displayAsPercent = false;
     barColor = "goldenrod";
 
+    /**
+     * Creates a new coin status bar instance for the given character.
+     * Initializes the maximum coin capacity, loads animation frames,
+     * sets the current coin count and starts the animated icon loop.
+     * @param {Character} character - The character whose coin inventory is displayed.
+     */
     constructor(character) {
         super();
         this.maxValue = character.collectableObjects.maxCoin;

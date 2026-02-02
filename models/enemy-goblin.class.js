@@ -41,19 +41,20 @@ class enemyGoblin extends enemy {
         'img/enemy/goblin/attack5.png',
     ]
 
+    /**
+     * Creates a new goblin enemy at the given X position.
+     * Loads all animation frames and starts movement + animation loops.
+     * @param {number} x - Initial X position of the goblin enemy.
+     */
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
-
         this.x = x;//   this.x = 450 + Math.random() * x;
-
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTAC);
         this.speed = 0.15 + Math.random() * 0.25;
-
         this.animate();
-
     }
 
 

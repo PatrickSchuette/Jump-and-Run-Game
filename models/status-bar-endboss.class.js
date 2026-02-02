@@ -24,6 +24,13 @@ class EndbossStatus extends StatusBar {
     barOffsetX = 0; 
     barCanvasOffsetX = -150;
 
+    /**
+     * Creates a new status bar instance for displaying the endboss's health.
+     * Loads the animated heart icons, initializes display settings and
+     * starts the animation loop. The bar dynamically updates based on
+     * the boss's current energy value.
+     * @param {Endboss} boss - The endboss whose health is being displayed.
+     */
     constructor(boss) {
         super();
         this.boss = boss;
@@ -44,7 +51,7 @@ class EndbossStatus extends StatusBar {
         }, 100, 'StatusBarEndboss: Animation', 'ui');
     }
 
-
+    /** Regenerate the Statusbar for the Endboss Health*/
     draw(ctx) {
         //this.percentage = this.boss.energy;
         this.setPercentage(this.boss.energy);

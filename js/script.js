@@ -19,6 +19,7 @@ function closeDialog() {
     document.getElementById("dialog").close();
 }
 
+/**Event Listener if a click is outside of the dialog */
 DIALOG.addEventListener("click", (event) => {
     const rect = DIALOG.getBoundingClientRect();
 

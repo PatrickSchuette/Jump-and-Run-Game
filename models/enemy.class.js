@@ -30,14 +30,18 @@ class enemy extends MoveableObject {
     IMAGES_WALKING = [];
     IMAGES_DEAD = [];
 
+    /**
+     * Base constructor for all enemy types.
+     * Initializes shared enemy properties such as hitbox, energy and movement.
+
+    * @param {number} x - Initial X position of the enemy.
+    */
     constructor(x) {
         super();
-
     }
 
     /**
-     * Starts the movement interval for the enemy.
-     * Moves left continuously while the enemy is alive.
+     * Starts the continuous movement loop for the enemy, moving it left as long as it is alive and not idle.
      */
     startMovementLoop() {
         this.moveInterval = IntervalManager.setInterval(() => {
@@ -47,10 +51,8 @@ class enemy extends MoveableObject {
         }, 1000 / 60, 'Enemy: Move', 'enemy');
     }
     
-
     /**
-     * Starts the animation interval for the enemy.
-     * Delegates animation selection to updateAnimationState().
+     * Starts the animation loop for the enemy, selecting the correct animation state on each tick.
      */
     startAnimationLoop() {
         this.animationInterval = IntervalManager.setInterval(() => {
@@ -126,6 +128,11 @@ class enemy extends MoveableObject {
         }
     }
 
+    /**
+     * Check if Enemy is close enought to Character to start an Attack
+     * @param {integer} x distance to check if enemey is close to Character
+     * @returns {boolean} true if enemy is close to character
+     */
     shouldAttack(x) {
         if (!this.IMAGES_ATTAC) return false;
         return this.distanceEnemy < x;

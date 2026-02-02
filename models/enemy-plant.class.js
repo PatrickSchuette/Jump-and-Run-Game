@@ -52,19 +52,20 @@ class enemyPlant extends enemy {
         './img/enemy/Plant/trap_plant6.png'
     ];
 
+    /**
+     * Creates a new plant enemy at the given X position.
+     * Loads all animation frames and starts movement + animation loops.
+     * @param {number} x - Initial X position of the plant enemy.
+     */
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
-
         this.x = x;//   this.x = 450 + Math.random() * x;
-
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTAC);
         this.speed = 0;
-
         this.animate();
-
     }
 
 }

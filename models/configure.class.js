@@ -14,18 +14,13 @@ class Configure {
         this.keyboard = keyboard;
         this.active = true;
         this.controls = this.loadControls();
-
         this.changeCharBtn = {
             x: this.canvas.width / 2 - 150,
             y: this.canvas.height - 120,
-            width: 300,
-            height: 60
+            width: 300, height: 60
         };
-
-        /** Bind click handler so it can be removed later */
         this.boundClickHandler = this.handleClick.bind(this);
         this.canvas.addEventListener("pointerdown", this.boundClickHandler);
-
         this.draw();
     }
 
@@ -95,11 +90,9 @@ class Configure {
         const btn = this.changeCharBtn;
         this.ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
         this.ctx.fillRect(btn.x, btn.y, btn.width, btn.height);
-
         this.ctx.strokeStyle = "white";
         this.ctx.lineWidth = 3;
         this.ctx.strokeRect(btn.x, btn.y, btn.width, btn.height);
-
         this.ctx.fillStyle = "white";
         this.ctx.font = "32px Arial";
         this.ctx.textAlign = "center";
@@ -107,12 +100,12 @@ class Configure {
     }
 
     /**
-     * Handles click events inside the configuration menu.
-     * @param {MouseEvent} e - The click event.
+     * Handles pointer/touch input inside the configuration menu.
+     * Detects whether the "Change Character" button was pressed.
+     * @param {PointerEvent} e - The pointer event containing click/touch data.
      */
     handleClick(e) {
         const { x, y } = this.getClickPosition(e);
-        console.log("Pointer:", e.pointerType, x, y);
         if (this.isInsideButton(x, y, this.changeCharBtn)) {
             this.close();
             configureMenu = null;
@@ -121,9 +114,10 @@ class Configure {
     }
 
     /**
-     * Converts a mouse event into canvas-relative coordinates.
-     * @param {MouseEvent} e - The click event.
-     * @returns {{x:number, y:number}} The click position.
+     * Converts a pointer event into canvas‑relative coordinates,
+     * compensating for canvas scaling on mobile devices.
+     * @param {PointerEvent} e - The pointer event.
+     * @returns {{x:number, y:number}} Scaled canvas coordinates.
      */
     getClickPosition(e) {
         const rect = this.canvas.getBoundingClientRect();
@@ -136,7 +130,7 @@ class Configure {
             y: (clientY - rect.top) * scaleY
         };
     }
-    
+
     /**
      * Checks whether a point lies inside a button rectangle.
      * @param {number} x - X coordinate.

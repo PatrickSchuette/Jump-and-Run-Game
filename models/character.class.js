@@ -58,6 +58,11 @@ class Character extends MoveableObject {
     showDrawFrame = true;
     isDeathSequenceRunning = false;
 
+    /**
+     * Base constructor for all playable characters.
+     * Loads all animation frames, initializes physics, sound effects,
+     * hitbox configuration and starts gravity + animation loops.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES_WALKING);
@@ -167,21 +172,16 @@ class Character extends MoveableObject {
      */
     handleAnimation() {
         this.extandOffsetAttac();
-
         const state = this.getAnimationState();
         const speed = this.animationSpeed[state];
-
         if (state === "dead") { this.handleDeathAnimation(); return; }
-
         const now = performance.now();
         if (!this.lastAnimTime) this.lastAnimTime = 0;
-
         if (now - this.lastAnimTime >= speed) {
             this.playStateAnimation(state);
             this.lastAnimTime = now;
         }
     }
-
 
     /**
      * Extends the hitbox during attack to match sword reach.
@@ -192,7 +192,6 @@ class Character extends MoveableObject {
 
     /**
      * Initiates a melee attack action.
-     * 
      * Sets the character into an attacking state, temporarily extends the hitbox
      * to match the weapon reach, triggers the attack animation, and schedules both
      * the end of the attack window and the cooldown period. While attacking, the
@@ -248,12 +247,10 @@ class Character extends MoveableObject {
 
     /**
      * Applies damage to the character unless a hurt cooldown is active.
-     * 
      * Reduces the character's energy by the given damage amount, plays the hurt
      * sound effect, and triggers the hurt cooldown period. If the character's
      * energy reaches zero or below, the death sequence is initiated. While the
      * hurt cooldown is active, the character cannot take additional damage.
-     *
      * @param {number} damage - The amount of damage to apply.
      */
     hit(damage) {
@@ -286,20 +283,18 @@ class Character extends MoveableObject {
 
     /**
      * Indicates whether the character is currently in a hurt cooldown state.
-     *
-     * @returns {boolean} True if the character is temporarily invulnerable,
-     *                    otherwise false.
+     * @returns {boolean} True if the character is temporarily invulnerable, otherwise false.
      */
     isHurt() {
         return this.isHurtCooldown;
     }
 
+    /** if the characteer has no energy left, start the die Sequenz */
     die() {
         this.energy = 0;
         this.dead = true;
         this.currentImage = 0;
         this.isDeathSequenceRunning = false;
     }
-    
-    
+
 }

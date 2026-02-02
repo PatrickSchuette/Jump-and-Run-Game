@@ -62,7 +62,11 @@ class CharacterMage extends Character {
         './img/character/Mage/Attack/attack4.png',
     ];
     
-
+    /**
+     * Creates a new Mage character.
+     * Loads all mage‑specific animation frames and initializes movement,
+     * combat and gravity behavior.
+     */
     constructor() {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);

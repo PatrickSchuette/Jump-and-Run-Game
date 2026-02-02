@@ -62,7 +62,11 @@ class CharacterRogue extends Character {
         './img/character/Rogue/Attack/attack4.png',
     ];
     
-
+    /**
+     * Creates a new Rogue character.
+     * Loads all rogue‑specific animation frames and initializes movement,
+     * combat and gravity behavior.
+     */
     constructor() {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);

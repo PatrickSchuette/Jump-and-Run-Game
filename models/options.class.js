@@ -12,14 +12,10 @@ class Option {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
-
         this.initCharacters();
         this.loadCharacterImages();
-
         this.background = new Image();
         this.background.src = "./img/world/Background2.jpg";
-
-        /** Bind click handler so it can be removed later */
         this.boundClickHandler = this.handleClick.bind(this);
         this.canvas.addEventListener("pointerdown", this.boundClickHandler);
 
@@ -49,8 +45,10 @@ class Option {
     }
 
     /**
-     * Handles click events for character selection.
-     * @param {MouseEvent} e - The click event.
+     * Handles pointer/touch selection of a character.
+     * Converts the pointer position into canvas coordinates and checks
+     * whether a character preview was tapped or clicked.
+     * @param {PointerEvent} e - The pointer event containing click/touch data.
      */
     handleClick(e) {
         const rect = this.canvas.getBoundingClientRect();
@@ -68,10 +66,10 @@ class Option {
     }
     
     /**
-     * Determines whether the click position intersects with a character preview.
-     * @param {number} x - Click x-coordinate.
-     * @param {number} y - Click y-coordinate.
-     * @param {Object} char - Character object with position and size.
+     * Checks whether the given canvas coordinates intersect with a character preview.
+     * @param {number} x - X coordinate relative to the canvas.
+     * @param {number} y - Y coordinate relative to the canvas.
+     * @param {{x:number,y:number,name:string,img:string}} char - Character preview data.
      * @returns {boolean} True if the character was clicked.
      */
     isCharacterClicked(x, y, char) {
@@ -84,8 +82,8 @@ class Option {
     }
 
     /**
-     * Saves the selected character and switches to the game world.
-     * @param {string} name - The selected character name.
+     * Saves the selected character to localStorage and switches to the game world.
+     * @param {string} name - The identifier of the chosen character.
      */
     selectCharacter(name) {
         localStorage.setItem("selectedCharacter", name);

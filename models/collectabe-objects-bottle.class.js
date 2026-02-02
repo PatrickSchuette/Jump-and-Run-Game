@@ -16,6 +16,13 @@ class CollectableBottle extends MoveableObject {
         './img/Ball_animation/Bll_animation2_7.png',
     ]
 
+    /**
+     * Creates a new bottle collectable at the given position.
+     * Loads animation frames and starts the spinning animation.
+     * @param {number} x - Initial X position of the bottle.
+     * @param {number} y - Initial Y position of the bottle.
+     * @param {boolean} otherDirection - Whether the bottle faces left.
+     */
     constructor(x, y, otherDirection) {
         super();
         this.loadImages(this.IMAGES);
@@ -27,6 +34,7 @@ class CollectableBottle extends MoveableObject {
             this.animate();
     }
 
+    /** Plays the bottle's idle animation by cycling through its frames. */
     animate() {
         IntervalManager.setInterval(() => {
             this.playAnimation(this.IMAGES);

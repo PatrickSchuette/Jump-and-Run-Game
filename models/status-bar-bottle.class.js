@@ -13,6 +13,12 @@ class BottleStatus extends StatusBar {
     displayAsPercent = false;
     barColor = "blue";
 
+    /**
+     * Creates a new bottle status bar instance for the given character.
+     * Initializes the maximum bottle capacity, loads animation frames,
+     * sets the current bottle count and starts the animated icon loop.
+     * @param {Character} character - The character whose bottle inventory is displayed.
+     */
     constructor(character) {
         super();
         this.maxValue = character.collectableObjects.maxBottle;

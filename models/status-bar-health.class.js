@@ -19,10 +19,16 @@ class HealthStatus extends StatusBar {
     percentage = 100;
     y = 10;
 
+    /**
+     * Creates a new health status bar instance for the given character.
+     * Initializes the maximum health capacity, loads animation frames,
+     * sets the current health count and starts the animated icon loop.
+     * @param {Character} character - The character whose health inventory is displayed.
+     */
     constructor() {
         super(); 
         this.loadImages(this.IMAGES); 
-        //this.setPercentage(this.percentage); // setzt das richtige Bild
+        //this.setPercentage(this.percentage);
             this.animate();
     }
 
