@@ -48,6 +48,7 @@ function checkNewSeassion() {
 
     if (!isReload) {
         localStorage.removeItem("selectedCharacter");
+        localStorage.setItem("drawingFrame", "false");
     }
 
     sessionStorage.setItem("tabOpen", "true");
