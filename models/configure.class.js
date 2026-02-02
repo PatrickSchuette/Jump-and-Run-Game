@@ -24,7 +24,7 @@ class Configure {
 
         /** Bind click handler so it can be removed later */
         this.boundClickHandler = this.handleClick.bind(this);
-        this.canvas.addEventListener("click", this.boundClickHandler);
+        this.canvas.addEventListener("pointerdown", this.boundClickHandler);
 
         this.draw();
     }
@@ -112,7 +112,7 @@ class Configure {
      */
     handleClick(e) {
         const { x, y } = this.getClickPosition(e);
-
+        console.log("Pointer:", e.pointerType, x, y);
         if (this.isInsideButton(x, y, this.changeCharBtn)) {
             this.close();
             configureMenu = null;
@@ -127,12 +127,16 @@ class Configure {
      */
     getClickPosition(e) {
         const rect = this.canvas.getBoundingClientRect();
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
         return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY
         };
     }
-
+    
     /**
      * Checks whether a point lies inside a button rectangle.
      * @param {number} x - X coordinate.
@@ -154,6 +158,6 @@ class Configure {
      */
     close() {
         this.active = false;
-        this.canvas.removeEventListener("click", this.boundClickHandler);
+        this.canvas.removeEventListener("pointerdown", this.boundClickHandler);
     }
 }

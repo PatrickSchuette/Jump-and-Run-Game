@@ -21,7 +21,7 @@ class Option {
 
         /** Bind click handler so it can be removed later */
         this.boundClickHandler = this.handleClick.bind(this);
-        this.canvas.addEventListener("click", this.boundClickHandler);
+        this.canvas.addEventListener("pointerdown", this.boundClickHandler);
 
         this.draw();
     }
@@ -54,16 +54,19 @@ class Option {
      */
     handleClick(e) {
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        const x = (clientX - rect.left) * scaleX;
+        const y = (clientY - rect.top) * scaleY;
         this.characters.forEach(char => {
             if (this.isCharacterClicked(x, y, char)) {
                 this.selectCharacter(char.name);
             }
         });
     }
-
+    
     /**
      * Determines whether the click position intersects with a character preview.
      * @param {number} x - Click x-coordinate.
@@ -88,7 +91,7 @@ class Option {
         localStorage.setItem("selectedCharacter", name);
 
         // Remove click listener so selection screen is fully disabled
-        this.canvas.removeEventListener("click", this.boundClickHandler);
+        this.canvas.removeEventListener("pointerdown", this.boundClickHandler);
 
         world = new World(this.canvas, this.keyboard);
     }
