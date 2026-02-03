@@ -24,7 +24,6 @@ class CoinStatus extends StatusBar {
     constructor(character) {
         super();
         this.maxValue = character.collectableObjects.maxCoin;
-        //this.percentage = character.collectableObjects.coin;
         this.loadImages(this.IMAGES);
         this.setPercentage(character.collectableObjects.coin);
         this.textSuffix = " / " + this.maxValue;

@@ -122,6 +122,11 @@ canvas {
     justify-content: space-between;
     width: 100%;
     display: flex;
+    pointer-events: none;
+}
+
+#mobile-controls button {
+    pointer-events: auto;
 }
 
 /* ################# FULLSCREEN Modus: ############################# */
@@ -442,5 +447,17 @@ dialog h3 {
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
+    }
+}
+
+@media (pointer: coarse) {
+
+    .gameButton:hover,
+    footer button:hover,
+    .btnDialogClose:hover {
+        transform: none !important;
+        box-shadow: none !important;
+        border-color: inherit !important;
+        text-shadow: none !important;
     }
 }

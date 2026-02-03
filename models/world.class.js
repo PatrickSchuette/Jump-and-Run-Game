@@ -246,7 +246,7 @@ class World {
         const pos = this.calculateThrowPosition();
         this.spawnBottle(pos.x, pos.y);
         this.consumeBottle();
-        this.character.startThrowCooldown(); // Cooldown starten
+        this.character.startThrowCooldown();
     }
 
     /**

@@ -21,26 +21,23 @@ bgMusic.loop = true;
 bgMusic.volume = 0.4;
 let userInteracted = false;
 
-/**
- * Initializes the game, loads settings, prepares canvas, sound, and world state. Creates either the character selection screen or the game world depending on saved data.
- */
+/** Initializes the game environment, loads settings, prepares UI, sound, and world state. Also binds all input and UI event handlers. */
 function init() {
     ensureDefaultControls();
 
     canvas = document.getElementById('canvas');
-    checkNewSeassion();
+    checkNewSession();
 
     checkLocalSoundExist();
     setBindButton();
     setUI();
     startSound();
-    checkCharacterSelected()
+    checkCharacterSelected();
+    bindAllEvents();
 }
 
-/**
- * Detects whether the page load is a fresh session or a reload. Resets character selection and debug settings on a new session.
- */
-function checkNewSeassion() {
+/** Detects whether the page load is a fresh session or a reload. On a fresh session, resets character selection and debug settings. */
+function checkNewSession() {
     const nav = performance.getEntriesByType("navigation")[0];
 
     const isReload =
@@ -55,9 +52,7 @@ function checkNewSeassion() {
     sessionStorage.setItem("tabOpen", "true");
 }
 
-/**
- * Loads either the character selection screen or the game world depending on whether a character is stored in localStorage.
- */
+/** Creates either the character selection screen or the game world, depending on whether a character is stored in localStorage. */
 function checkCharacterSelected() {
     const selected = localStorage.getItem("selectedCharacter");
     if (selected) {
@@ -68,40 +63,45 @@ function checkCharacterSelected() {
 }
 
 /**
- * Handles keyboard keydown events and maps them to game controls.
- * @event window#keydown
+ * Handles keyboard keydown events and maps them to game control flags. Uses `KeyboardEvent.code` for layout‑independent input handling.
  * @param {KeyboardEvent} e - The keyboard event.
  */
-window.addEventListener('keydown', (e) => {
+function handleKeyDown(e) {
     if (world.statusPlayMode && !world.character.isDead()) {
-        switch (e.keyCode) {
-            case 39: keyboard.RIGHT = true; break;
-            case 37: keyboard.LEFT = true; break;
-            case 38: keyboard.UP = true; break;
-            case 40: keyboard.DOWN = true; break;
-            case 32: keyboard.SPACE = true; break;
-            case 68: keyboard.D = true; break;
-            case 70: if (!keyboard.ATTAC_PRESSED) { keyboard.ATTAC = true; keyboard.ATTAC_PRESSED = true; }; break;
+        switch (e.code) {
+            case "ArrowRight": keyboard.RIGHT = true; break;
+            case "ArrowLeft": keyboard.LEFT = true; break;
+            case "ArrowUp": keyboard.UP = true; break;
+            case "ArrowDown": keyboard.DOWN = true; break;
+            case "Space": keyboard.SPACE = true; break;
+            case "KeyD": keyboard.D = true; break;
+            case "KeyF":
+                if (!keyboard.ATTAC_PRESSED) {
+                    keyboard.ATTAC = true;
+                    keyboard.ATTAC_PRESSED = true;
+                } break;
         }
     }
-});
+}
 
 /**
- * Handles keyboard keyup events and resets game control flags.
- * @event window#keyup
+ * Handles keyboard keyup events and resets game control flags. Uses `KeyboardEvent.code` for layout‑independent input handling.
  * @param {KeyboardEvent} e - The keyboard event.
  */
-window.addEventListener('keyup', (e) => {
-    switch (e.keyCode) {
-        case 39: keyboard.RIGHT = false; break;
-        case 37: keyboard.LEFT = false; break;
-        case 38: keyboard.UP = false; break;
-        case 40: keyboard.DOWN = false; break;
-        case 32: keyboard.SPACE = false; break;
-        case 68: keyboard.D = false; break;
-        case 70: keyboard.ATTAC = false; keyboard.ATTAC_PRESSED = false; break;
+function handleKeyUp(e) {
+    switch (e.code) {
+        case "ArrowRight": keyboard.RIGHT = false; break;
+        case "ArrowLeft": keyboard.LEFT = false; break;
+        case "ArrowUp": keyboard.UP = false; break;
+        case "ArrowDown": keyboard.DOWN = false; break;
+        case "Space": keyboard.SPACE = false; break;
+        case "KeyD": keyboard.D = false; break;
+        case "KeyF":
+            keyboard.ATTAC = false;
+            keyboard.ATTAC_PRESSED = false;
+            break;
     }
-});
+}
 
 /**
  * Binds pointer and mouse events to a virtual button and maps them to keyboard flags.
@@ -126,28 +126,21 @@ function bindButton(btn, key) {
     });
 }
 
-/**
- * Starts the game when the start button is clicked.
- * @event HTMLElement#click
- */
-elementRev.btnStart.addEventListener("click", () => {
+/** Handles the start button action. Starts the game or opens the character selection screen. */
+function startButtonClicked() {
     if (!localStorage.getItem("selectedCharacter")) {
         checkCharacterSelected();
     } else {
         startGame();
     }
-});
+}
 
-/**
- * Starts the game when the start screen is active and the user presses the play key.
- */
+/** Starts the game when the start screen is active and the user presses the play key. */
 function playGameButton() {
     if (world.level === START) startGame();
 }
 
-/**
- * Creates a new game world, resets intervals, loads level 1 and ensures background music is updated.
- */
+/** Creates a new game world, resets intervals, loads level 1, and ensures background music is updated. */
 function startGame() {
     elementRev.btnStart.blur();
 
@@ -163,37 +156,31 @@ function startGame() {
     startSound();
 }
 
-/**
- * Opens or closes the configuration menu.
- * @event HTMLElement#click
- */
-elementRev.btnOptions.addEventListener("click", () => {
+/** Opens or closes the configuration menu. */
+function optionsButtonClicked() {
     elementRev.btnOptions.blur();
+
     if (!configureMenu) {
         if (world && world.stop) world.stop();
         configureMenu = new Configure(canvas, keyboard);
         return;
     }
+
     configureMenu.close();
     configureMenu = null;
     checkCharacterSelected();
-});
+}
 
-/**
- * Toggles fullscreen mode when the fullscreen button is clicked.
- * @event HTMLElement#click
- */
-elementRev.btnFullscreen.addEventListener("click", () => {
+/** Toggles fullscreen mode when the fullscreen button is clicked. */
+function fullscreenButtonClicked() {
     if (!document.fullscreenElement) {
         openFullscreen();
     } else {
         closeFullscreen();
     }
-});
+}
 
-/**
- * Requests fullscreen mode for the game container.
- */
+/** Requests fullscreen mode for the game container. */
 function openFullscreen() {
     if (elementRev.gameArea.requestFullscreen) {
         elementRev.gameArea.requestFullscreen();
@@ -204,9 +191,7 @@ function openFullscreen() {
     }
 }
 
-/**
- * Exits fullscreen mode if currently active.
- */
+/** Exits fullscreen mode if currently active. */
 function closeFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -217,33 +202,24 @@ function closeFullscreen() {
     }
 }
 
-/**
- * Updates the fullscreen button icon when fullscreen mode changes.
- * @event document#fullscreenchange
- */
-document.addEventListener("fullscreenchange", () => {
-    if (document.fullscreenElement) {
-        elementRev.btnFullscreen.blur();
-        elementRev.btnFullscreen.style.backgroundImage = "url('./img/button/no-fullscreen.png')";
-    } else {
-        elementRev.btnFullscreen.blur();
-        elementRev.btnFullscreen.style.backgroundImage = "url('./img/button/fullscreen.png')";
-    }
-});
+/** Updates the fullscreen button icon when fullscreen mode changes. */
+function handleFullscreenChange() {
+    elementRev.btnFullscreen.blur();
 
-/**
- * Toggles sound on/off when the sound button is clicked.
- * @event HTMLElement#click
- */
-elementRev.btnSound.addEventListener("click", () => {
+    elementRev.btnFullscreen.style.backgroundImage =
+        document.fullscreenElement
+            ? "url('./img/button/no-fullscreen.png')"
+            : "url('./img/button/fullscreen.png')";
+}
+
+/** Toggles sound on/off when the sound button is clicked. */
+function soundButtonClicked() {
     elementRev.btnSound.blur();
     playSound = !playSound;
     startSound();
-});
+}
 
-/**
- * Toggles background music based on user settings and interaction state. Updates the sound button icon accordingly.
- */
+/** Toggles background music based on user settings and interaction state. Updates the sound button icon accordingly. */
 function startSound() {
     localStorage.setItem("playSound", String(playSound));
 
@@ -257,9 +233,7 @@ function startSound() {
     bgMusic.play();
 }
 
-/**
- * check if a Variable in localStorage exists
- */
+/** check if a Variable in localStorage exists */
 function checkLocalSoundExist() {
     if (localStorage.getItem("playSound") === null) {
         localStorage.setItem("playSound", "true")
@@ -268,9 +242,7 @@ function checkLocalSoundExist() {
     };
 }
 
-/**
- * Bind all buttons to the event Listener Actions
- */
+/** Bind all buttons to the event Listener Actions */
 function setBindButton() {
     bindButton(elementRev.btnLeft, "LEFT");
     bindButton(elementRev.btnRight, "RIGHT");
@@ -302,9 +274,7 @@ function bindButtonAttack(btn) {
     });
 }
 
-/**
- * Ensures that default control mappings exist in localStorage. Creates them if they are missing.
- */
+/** Ensures that default control mappings exist in localStorage. Creates them if they are missing. */
 function ensureDefaultControls() {
     const existing = localStorage.getItem("controls");
     if (!existing) {
@@ -319,28 +289,22 @@ function ensureDefaultControls() {
     }
 }
 
-/**
- * Unlocks audio playback on first user interaction (required by browsers).
- * @event window#pointerdown
- */
-window.addEventListener("pointerdown", () => {
+/** Unlocks audio playback on first user interaction (required by browsers). */
+function handlePointerDown() {
     if (!userInteracted) {
         userInteracted = true;
-
-        if (playSound) { startSound(); }
+        if (playSound) startSound();
     }
-});
+}
 
-/**
- * Shows or hides the rotate‑device overlay depending on whether the device is in portrait or landscape orientation.
- */
+/** Shows or hides the rotate‑device overlay depending on whether the device is in portrait or landscape orientation. */
 function checkOrientation() {
     const overlay = document.getElementById("rotate-overlay");
 
     if (window.innerWidth > window.innerHeight) {
-        overlay.style.display = "none";   // Landscape
+        overlay.style.display = "none"; 
     } else {
-        overlay.style.display = "flex";   // Portrait
+        overlay.style.display = "flex";  
     }
 }
 
@@ -362,9 +326,7 @@ function isTablet() {
     return isCoarse && isWideEnough;
 }
 
-/**
- * Applies tablet‑specific UI adjustments by toggling visibility of elements marked as desktop‑only or mobile‑only.
- */
+/** Applies tablet‑specific UI adjustments by toggling visibility of elements marked as desktop‑only or mobile‑only. */
 function checkTabletModus() {
     const desktopEls = document.querySelectorAll('.onlyDesktop');
     const mobileEls = document.querySelectorAll('.onlyMobile');
@@ -379,17 +341,39 @@ function checkTabletModus() {
     }
 }
 
-/**
- * Set eventListener for UI Interface of mobile Devices
- */
-function setUI(){
-   checkOrientation();
-checkTabletModus(); 
-}
-
-window.addEventListener("resize", () => {
+/** Set eventListener for UI Interface of mobile Devices */
+function setUI() {
     checkOrientation();
     checkTabletModus();
-});
+}
+
+/** Handles window resize events and updates UI layout accordingly. */
+function handleResize() {
+    checkOrientation();
+    checkTabletModus();
+}
+
 window.addEventListener("orientationchange", checkOrientation);
-window.addEventListener("contextmenu", event => event.preventDefault());
+
+/**
+ * Prevents the default context menu from opening.
+ * @param {MouseEvent} e - The contextmenu event.
+ */
+function handleContextMenu(e) {
+    e.preventDefault();
+}
+
+/** Binds all input, UI, and system event handlers to the window and DOM elements. */
+function bindAllEvents() {
+    window.onkeydown = handleKeyDown;
+    window.onkeyup = handleKeyUp;
+    window.onpointerdown = handlePointerDown;
+    elementRev.btnStart.onclick = startButtonClicked;
+    elementRev.btnOptions.onclick = optionsButtonClicked;
+    elementRev.btnFullscreen.onclick = fullscreenButtonClicked;
+    elementRev.btnSound.onclick = soundButtonClicked;
+    document.onfullscreenchange = handleFullscreenChange;
+    window.onresize = handleResize;
+    window.onorientationchange = checkOrientation;
+    window.oncontextmenu = handleContextMenu;
+}

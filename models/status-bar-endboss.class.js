@@ -53,7 +53,6 @@ class EndbossStatus extends StatusBar {
 
     /** Regenerate the Statusbar for the Endboss Health*/
     draw(ctx) {
-        //this.percentage = this.boss.energy;
         this.setPercentage(this.boss.energy);
         super.draw(ctx);
     }

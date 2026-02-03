@@ -242,8 +242,8 @@ class Endboss extends enemy {
         spike.parentArray = this.world.level.enemies;
         this.world.level.enemies.push(spike);
 
-        setTimeout(() => { this.state = null; }, 1500); // set Time how long Endboss is in Idle State
-        setTimeout(() => this.canSpike = true, 7000); // Set Time to next rewspawn
+        setTimeout(() => { this.state = null; }, 1500); 
+        setTimeout(() => this.canSpike = true, 7000); 
     }
 
 

@@ -45,7 +45,7 @@ class enemySpider extends enemy {
     constructor(x) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
-        this.x = x;//   this.x = 450 + Math.random() * x;
+        this.x = x;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTAC);

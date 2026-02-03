@@ -22,7 +22,6 @@ class BottleStatus extends StatusBar {
     constructor(character) {
         super();
         this.maxValue = character.collectableObjects.maxBottle;
-        //this.percentage = character.collectableObjects.coin;
         this.loadImages(this.IMAGES);
         this.setPercentage(character.collectableObjects.bottle);
         this.textSuffix = " / " + this.maxValue;

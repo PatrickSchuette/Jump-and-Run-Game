@@ -88,7 +88,6 @@ class Option {
     selectCharacter(name) {
         localStorage.setItem("selectedCharacter", name);
 
-        // Remove click listener so selection screen is fully disabled
         this.canvas.removeEventListener("pointerdown", this.boundClickHandler);
 
         world = new World(this.canvas, this.keyboard);
@@ -108,7 +107,7 @@ class Option {
         this.ctx.font = "32px Arial";
         this.ctx.fillStyle = "red";
         this.ctx.textAlign = "center";
-        this.ctx.fillText("Please select your character", this.canvas.width / 2, 80);
+        this.ctx.fillText("Please select your character", this.canvas.width / 2, 150);
     }
 
     /**

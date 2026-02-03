@@ -12,7 +12,7 @@ class HealthStatus extends StatusBar {
         './img/Heart/heart10.png',
 
     ];
-    
+
     displayAsPercent = true;
     maxValue = 100;
     textSuffix = "%";
@@ -26,10 +26,9 @@ class HealthStatus extends StatusBar {
      * @param {Character} character - The character whose health inventory is displayed.
      */
     constructor() {
-        super(); 
-        this.loadImages(this.IMAGES); 
-        //this.setPercentage(this.percentage);
-            this.animate();
+        super();
+        this.loadImages(this.IMAGES);
+        this.animate();
     }
 
     /**
