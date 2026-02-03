@@ -314,6 +314,7 @@ class World {
 
     /** Check if Character is hitting enemy during jump. */
     isStompHit(player, enemy) {
+        if (!enemy.hitPosition.top) return;
         const CHARACTER = player.getHitbox();
         const ENEMY = enemy.getHitbox();
         if (player.speedY > 1) return false;
