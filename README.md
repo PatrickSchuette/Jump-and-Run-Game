@@ -12,7 +12,7 @@ A handcrafted 2D action‑adventure built with HTML5 Canvas and a fully custom J
 
 - Three unique characters: Knight, Mage, Rogue — each with their own animations and combat style
 - Multiple enemy types: goblins, dinosaurs, spiders, plant creatures
-- Endboss encounter with melee attacks, spike waves, idle/hurt/death states, and a complete AI state machine
+- Endboss encounter with melee attacks, spike waves, idle/hurt/death states
 - Collectables: coins and bottles with animated sprites
 - Throwable objects: bottle‑throwing mechanic with physics and cooldown
 - Status bars for health, coins, bottles, and the endboss
